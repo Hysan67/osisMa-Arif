@@ -16,9 +16,9 @@ return new class extends Migration
             $table->text('quote');
             $table->text('pengalaman_prestasi');
             $table->string('masa_bakti');
-            $table->string('status')->default('aktif'); // aktif, alumni
-            $table->foreignId('bidang_id')->constrained('bidangs')->onDelete('set null'); // jika bidang dihapus, anggota tetap ada
-            $table->timestamps(); // created_at dan updated_at
+            $table->string('status')->default('aktif');
+            $table->foreignId('bidang_id')->nullable()->constrained('bidangs')->onDelete('set null'); // jika bidang dihapus, anggota tetap ada
+            $table->timestamps();
         });
     }
 
