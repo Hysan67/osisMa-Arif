@@ -2,38 +2,47 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Bidang;
+use App\Models\Anggota;
+use App\Models\Artikel;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that is loaded on the first page visit.
-     *
-     * @var string
-     */
     protected $rootView = 'app';
 
-    /**
-     * Determine the current asset version.
-     */
     public function version(Request $request): ?string
     {
         return parent::version($request);
     }
 
-    /**
-     * Define the props that are shared by default.
-     *
-     * @return array<string, mixed>
-     */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
+        return array_merge(parent::share($request), [
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                    'is_admin' => $request->user()->is_admin ?? false,
+                ] : null,
             ],
-        ];
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+            ],
+            // Shared data untuk semua pages (hitung jika perlu)
+            'totalAnggota' => fn () => Anggota::count(),
+            'totalArtikel' => fn () => Artikel::count(),
+            'bidangs' => fn () => Bidang::all()->map(function ($bidang) {
+                return [
+                    'id' => $bidang->id,
+                    'nama' => $bidang->nama,
+                    'deskripsi' => $bidang->deskripsi,
+                ];
+            }),
+        ]);
     }
 }
