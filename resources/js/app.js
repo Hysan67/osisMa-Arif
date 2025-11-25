@@ -1,11 +1,11 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import App from './App.vue'
-import router from './router'
 import '../css/app.css'  // Sesuaikan path CSS
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import { useAuthStore } from './stores/authStore' // Sesuaikan path store
+import App from './app.vue'
+import router from './Router/index.js'
+import { useAuthStore } from './store/useAuthStore.js'
 
 const app = createApp(App)
 

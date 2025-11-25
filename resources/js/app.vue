@@ -32,8 +32,8 @@
  <script setup>
  import { computed } from 'vue'
  import { useRoute } from 'vue-router'
- import Navbar from './components/layout/Navbar.vue'
- import Footer from './components/layout/Footer.vue'
+ import Navbar from '@/Layouts/Navbar.vue'
+ import Footer from '@/Layouts/Footer.vue'
  
  const route = useRoute()
  
