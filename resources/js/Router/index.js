@@ -8,7 +8,7 @@ import Generasi from '@/Pages/Generasi.vue'
 import BidangDetail from '@/Pages/BidangDetail.vue'
 import FormAspirasi from '@/Pages/FormAspirasi.vue'
 import Login from '@/Pages/Login.vue'
-import EventForm from '@/Pages/Event.vue'
+import EventForm from '@/Pages/Admin/EventForm.vue'
 import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
 import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue' // ← Pastikan file ini ada
