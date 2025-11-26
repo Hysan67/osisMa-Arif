@@ -45,8 +45,8 @@
  const authStore = useAuthStore()
  
  const form = ref({
-   email: '',
-   password: ''
+   email: 'wkwk@gmail.com',
+   password: 'kwk'
  })
  const loading = ref(false)
  const error = ref('')
@@ -56,7 +56,7 @@
    error.value = ''
    try {
      await authStore.login(form.value.email, form.value.password)
-     router.push('/admin/dashboard') // Redirect ke dashboard setelah login berhasil
+     router.push('/admin') // Redirect ke dashboard setelah login berhasil
    } catch (err) {
      error.value = 'Login gagal. Periksa email dan password.'
    } finally {

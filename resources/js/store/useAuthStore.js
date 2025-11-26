@@ -1,3 +1,4 @@
+// resources/js/stores/useAuthStore.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
@@ -8,26 +9,28 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => !!token.value)
 
   const login = async (email, password) => {
-    try {
-      // SEMENTARA: Simulasi login tanpa API
-      // Nanti ganti dengan call ke Laravel backend
-      
-      if (email === 'admin@osis.com' && password === 'password') {
-        user.value = { 
-          id: 1, 
-          name: 'Admin OSIS', 
-          email: email,
-          role: 'admin'
+    console.log('🔄 AuthStore login called with:', email, password)
+    
+    // Demo login - always success
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (email && password) {
+          user.value = { 
+            id: 1, 
+            name: 'Admin OSIS', 
+            email: email,
+            role: 'admin'
+          }
+          token.value = 'demo-token-' + Date.now()
+          localStorage.setItem('auth_token', token.value)
+          console.log('✅ Login successful')
+          resolve({ success: true, user: user.value })
+        } else {
+          console.log('❌ Login failed')
+          reject(new Error('Email dan password required'))
         }
-        token.value = 'fake-jwt-token-for-development'
-        localStorage.setItem('auth_token', token.value)
-        return { success: true, user: user.value }
-      } else {
-        throw new Error('Email atau password salah')
-      }
-    } catch (error) {
-      throw error
-    }
+      }, 1000)
+    })
   }
 
   const logout = () => {
@@ -37,7 +40,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const checkAuth = () => {
-    // Check if token exists in localStorage
     const savedToken = localStorage.getItem('auth_token')
     if (savedToken) {
       user.value = { 

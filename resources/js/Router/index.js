@@ -8,6 +8,9 @@ import Generasi from '@/Pages/Generasi.vue'
 import BidangDetail from '@/Pages/BidangDetail.vue'
 import FormAspirasi from '@/Pages/FormAspirasi.vue'
 import Login from '@/Pages/Login.vue'
+import EventForm from '@/Pages/Event.vue'
+import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
+import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue' // ← Pastikan file ini ada
 import { useAuthStore } from '@/store/useAuthStore.js' // ← Path diperbaiki
 
@@ -26,9 +29,8 @@ const routes = [
     props: true
   },
   { path: '/login', name: 'Login', component: Login },
-  { 
-    path: '/admin/dashboard', 
-    name: 'AdminDashboard', 
+  {
+    path: '/admin',
     component: AdminDashboard,
     beforeEnter: (to, from, next) => {
       const authStore = useAuthStore()
@@ -37,7 +39,24 @@ const routes = [
       } else {
         next('/login')
       }
-    }
+    },
+    children: [ 
+      {
+        path: 'event-form',
+        name: 'EventForm',
+        component: EventForm
+      },
+      {
+        path: 'kelola-artikel',
+        name: 'KelolaArtikel',
+        component: KelolaArtikel
+      },
+      {
+        path: 'member-osis',
+        name: 'MemberOsis',
+        component: MemberOsis
+      }
+    ]
   }
 ]
 
