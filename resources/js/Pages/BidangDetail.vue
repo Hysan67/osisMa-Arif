@@ -160,10 +160,9 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const activeTab = ref('motto') // ✔ DITAMBAHKAN — mendefinisikan tab aktif
+const activeTab = ref('motto') 
 
 const bidangData = {
-  /* (isinya tetap, tidak diubah) */
   inti: {
     title: 'Inti OSIS',
     description: 'Inti OSIS adalah jantung dari organisasi yang terdiri dari Ketua, Wakil Ketua, Sekretaris, dan Bendahara. Mereka bertugas mengkoordinir seluruh bidang, menyusun program kerja tahunan, dan menjadi penghubung antara siswa dengan pihak sekolah.',
