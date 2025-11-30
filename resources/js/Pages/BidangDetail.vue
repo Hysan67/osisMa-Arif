@@ -2,7 +2,7 @@
 <template>
   <div class="min-h-screen bg-transparant py-16">
     <div class="max-w-4xl mx-auto px-4 py-16">
-      <router-link to="/" class="text-blue-600 hover:underline mb-8 inline-block font-light">&larr; Kembali ke Beranda</router-link>
+      <router-link to="/" class="text-blue-600 hover:underline mb-8 inline-block font-light" data-aos="fade-left" data-aos-delay="500">&larr; Kembali ke Beranda</router-link>
 
       <div v-if="!bidang" class="text-center py-16 text-gray-500">
         Halaman tidak ditemukan.
@@ -11,18 +11,18 @@
       <div v-else>
         <!-- Judul -->
         <div class="text-center mb-16">
-          <h1 class="text-5xl font-light text-blue-600 mb-6">{{ bidang.title }}</h1>
-          <div class="w-16 h-px bg-yellow-300 mx-auto"></div>
-          <p class="text-gray-700 mt-8 max-w-2xl mx-auto text-lg leading-relaxed">{{ bidang.description }}</p>
+          <h1 class="text-5xl font-light text-blue-600 mb-6" data-aos="fade-right" data-aos-delay="500">{{ bidang.title }}</h1>
+          <div class="w-16 h-px bg-yellow-300 mx-auto" data-aos="fade-left" data-aos-delay="500"></div>
+          <p class="text-gray-700 mt-8 max-w-2xl mx-auto text-lg leading-relaxed" data-aos="zoom-in" data-aos-delay="500">{{ bidang.description }}</p>
         </div>
 
         <!-- Program Kerja -->
         <div class="mb-20">
-          <h2 class="text-3xl font-light text-blue-600 mb-8">Program Kerja</h2>
+          <h2 class="text-3xl font-light text-blue-600 mb-8" data-aos="fade-left" data-aos-delay="500">Program Kerja</h2>
           <ul class="space-y-4">
             <li v-for="(program, i) in bidang.programs" :key="i" class="flex items-start">
-              <span class="text-blue-600 mr-3 mt-1">•</span>
-              <span class="text-gray-800 font-light">{{ program }}</span>
+              <span class="text-blue-600 mr-3 mt-1" data-aos="fade-down" data-aos-delay="500">•</span>
+              <span class="text-gray-800 font-light" data-aos="fade-up" data-aos-delay="500">{{ program }}</span>
             </li>
           </ul>
         </div>

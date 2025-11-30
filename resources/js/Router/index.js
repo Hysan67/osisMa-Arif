@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/Pages/Home.vue'  // ← Path diperbaiki
 import Event from '@/Pages/Event.vue'
 import EventDetail from '@/Pages/EventDetail.vue'
-import Galeri from '@/Pages/Galeri.vue'
-import Kontak from '@/Pages/Kontak.vue'
 import Generasi from '@/Pages/Generasi.vue'
 import BidangDetail from '@/Pages/BidangDetail.vue'
 import FormAspirasi from '@/Pages/FormAspirasi.vue'
@@ -18,8 +16,6 @@ const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/event', name: 'Event', component: Event },
   { path: '/event/:id', name: 'EventDetail', component: EventDetail },
-  { path: '/galeri', name: 'Galeri', component: Galeri },
-  { path: '/kontak', name: 'Kontak', component: Kontak },
   { path: '/generasi', name: 'Generasi', component: Generasi },
   { path: '/form-aspirasi-siswa', name: 'FormAspirasi', component: FormAspirasi },
   { 
