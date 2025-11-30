@@ -147,11 +147,10 @@ import ProgramCard from '../Pages/ProgramCard.vue'
 import EventCard from '../Pages/EventCard.vue'
 import BidangCard from '../Pages/BidangCard.vue'
 import GalleryCarousel from '../Pages/GalleryCarousel.vue'
-import SocialLink from '../Pages/SocialLink.vue'
 import AspirasiSection from '../Pages/AspirasiSection.vue'
 import EventBesarSection from '../Pages/EventBesarSection.vue'
 import FindUsSection from '../Pages/FindUsSection.vue'
-
+import SocialLink from '../Pages/SocialLink.vue'
 
 const eventStore = useEventStore()
 useAOSRefresh()
