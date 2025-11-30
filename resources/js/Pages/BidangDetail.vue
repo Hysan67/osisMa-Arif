@@ -27,8 +27,124 @@
           </ul>
         </div>
 
-        <!-- Ilustrasi Foto (jika nanti ada) -->
-        <div class="rounded-2xl overflow-hidden shadow-sm" data-aos="flip-left" data-aos-delay="500">
+        <!-- ⭐ TIMELINE PENGALAMAN (DITAMBAHKAN) -->
+        <div class="bg-white rounded-2xl shadow-md p-6 mb-20">
+          <h2 class="text-center text-gray-700 font-semibold tracking-wide mb-6">
+            PENGALAMAN ORGANISASI & KEPANITIAAN
+          </h2>
+
+          <div class="space-y-8 relative">
+
+            <!-- ITEM 1 -->
+            <div class="flex items-start gap-4 relative">
+              <div class="bg-white rounded-full p-1 z-10 relative">
+               <div class="absolute -left-[3px] top-3 w-3 h-3 bg-[#1E40AF] rounded-full z-20"></div>
+              </div>
+
+              <div>
+                <h3 class="font-semibold text-[#1E40AF] leading-tight">Koordinator Dana Zion Competition Gen 2</h3>
+                <p class="text-sm text-gray-600">Kompetisi Zion Gen II TA 2024/2025</p>
+              </div>
+            </div>
+
+            <!-- ITEM 2 -->
+            <div class="flex items-start gap-4 relative">
+              <div class="bg-white rounded-full p-1 z-10 relative">
+               <div class="absolute -left-[3px] top-3 w-3 h-3 bg-[#1E40AF] rounded-full z-20"></div>
+              </div>
+
+              <div>
+                <h3 class="font-semibold text-[#1E40AF] leading-tight">Sekretaris II Piala Zion VI</h3>
+                <p class="text-sm text-gray-600">Panitia Sekretaris 2 ZION CUP Vol. VI Tahun 2025</p>
+              </div>
+            </div>
+
+            <!-- ITEM 3 -->
+            <div class="flex items-start gap-4 relative">
+              <div class="bg-white rounded-full p-1 z-10 relative">
+               <div class="absolute -left-[3px] top-3 w-3 h-3 bg-[#1E40AF] rounded-full z-20"></div>
+              </div>
+
+              <div>
+                <h3 class="font-semibold text-[#1E40AF] leading-tight">Ketua Panitia Natal 2024</h3>
+                <p class="text-sm text-gray-600">Perayaan Natal SMA Zion TA 2024–2025</p>
+              </div>
+            </div>
+
+            <!-- ITEM 4 -->
+            <div class="flex items-start gap-4 relative">
+              <div class="bg-white rounded-full p-1 z-10 relative">
+               <div class="absolute -left-[3px] top-3 w-3 h-3 bg-[#1E40AF] rounded-full z-20"></div>
+              </div>
+
+              <div>
+                <h3 class="font-semibold text-[#1E40AF] leading-tight">Koordinator Lomba Balon Berantai HUT RI ke–79</h3>
+                <p class="text-sm text-gray-600">HUT RI ke–79</p>
+              </div>
+            </div>
+
+            <!-- ITEM 5 -->
+            <div class="flex items-start gap-4 relative">
+              <div class="bg-white rounded-full p-1 z-10 relative">
+               <div class="absolute -left-[3px] top-3 w-3 h-3 bg-[#1E40AF] rounded-full z-20"></div>
+              </div>
+
+              <div>
+                <h3 class="font-semibold text-[#1E40AF] leading-tight">Bendahara Porseni 2 TA 2023–2024</h3>
+                <p class="text-sm text-gray-600">Pekan Olahraga & Seni 2 TA 2023–2024 SMA Zion</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ⭐ END TIMELINE -->
+
+<!-- ⭐ M O T T O  &  H O B I  (DINAMIS) -->
+<div class="border border-gray-300 rounded-md overflow-hidden w-full max-w-3xl mx-auto mb-20">
+
+  <!-- TAB HEADER -->
+  <div class="grid grid-cols-2 text-center font-semibold">
+
+    <button
+      @click="activeTab = 'motto'"
+      :class="activeTab === 'motto'
+        ? 'bg-[#1E266D] text-white'
+        : 'bg-gray-100 text-gray-700'"
+      class="py-4 transition-colors duration-200"
+    >
+      Motto
+    </button>
+
+    <button
+      @click="activeTab = 'hobi'"
+      :class="activeTab === 'hobi'
+        ? 'bg-[#1E266D] text-white'
+        : 'bg-gray-100 text-gray-700'"
+      class="py-4 transition-colors duration-200"
+    >
+      Hobi
+    </button>
+
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div class="p-6 text-gray-800 text-lg leading-relaxed min-h-[120px]">
+
+    <!-- Motto -->
+    <p v-if="activeTab === 'motto'">
+      {{ bidang.motto || '— Tidak ada motto —' }}
+    </p>
+
+    <!-- Hobi -->
+    <p v-else>
+      {{ bidang.hobi || '— Tidak ada hobi —' }}
+    </p>
+
+  </div>
+
+</div>
+<!-- ⭐ END MOTO & HOBI -->
+        <!-- Ilustrasi Foto -->
+        <div class="rounded-2xl overflow-hidden shadow-sm">
           <div class="aspect-video bg-gray-200 flex items-center justify-center">
             <span class="text-gray-600">Dokumentasi: {{ bidang.title }}</span>
           </div>
@@ -39,13 +155,15 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
+const activeTab = ref('motto') // ✔ DITAMBAHKAN — mendefinisikan tab aktif
+
 const bidangData = {
-  // ... (sama seperti sebelumnya, tidak perlu diubah)
+  /* (isinya tetap, tidak diubah) */
   inti: {
     title: 'Inti OSIS',
     description: 'Inti OSIS adalah jantung dari organisasi yang terdiri dari Ketua, Wakil Ketua, Sekretaris, dan Bendahara. Mereka bertugas mengkoordinir seluruh bidang, menyusun program kerja tahunan, dan menjadi penghubung antara siswa dengan pihak sekolah.',
