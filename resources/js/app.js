@@ -1,27 +1,38 @@
-import '../css/app.css';
-import './bootstrap';
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import '../css/app.css'  // Sesuaikan path CSS
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import App from './app.vue'
+import router from './Router/index.js'
+import { useAuthStore } from './store/useAuthStore.js'
 
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { createApp, h } from 'vue';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+const app = createApp(App)
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+// Konfigurasi AOS
+app.config.globalProperties.$AOS = AOS
+app.mixin({
+  mounted() {
+    AOS.init({
+      duration: 800,
+      once: false, 
+      easing: 'ease-out-cubic',
+      offset: 50,
+    })
+  },
+})
 
-createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) =>
-        resolvePageComponent(
-            `./Pages/${name}.vue`,
-            import.meta.glob('./Pages/**/*.vue'),
-        ),
-    setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(ZiggyVue)
-            .mount(el);
-    },
-    progress: {
-        color: '#4B5563',
-    },
-});
+// Scroll ke atas setiap kali ganti halaman
+router.afterEach(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  AOS.refresh()
+})
+
+app.use(createPinia())
+app.use(router)
+
+// Inisialisasi autentikasi saat app start
+const authStore = useAuthStore()
+authStore.checkAuth()
+
+app.mount('#app')

@@ -13,6 +13,7 @@
           active-class="bg-blue-800"
         >
           <i class="fa-solid fa-newspaper text-lg w-5 text-white"></i>
+          <i class="fas fa-newspaper w-5"></i>
           <span>Kelola Artikel</span>
         </router-link>
 
@@ -22,6 +23,7 @@
           active-class="bg-blue-800"
         >
           <i class="fa-solid fa-calendar-days text-lg w-5 text-white"></i>
+          <i class="fas fa-table w-5"></i>
           <span>Kelola Event</span>
         </router-link>
 
@@ -31,6 +33,7 @@
           active-class="bg-blue-800"
         >
           <i class="fa-solid fa-users text-lg w-5 text-white"></i>
+          <i class="fas fa-users w-5"></i>
           <span>Member OSIS</span>
         </router-link>
       </nav>
@@ -42,6 +45,11 @@
           class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md flex items-center justify-center gap-2"
         >
           <i class="fa-solid fa-right-from-bracket"></i>
+      <div class="p-4 border-t border-blue-700">
+        <button
+          @click="handleLogout"
+          class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md"
+        >
           Logout
         </button>
       </div>
@@ -75,3 +83,15 @@ onMounted(() => {
 })
 </script>
 
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/store/useAuthStore.js'
+
+const router = useRouter();
+const authStore = useAuthStore()
+
+const handleLogout = async () => {
+  await authStore.logout();
+  router.push({ name: 'Login' });
+};
+
+</script>
