@@ -7,6 +7,7 @@
       <span class="text-gray-600 text-lg">Foto Grup: {{ bidang.title }}</span>
     </div>
 
+    <!-- CONTAINER UTAMA -->
     <div class="max-w-5xl mx-auto px-4 py-12">
 
       <!-- Judul Bidang -->
@@ -136,7 +137,7 @@
         </div>
       </div>
 
-      <!-- Apa yang Kami Lakukan -->
+      <!-- 🔥 Apa yang Kami Lakukan -->
       <div class="mt-16 bg-gray-50 py-12">
         <div class="max-w-5xl mx-auto px-4">
           <h2 class="text-3xl md:text-4xl font-light text-blue-600 mb-4">Apa yang kami lakukan.</h2>
@@ -158,7 +159,7 @@
         </div>
       </div>
 
-      <!-- Foto Slider Dokumentasi -->
+      <!-- 📸 Foto Slider Dokumentasi -->
       <div class="mt-12">
         <h3 class="text-xl font-medium text-blue-600 mb-4">Dokumentasi Kegiatan</h3>
         <PhotoSlider :photos="bidang.photos" />

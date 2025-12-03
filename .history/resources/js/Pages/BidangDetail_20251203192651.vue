@@ -158,7 +158,7 @@
         </div>
       </div>
 
-      <!-- Foto Slider Dokumentasi -->
+      <!-- 📸 Foto Slider Dokumentasi -->
       <div class="mt-12">
         <h3 class="text-xl font-medium text-blue-600 mb-4">Dokumentasi Kegiatan</h3>
         <PhotoSlider :photos="bidang.photos" />

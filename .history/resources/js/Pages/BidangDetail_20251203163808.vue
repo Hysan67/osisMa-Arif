@@ -1,17 +1,18 @@
 <!-- src/pages/BidangDetail.vue -->
 <template>
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen bg-white py-12">
+    <div class="max-w-5xl mx-auto px-4">
 
-    <!-- FOTO BESAR -->
-    <div class="w-full aspect-[16/9] bg-gray-200 flex items-center justify-center rounded-none">
-      <span class="text-gray-600 text-lg">Foto Grup: {{ bidang.title }}</span>
-    </div>
-
-    <div class="max-w-5xl mx-auto px-4 py-12">
+      <!-- Foto Grup (Full Width, 16:9) -->
+      <div class="mb-8">
+        <div class="w-full aspect-[16/9] bg-gray-200 rounded-xl flex items-center justify-center">
+          <span class="text-gray-600">Foto Grup: {{ bidang.title }}</span>
+        </div>
+      </div>
 
       <!-- Judul Bidang -->
       <div class="text-center mb-8">
-        <h1 class="text-4xl md:text-5xl font-light text-blue-600 mb-4">{{ bidang.title }}</h1>
+        <h1 class="text-4xl md:text-5xl font-light text-osisBlue mb-4">{{ bidang.title }}</h1>
         <div class="w-16 h-0.5 bg-osisGold mx-auto"></div>
       </div>
 
@@ -24,13 +25,13 @@
 
       <!-- Ketua / Koordinator -->
       <div class="mb-16">
-        <h2 class="text-2xl font-medium text-blue-600 mb-6 text-center">Ketua / Koordinator Bidang</h2>
+        <h2 class="text-2xl font-medium text-osisBlue mb-6 text-center">Ketua / Koordinator Bidang</h2>
         <div class="flex flex-col md:flex-row gap-8 items-center max-w-3xl mx-auto">
-          <div class="w-28 h-28 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold">
+          <div class="w-28 h-28 rounded-full bg-osisBlue flex items-center justify-center text-white text-2xl font-bold">
             {{ getInitials(ketua.nama) }}
           </div>
           <div class="text-center md:text-left">
-            <h3 class="text-xl font-semibold text-blue-600">{{ ketua.nama }}</h3>
+            <h3 class="text-xl font-semibold text-osisBlue">{{ ketua.nama }}</h3>
             <p class="text-gray-600 mb-4">{{ ketua.jabatan }}</p>
 
             <!-- Tab Motto & Hobi -->
@@ -38,14 +39,14 @@
               <div class="grid grid-cols-2 text-center">
                 <button
                   @click="activeTab.ketua = 'motto'"
-                  :class="activeTab.ketua === 'motto' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'"
+                  :class="activeTab.ketua === 'motto' ? 'bg-osisBlue text-white' : 'bg-gray-100 text-gray-700'"
                   class="py-2 font-medium transition-colors"
                 >
                   Motto
                 </button>
                 <button
                   @click="activeTab.ketua = 'hobi'"
-                  :class="activeTab.ketua === 'hobi' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'"
+                  :class="activeTab.ketua === 'hobi' ? 'bg-osisBlue text-white' : 'bg-gray-100 text-gray-700'"
                   class="py-2 font-medium transition-colors"
                 >
                   Hobi
@@ -64,9 +65,9 @@
 
             <!-- Timeline -->
             <div class="mt-6">
-              <h4 class="font-medium text-blue-600 mb-2">Pengalaman Organisasi</h4>
+              <h4 class="font-medium text-osisBlue mb-2">Pengalaman Organisasi</h4>
               <div class="space-y-3">
-                <div v-for="(exp, i) in ketua.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1">
+                <div v-for="(exp, i) in ketua.pengalaman" :key="i" class="border-l-2 border-osisBlue pl-3 py-1">
                   <h5 class="font-medium text-gray-800">{{ exp.kegiatan }}</h5>
                   <p class="text-sm text-gray-600">{{ exp.tahun }}</p>
                 </div>
@@ -78,7 +79,7 @@
 
       <!-- Anggota Tim -->
       <div v-if="anggotaTim.length" class="mb-12">
-        <h2 class="text-2xl font-medium text-blue-600 mb-6 text-center">Anggota Tim</h2>
+        <h2 class="text-2xl font-medium text-osisBlue mb-6 text-center">Anggota Tim</h2>
         <p class="text-gray-600 text-center mb-8">
           Terdiri dari {{ anggotaTim.length }} anggota.
         </p>
@@ -89,7 +90,7 @@
               {{ getInitials(anggota.nama) }}
             </div>
             <div class="flex-1 max-w-3xl">
-              <h3 class="text-lg font-semibold text-blue-600">{{ anggota.nama }}</h3>
+              <h3 class="text-lg font-semibold text-osisBlue">{{ anggota.nama }}</h3>
               <p class="text-gray-600 mb-4">{{ anggota.jabatan }}</p>
 
               <!-- Tab Motto & Hobi -->
@@ -97,14 +98,14 @@
                 <div class="grid grid-cols-2 text-center">
                   <button
                     @click="activeTab[anggota.id] = 'motto'"
-                    :class="activeTab[anggota.id] === 'motto' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'"
+                    :class="activeTab[anggota.id] === 'motto' ? 'bg-osisBlue text-white' : 'bg-gray-100 text-gray-700'"
                     class="py-1 font-medium transition-colors"
                   >
                     Motto
                   </button>
                   <button
                     @click="activeTab[anggota.id] = 'hobi'"
-                    :class="activeTab[anggota.id] === 'hobi' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'"
+                    :class="activeTab[anggota.id] === 'hobi' ? 'bg-osisBlue text-white' : 'bg-gray-100 text-gray-700'"
                     class="py-1 font-medium transition-colors"
                   >
                     Hobi
@@ -123,9 +124,9 @@
 
               <!-- Timeline -->
               <div>
-                <h4 class="font-medium text-blue-600 mb-2">Pengalaman Organisasi</h4>
+                <h4 class="font-medium text-osisBlue mb-2">Pengalaman Organisasi</h4>
                 <div class="space-y-2">
-                  <div v-for="(exp, i) in anggota.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1">
+                  <div v-for="(exp, i) in anggota.pengalaman" :key="i" class="border-l-2 border-osisBlue pl-3 py-1">
                     <h5 class="font-medium text-gray-800">{{ exp.kegiatan }}</h5>
                     <p class="text-sm text-gray-600">{{ exp.tahun }}</p>
                   </div>
@@ -136,10 +137,10 @@
         </div>
       </div>
 
-      <!-- Apa yang Kami Lakukan -->
+      <!-- 🔥 Apa yang Kami Lakukan -->
       <div class="mt-16 bg-gray-50 py-12">
         <div class="max-w-5xl mx-auto px-4">
-          <h2 class="text-3xl md:text-4xl font-light text-blue-600 mb-4">Apa yang kami lakukan.</h2>
+          <h2 class="text-3xl md:text-4xl font-light text-osisBlue mb-4">Apa yang kami lakukan.</h2>
           <p class="text-gray-600 mb-12 max-w-3xl">
             {{ bidang.aktivitasDeskripsi }}
           </p>
@@ -150,18 +151,12 @@
                 <span v-html="getIcon(aktivitas.icon)"></span>
               </div>
               <div>
-                <h3 class="text-xl font-semibold text-blue-600">{{ aktivitas.judul }}</h3>
+                <h3 class="text-xl font-semibold text-osisBlue">{{ aktivitas.judul }}</h3>
                 <p class="text-gray-700 mt-2">{{ aktivitas.deskripsi }}</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Foto Slider Dokumentasi -->
-      <div class="mt-12">
-        <h3 class="text-xl font-medium text-blue-600 mb-4">Dokumentasi Kegiatan</h3>
-        <PhotoSlider :photos="bidang.photos" />
       </div>
     </div>
   </div>
@@ -170,7 +165,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import PhotoSlider from '../Pages/PhotoSlider.vue'
 
 const route = useRoute()
 const activeTab = ref({ ketua: 'motto' })
@@ -225,11 +219,6 @@ const bidangData = {
       { icon: 'publikasi', judul: 'Laporan Kegiatan', deskripsi: 'Menyusun laporan kegiatan untuk diserahkan kepada kepala sekolah.' },
       { icon: 'ibadah', judul: 'Pembinaan Harian', deskripsi: 'Memberikan arahan dan pendampingan kepada pengurus harian.' },
       { icon: 'sosial', judul: 'Koordinasi Antar Bidang', deskripsi: 'Memastikan semua bidang bekerja sama dalam setiap acara besar.' }
-    ],
-    photos: [
-      { src: '/images/inti-1.jpg', alt: 'Foto Inti OSIS 1' },
-      { src: '/images/inti-2.jpg', alt: 'Foto Inti OSIS 2' },
-      { src: '/images/inti-3.jpg', alt: 'Foto Inti OSIS 3' }
     ]
   },
   1: {
@@ -243,11 +232,6 @@ const bidangData = {
       { icon: 'ibadah', judul: 'Peringatan PHBI', deskripsi: 'Mengatur perayaan Hari Besar Islam seperti Isra Mi’raj dan Maulid Nabi.' },
       { icon: 'sosial', judul: 'Bakti Sosial', deskripsi: 'Mengadakan santunan anak yatim dan donasi untuk panti asuhan.' },
       { icon: 'ibadah', judul: 'Bimbingan Sholat', deskripsi: 'Membimbing sholat dhuha dan sholat dzuhur berjamaah.' }
-    ],
-    photos: [
-      { src: '/images/bidang1-1.jpg', alt: 'Foto Bidang I 1' },
-      { src: '/images/bidang1-2.jpg', alt: 'Foto Bidang I 2' },
-      { src: '/images/bidang1-3.jpg', alt: 'Foto Bidang I 3' }
     ]
   },
   2: {
@@ -261,11 +245,6 @@ const bidangData = {
       { icon: 'disiplin', judul: 'Jaga Pagi', deskripsi: 'Melakukan penjagaan di gerbang sekolah saat jam masuk.' },
       { icon: 'disiplin', judul: 'Mediasi Konflik', deskripsi: 'Menjadi penengah dalam konflik antar siswa secara adil.' },
       { icon: 'sosial', judul: 'Pelatihan Karakter', deskripsi: 'Mengadakan pelatihan kepemimpinan dan akhlak mulia.' }
-    ],
-    photos: [
-      { src: '/images/bidang2-1.jpg', alt: 'Foto Bidang II 1' },
-      { src: '/images/bidang2-2.jpg', alt: 'Foto Bidang II 2' },
-      { src: '/images/bidang2-3.jpg', alt: 'Foto Bidang II 3' }
     ]
   },
   3: {
@@ -279,11 +258,6 @@ const bidangData = {
       { icon: 'seni', judul: 'Festival Seni Islami', deskripsi: 'Mengadakan lomba nasyid, kaligrafi, dan rebana.' },
       { icon: 'lomba', judul: 'Lomba Futsal & Voli', deskripsi: 'Mengkoordinir turnamen antar kelas dan sekolah.' },
       { icon: 'seni', judul: 'Pelatihan Tari Saman', deskripsi: 'Memberikan pelatihan tari tradisional kepada siswa.' }
-    ],
-    photos: [
-      { src: '/images/bidang3-1.jpg', alt: 'Foto Bidang III 1' },
-      { src: '/images/bidang3-2.jpg', alt: 'Foto Bidang III 2' },
-      { src: '/images/bidang3-3.jpg', alt: 'Foto Bidang III 3' }
     ]
   },
   4: {
@@ -297,11 +271,6 @@ const bidangData = {
       { icon: 'publikasi', judul: 'Dokumentasi Foto & Video', deskripsi: 'Mendokumentasikan setiap kegiatan OSIS.' },
       { icon: 'publikasi', judul: 'Desain Poster', deskripsi: 'Membuat desain promosi untuk setiap event.' },
       { icon: 'sosial', judul: 'Kolaborasi Eksternal', deskripsi: 'Menjalin kerja sama dengan OSIS sekolah lain.' }
-    ],
-    photos: [
-      { src: '/images/bidang4-1.jpg', alt: 'Foto Bidang IV 1' },
-      { src: '/images/bidang4-2.jpg', alt: 'Foto Bidang IV 2' },
-      { src: '/images/bidang4-3.jpg', alt: 'Foto Bidang IV 3' }
     ]
   },
   5: {
@@ -315,11 +284,6 @@ const bidangData = {
       { icon: 'sosial', judul: 'Donor Darah', deskripsi: 'Mengadakan kegiatan donor darah bersama PMI.' },
       { icon: 'lingkungan', judul: 'Penanaman Pohon', deskripsi: 'Mengadakan penanaman pohon di area sekolah.' },
       { icon: 'sosial', judul: 'Kampanye Anti Narkoba', deskripsi: 'Memberikan edukasi tentang bahaya narkoba.' }
-    ],
-    photos: [
-      { src: '/images/bidang5-1.jpg', alt: 'Foto Bidang V 1' },
-      { src: '/images/bidang5-2.jpg', alt: 'Foto Bidang V 2' },
-      { src: '/images/bidang5-3.jpg', alt: 'Foto Bidang V 3' }
     ]
   },
   6: {
@@ -333,11 +297,6 @@ const bidangData = {
       { icon: 'bisnis', judul: 'Pelatihan Sabun Herbal', deskripsi: 'Memberikan pelatihan membuat sabun alami.' },
       { icon: 'bisnis', judul: 'Pameran Karya Kreatif', deskripsi: 'Menampilkan hasil karya siswa kepada publik.' },
       { icon: 'sosial', judul: 'Kolaborasi UMKM', deskripsi: 'Bekerja sama dengan pelaku UMKM lokal.' }
-    ],
-    photos: [
-      { src: '/images/bidang6-1.jpg', alt: 'Foto Bidang VI 1' },
-      { src: '/images/bidang6-2.jpg', alt: 'Foto Bidang VI 2' },
-      { src: '/images/bidang6-3.jpg', alt: 'Foto Bidang VI 3' }
     ]
   }
 }
@@ -359,12 +318,4 @@ const bidang = computed(() => {
 
 const ketua = computed(() => bidang.value.ketua)
 const anggotaTim = computed(() => bidang.value.anggota || [])
-
-// Navigasi ke bidang selanjutnya
-const nextBidangPath = computed(() => {
-  const id = parseInt(route.params.id)
-  const nextId = id + 1
-  if (nextId > 6) return '/inti'
-  return `/bidang/${nextId}`
-})
 </script>
