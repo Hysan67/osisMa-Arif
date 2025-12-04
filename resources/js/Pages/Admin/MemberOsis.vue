@@ -2,7 +2,6 @@
   <div class="p-6">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-semibold text-blue-700">Member OSIS</h2>
-      <button @click="openForm" class="bg-[#1E40AF] hover:bg-[#1E3A8A] text-white px-4 py-2 rounded">
       <button @click="openForm" class="bg-white text-blue-700 px-3 py-2 rounded shadow hover:bg-gray-100">
         + Tambah Member
       </button>

@@ -42,12 +42,6 @@
       <div class="p-4 border-t border-blue-700">
         <button
           @click="handleLogout"
-          class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md flex items-center justify-center gap-2"
-        >
-          <i class="fa-solid fa-right-from-bracket"></i>
-      <div class="p-4 border-t border-blue-700">
-        <button
-          @click="handleLogout"
           class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md"
         >
           Logout
@@ -81,17 +75,4 @@ onMounted(() => {
     window.history.pushState(null, '', window.location.href)
   })
 })
-</script>
-
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/store/useAuthStore.js'
-
-const router = useRouter();
-const authStore = useAuthStore()
-
-const handleLogout = async () => {
-  await authStore.logout();
-  router.push({ name: 'Login' });
-};
-
 </script>
