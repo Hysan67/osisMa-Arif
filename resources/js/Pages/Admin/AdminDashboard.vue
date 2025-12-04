@@ -58,21 +58,12 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
 
 const router = useRouter()
 
 function handleLogout() {
-  localStorage.removeItem('admin_token')
+  const authStore = useAuthStore();
+  authStore.logout();
   router.push('/login')
 }
-
-// ANTI KEMBALI KE LOGIN SAAT TEKAN BACK
-onMounted(() => {
-  // kunci history agar tidak bisa kembali
-  window.history.pushState(null, '', window.location.href)
-  window.addEventListener('popstate', () => {
-    window.history.pushState(null, '', window.location.href)
-  })
-})
 </script>

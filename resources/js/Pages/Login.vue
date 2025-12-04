@@ -91,35 +91,40 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../store/useAuthStore'
+import axios from 'axios'
 
 const router = useRouter()
-const authStore = useAuthStore()
 
 const form = ref({
-  email: '',
-  password: ''
+  email: 'admin@gmail.com',
+  password: '123'
 })
 
 const loading = ref(false)
 const error = ref('')
 const showPassword = ref(false)
 
-/* WhatsApp Auto Message */
 const whatsappNumber = "6285755924627"
 const whatsappText = "Permisi, saya perlu bantuan"
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`
+
+// ... bagian lain dari script setup ...
 
 const handleLogin = async () => {
   loading.value = true
   error.value = ''
   try {
-    await authStore.login(form.value.email, form.value.password)
-    router.replace('/admin')
+    const response = await axios.post('/api/login', { // atau URL lengkap
+      email: form.value.email,
+      password: form.value.password,
+    })
+    console.log(response.data.message)
+    // successMessage.value = response.data.message
   } catch (err) {
-    error.value = 'Login gagal. Periksa email dan password.'
+    error.value = err.response?.data?.message || 'Login failed'
   } finally {
     loading.value = false
+    router.push('/admin')
   }
 }
 </script>

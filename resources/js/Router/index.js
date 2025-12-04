@@ -28,14 +28,14 @@ const routes = [
   {
     path: '/admin',
     component: AdminDashboard,
-    beforeEnter: (to, from, next) => {
-      const authStore = useAuthStore()
-      if (authStore.isAuthenticated) {
-        next()
-      } else {
-        next('/login')
-      }
-    },
+    // beforeEnter: (to, from, next) => {
+    //   const authStore = useAuthStore()
+    //   if (authStore.isAuthenticated) {
+    //     next()
+    //   } else {
+    //     next('/login')
+    //   }
+    // },
     children: [ 
       {
         path: 'event-form',
