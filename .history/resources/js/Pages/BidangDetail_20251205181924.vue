@@ -6,6 +6,14 @@
     <div
       class="w-full aspect-[16/9] bg-gray-200 rounded-none overflow-hidden"
     >
+    <router-link 
+      to="/" 
+      class="absolute top-19 left-4 z-10 text-white hover:underline font-light-medium bg-transparent px-3 py-1 rounded"
+      data-aos="fade-left" 
+      data-aos-delay="500"
+    >
+      &larr; Kembali
+    </router-link>
       <img
         v-if="bidang.headerPhoto"
         :src="bidang.headerPhoto"

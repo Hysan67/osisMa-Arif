@@ -1,6 +1,6 @@
 <!-- src/pages/BidangDetail.vue -->
 <template>
-  <div class="min-h-screen bg-white py-8">
+  <div class="min-h-screen bg-white">
 
       <!-- FOTO BESAR -->
     <div
@@ -11,8 +11,6 @@
         :src="bidang.headerPhoto"
         :alt="'Foto ' + bidang.title"
         class="w-full h-full object-cover"
-        data-aos="flip-left"
-        :data-aos-delay="bidang.headerPhoto * 500"
       />
 
       <!-- fallback kalau headerPhoto belum diisi -->
@@ -26,30 +24,30 @@
 
       <!-- Judul Bidang -->
       <div class="text-center mb-8">
-        <h1 class="text-4xl md:text-5xl font-light text-blue-600 mb-4"  data-aos="zoom-in" data-aos-delay="500">{{ bidang.title }}</h1>
+        <h1 class="text-4xl md:text-5xl font-light text-blue-600 mb-4">{{ bidang.title }}</h1>
         <div class="w-16 h-0.5 bg-osisGold mx-auto"></div>
       </div>
 
       <!-- Tugas Umum -->
       <div class="text-center mb-12 max-w-3xl mx-auto">
-        <p class="text-gray-700 text-lg leading-relaxed" data-aos="fade-left" data-aos-delay="500">
+        <p class="text-gray-700 text-lg leading-relaxed">
           {{ bidang.tugasUmum }}
         </p>
       </div>
 
       <!-- Ketua / Koordinator -->
       <div class="mb-16">
-        <h2 class="text-2xl font-medium text-blue-600 mb-6 text-center" data-aos="fade-right" data-aos-delay="500">Ketua / Koordinator Bidang</h2>
+        <h2 class="text-2xl font-medium text-blue-600 mb-6 text-center">Ketua / Koordinator Bidang</h2>
         <div class="flex flex-col md:flex-row gap-8 items-center max-w-3xl mx-auto">
-          <div class="w-28 h-28 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold" data-aos="flip-left" data-aos-delay="500">
+          <div class="w-28 h-28 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold">
             {{ getInitials(ketua.nama) }}
           </div>
           <div class="text-center md:text-left">
-            <h3 class="text-xl font-semibold text-blue-600" data-aos="fade-up" data-aos-delay="500">{{ ketua.nama }}</h3>
-            <p class="text-gray-600 mb-4" data-aos="fade-up" data-aos-delay="500">{{ ketua.jabatan }}</p>
+            <h3 class="text-xl font-semibold text-blue-600">{{ ketua.nama }}</h3>
+            <p class="text-gray-600 mb-4">{{ ketua.jabatan }}</p>
 
             <!-- Tab Motto & Hobi -->
-            <div class="border border-gray-300 rounded-md max-w-md mx-auto md:mx-0" data-aos="fade-up" data-aos-delay="500">
+            <div class="border border-gray-300 rounded-md max-w-md mx-auto md:mx-0">
               <div class="grid grid-cols-2 text-center">
                 <button
                   @click="activeTab.ketua = 'motto'"
@@ -79,9 +77,9 @@
 
             <!-- Timeline -->
             <div class="mt-6">
-              <h4 class="font-medium text-blue-600 mb-2"  data-aos="fade-up" data-aos-delay="500">Pengalaman Organisasi</h4>
+              <h4 class="font-medium text-blue-600 mb-2">Pengalaman Organisasi</h4>
               <div class="space-y-3">
-                <div v-for="(exp, i) in ketua.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1"  data-aos="fade-up" data-aos-delay="500">
+                <div v-for="(exp, i) in ketua.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1">
                   <h5 class="font-medium text-gray-800">{{ exp.kegiatan }}</h5>
                   <p class="text-sm text-gray-600">{{ exp.tahun }}</p>
                 </div>
@@ -93,22 +91,22 @@
 
       <!-- Anggota Tim -->
       <div v-if="anggotaTim.length" class="mb-12">
-        <h2 class="text-2xl font-medium text-blue-600 mb-6 text-center" data-aos="fade-right" data-aos-delay="500">Anggota Tim</h2>
-        <p class="text-gray-600 text-center mb-8" data-aos="fade-left" data-aos-delay="500">
+        <h2 class="text-2xl font-medium text-blue-600 mb-6 text-center">Anggota Tim</h2>
+        <p class="text-gray-600 text-center mb-8">
           Terdiri dari {{ anggotaTim.length }} anggota.
         </p>
 
         <div class="space-y-12 max-w-4xl mx-auto">
           <div v-for="(anggota, idx) in anggotaTim" :key="anggota.id" class="flex flex-col md:flex-row gap-8 items-start">
-            <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 text-xl font-bold" data-aos="flip-left" data-aos-delay="500">
+            <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 text-xl font-bold">
               {{ getInitials(anggota.nama) }}
             </div>
             <div class="flex-1 max-w-3xl">
-              <h3 class="text-lg font-semibold text-blue-600" data-aos="fade-up" data-aos-delay="500">{{ anggota.nama }}</h3>
-              <p class="text-gray-600 mb-4" data-aos="fade-up" data-aos-delay="500">{{ anggota.jabatan }}</p>
+              <h3 class="text-lg font-semibold text-blue-600">{{ anggota.nama }}</h3>
+              <p class="text-gray-600 mb-4">{{ anggota.jabatan }}</p>
 
               <!-- Tab Motto & Hobi -->
-              <div class="border border-gray-300 rounded-md mb-4" data-aos="fade-up" data-aos-delay="500">
+              <div class="border border-gray-300 rounded-md mb-4">
                 <div class="grid grid-cols-2 text-center">
                   <button
                     @click="activeTab[anggota.id] = 'motto'"
@@ -138,8 +136,8 @@
 
               <!-- Timeline -->
               <div>
-                <h4 class="font-medium text-blue-600 mb-2" data-aos="fade-up" data-aos-delay="500">Pengalaman Organisasi</h4>
-                <div class="space-y-2" data-aos="fade-up" data-aos-delay="500">
+                <h4 class="font-medium text-blue-600 mb-2">Pengalaman Organisasi</h4>
+                <div class="space-y-2">
                   <div v-for="(exp, i) in anggota.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1">
                     <h5 class="font-medium text-gray-800">{{ exp.kegiatan }}</h5>
                     <p class="text-sm text-gray-600">{{ exp.tahun }}</p>
@@ -154,12 +152,12 @@
       <!-- Apa yang Kami Lakukan -->
       <div class="mt-16 bg-gray-50 py-12">
         <div class="max-w-5xl mx-auto px-4">
-          <h2 class="text-3xl md:text-4xl font-light text-blue-600 mb-4" data-aos="fade-right" data-aos-delay="500">Apa yang kami lakukan.</h2>
-          <p class="text-gray-600 mb-12 max-w-3xl" data-aos="fade-left" data-aos-delay="500">
+          <h2 class="text-3xl md:text-4xl font-light text-blue-600 mb-4">Apa yang kami lakukan.</h2>
+          <p class="text-gray-600 mb-12 max-w-3xl">
             {{ bidang.aktivitasDeskripsi }}
           </p>
 
-          <div class="grid md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="500">
+          <div class="grid md:grid-cols-2 gap-8">
             <div v-for="(aktivitas, i) in bidang.aktivitas" :key="i" class="flex items-start space-x-4">
               <div class="flex-shrink-0 w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white">
                 <span v-html="getIcon(aktivitas.icon)"></span>
@@ -174,12 +172,10 @@
       </div>
 
       <!-- Foto Slider Dokumentasi -->
-      <div class="mt-12" data-aos="flip-left" data-aos-delay="500">
+      <div class="mt-12">
         <h3 class="text-xl font-medium text-blue-600 mb-4">Dokumentasi Kegiatan</h3>
         <PhotoSlider :photos="bidang.photos" />
       </div>
-      <br/>
-      <br/>
     </div>
   </div>
 </template>

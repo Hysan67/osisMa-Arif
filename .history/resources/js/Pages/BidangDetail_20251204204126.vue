@@ -180,6 +180,7 @@
       </div>
       <br/>
       <br/>
+      <router-link to="/" class="text-blue-600 hover:underline mb-8 inline-block font-light" data-aos="fade-left" data-aos-delay="500">&larr; Kembali ke Daftar Bidang</router-link>
     </div>
   </div>
 </template>

@@ -11,7 +11,7 @@
         :src="bidang.headerPhoto"
         :alt="'Foto ' + bidang.title"
         class="w-full h-full object-cover"
-        data-aos="flip-left"
+        data-aos="fade-right"
         :data-aos-delay="bidang.headerPhoto * 500"
       />
 
@@ -180,6 +180,7 @@
       </div>
       <br/>
       <br/>
+      <router-link to="/bidang" class="text-blue-600 hover:underline mb-8 inline-block font-light" data-aos="fade-left" data-aos-delay="500">&larr; Kembali ke Daftar Event</router-link>
     </div>
   </div>
 </template>

@@ -11,7 +11,7 @@
         :src="bidang.headerPhoto"
         :alt="'Foto ' + bidang.title"
         class="w-full h-full object-cover"
-        data-aos="flip-left"
+        data-aos="fade-right"
         :data-aos-delay="bidang.headerPhoto * 500"
       />
 
@@ -178,8 +178,6 @@
         <h3 class="text-xl font-medium text-blue-600 mb-4">Dokumentasi Kegiatan</h3>
         <PhotoSlider :photos="bidang.photos" />
       </div>
-      <br/>
-      <br/>
     </div>
   </div>
 </template>

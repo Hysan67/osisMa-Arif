@@ -64,10 +64,18 @@
                >
                   <li>
                      <router-link
+                        to="/bidang/inti"
+                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
+                        @click="closeAllDropdowns"
+                        >Badan Pengurus Harian</router-link
+                     >
+                  </li>
+                  <li>
+                     <router-link
                         to="/bidang/1"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Bidang I – Badan Pengurus Harian</router-link
+                        >Bidang I – Keamanan & Ketertiban</router-link
                      >
                   </li>
                   <li>
@@ -75,7 +83,7 @@
                         to="/bidang/2"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Bidang II – Keamanan & Ketertiban</router-link
+                        >Bidang II – Pramuka & Upacara</router-link
                      >
                   </li>
                   <li>
@@ -83,7 +91,7 @@
                         to="/bidang/3"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Bidang III – Pramuka & Upacara</router-link
+                        >Bidang III – Keagamaan</router-link
                      >
                   </li>
                   <li>
@@ -91,7 +99,7 @@
                         to="/bidang/4"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Bidang IV – Keagamaan</router-link
+                        >Bidang IV – Kesehatan</router-link
                      >
                   </li>
                   <li>
@@ -99,7 +107,7 @@
                         to="/bidang/5"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Bidang V – Kesehatan</router-link
+                        >Bidang V – Seni & Hubungan Masyarakat</router-link
                      >
                   </li>
                   <li>
@@ -107,15 +115,7 @@
                         to="/bidang/6"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Bidang VI – Seni & Hubungan Masyarakat</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/7"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang VII – Olahraga</router-link
+                        >Bidang VI – Olahraga</router-link
                      >
                   </li>
                </ul>
@@ -272,10 +272,18 @@
                >
                   <li>
                      <router-link
+                        to="/bidang/inti"
+                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
+                        @click="closeMenu"
+                        >Inti OSIS</router-link
+                     >
+                  </li>
+                  <li>
+                     <router-link
                         to="/bidang/1"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Bidang I – Badan Pengurus Harian</router-link
+                        >Bidang I – Kerohanian</router-link
                      >
                   </li>
                   <li>
@@ -283,7 +291,7 @@
                         to="/bidang/2"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Bidang II – Keamanan & Ketertiban</router-link
+                        >Bidang II – Kesiswaan</router-link
                      >
                   </li>
                   <li>
@@ -291,7 +299,7 @@
                         to="/bidang/3"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Bidang III – Pramuka & Upacara</router-link
+                        >Bidang III – Olahraga & Seni</router-link
                      >
                   </li>
                   <li>
@@ -299,7 +307,7 @@
                         to="/bidang/4"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Bidang IV – Keagamaan</router-link
+                        >Bidang IV – Humas & Publikasi</router-link
                      >
                   </li>
                   <li>
@@ -307,7 +315,7 @@
                         to="/bidang/5"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Bidang V – Kesehatan</router-link
+                        >Bidang V – Sosial & Lingkungan</router-link
                      >
                   </li>
                   <li>
@@ -315,15 +323,7 @@
                         to="/bidang/6"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Bidang VI – Seni & Hubungan Masyarakat</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/7"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang VII – Olahraga</router-link
+                        >Bidang VI – Kewirausahaan</router-link
                      >
                   </li>
                </ul>
