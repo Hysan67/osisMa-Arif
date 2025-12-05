@@ -6,6 +6,14 @@
     <div
       class="w-full aspect-[16/9] bg-gray-200 rounded-none overflow-hidden"
     >
+    <router-link 
+      to="/" 
+      class="absolute top-20 left-4 z-10 text-white hover:underline font-light-medium bg-transparent px-3 py-1 rounded"
+      data-aos="fade-left" 
+      data-aos-delay="500"
+    >
+      &larr; Kembali ke Daftar Bidang
+    </router-link>
       <img
         v-if="bidang.headerPhoto"
         :src="bidang.headerPhoto"
@@ -311,7 +319,7 @@ const bidangData = {
   ],
 
   aktivitasDeskripsi:
-    "Bidang Keamanan memastikan seluruh kegiatan sekolah berjalan tertib dan aman.",
+    "Memastikan seluruh kegiatan sekolah berjalan tertib dan aman.",
 
   aktivitas: [
     {
@@ -335,7 +343,7 @@ const bidangData = {
   title: "Bidang Pramuka & Upacara",
   headerPhoto: "../bidang3.jpg",
 
-  tugasUmum:"Mengorganisir petugas upacara",
+  tugasUmum:"Menyiapkan petugas upacara dan kebutuhan upacara",
 
   ketua: {
     id: '3-ketua',
@@ -386,7 +394,7 @@ const bidangData = {
   title: "Bidang Keagamaan",
   headerPhoto: "../bidang4.jpg",
 
-  tugasUmum: "Mengadakan kegiatan keagamaan rutin",
+  tugasUmum: "Meningkatkan kegiatan dan wawasan keagamaan",
 
   ketua: {
     id: '4-ketua',
@@ -437,7 +445,7 @@ const bidangData = {
   title: "Bidang Kesehatan",
   headerPhoto: "../bidang5.jpg",
 
-  tugasUmum:"Memonitor kondisi kesehatan siswa",
+  tugasUmum:"Menangani pertolongan pertama saat kegiatan/sekolah",
 
   ketua: {
     id: '5-ketua',
@@ -489,7 +497,7 @@ const bidangData = {
   title: "Bidang Seni & Humas",
   headerPhoto: "../bidang6.jpg",
 
-  tugasUmum: "Mengelola dokumentasi kegiatan sekolah",
+  tugasUmum: "Menyampaikan informasi & publikasi kegiatan",
 
   ketua: {
     id: '6-ketua',
@@ -541,7 +549,7 @@ const bidangData = {
   title: "Bidang Olahraga",
   headerPhoto: "../bidang7.jpg",
 
-  tugasUmum:"Mengorganisir kegiatan olahraga sekolah",
+  tugasUmum:"Meningkatkan minat dan prestasi olahraga",
 
   ketua: {
     id: '7-ketua',
