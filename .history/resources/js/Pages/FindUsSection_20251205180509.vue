@@ -6,8 +6,8 @@
       <div class="mb-6">
         <div class="w-16 h-1 bg-yellow-300 mx-auto rounded-full"></div>
       </div>
-      <h2 class="text-3xl md:text-4xl font-light mb-4 text-white  hover:text-blue-600 drop-shadow-lg">Temukan Kami</h2>
-      <p class="text-white max-w-2xl mx-auto mb-12 hover:text-blue-600 drop-shadow-lg leading-relaxed">
+      <h2 class="text-3xl md:text-4xl font-light mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">Temukan Kami</h2>
+      <p class="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed font-light">
         Ikuti setiap langkah, karya, dan kegiatan OSIS MA Ma’arif Udanawu melalui platform berikut.
       </p>
 

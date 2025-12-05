@@ -6,6 +6,7 @@
     <div
       class="w-full aspect-[16/9] bg-gray-200 rounded-none overflow-hidden"
     >
+      <router-link to="/" class="text-blue-600 hover:underline mb-8 inline-block font-light" data-aos="fade-left" data-aos-delay="500">&larr; <</router-link>
       <img
         v-if="bidang.headerPhoto"
         :src="bidang.headerPhoto"

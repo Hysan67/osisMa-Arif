@@ -171,10 +171,10 @@ const bidangs = [
   { id:1,name:'Bidang I – Badan Pengurus Harian',desc:'Mengatur organisasi dan mengoordinasi seluruh bidang.',image:'../bidang1.jpg'},
   { id:2,name:'Bidang II – Keamanan & Ketertiban',desc:'Menjaga keamanan acara dan ketertiban lingkungan sekolah.',image:'../bidang2.jpg'},
   { id:3,name:'Bidang III – Pramuka & Upacara',desc:'Mengelola kegiatan pramuka dan menyiapkan upacara bendera.',image:'../bidang3.jpg'},
-  { id:4,name:'Bidang IV – Keagamaan',desc:'Meningkatkan kegiatan dan wawasan keagamaan.',image:'../bidang4.jpg'},
+  { id:4,name:'Bidang IV – Keagamaan',desc:'Mengatur kegiatan kerohanian dan peringatan hari besar agama.',image:'../bidang4.jpg'},
   { id:5,name:'Bidang V – Kesehatan',desc:'Memberikan pertolongan pertama dan memantau kesehatan siswa.',image:'../bidang5.jpg'},
-  { id:6,name:'Bidang VI – Seni & Hubungan Masyarakat',desc:'Menyampaikan informasi & publikasi kegiatan.',image:'../bidang6.jpg'},
-  { id:7,name:'Bidang VII – Olahraga',desc:'Meningkatkan minat dan prestasi olahraga.',image:'../bidang7.jpg'}
+  { id:6,name:'Bidang VI – Seni & Hubungan Masyarakat',desc:'Mengelola publikasi, dokumentasi, dan kegiatan seni sekolah.',image:'../bidang6.jpg'},
+  { id:7,name:'Bidang VII – Olahraga',desc:'Mengelola kegiatan olahraga dan menjaga semangat sportivitas.',image:'../bidang7.jpg'}
 ];
 
 

@@ -11,7 +11,7 @@
         :src="bidang.headerPhoto"
         :alt="'Foto ' + bidang.title"
         class="w-full h-full object-cover"
-        data-aos="flip-left"
+        data-aos="fade-right"
         :data-aos-delay="bidang.headerPhoto * 500"
       />
 
@@ -78,10 +78,10 @@
             </div>
 
             <!-- Timeline -->
-            <div class="mt-6">
-              <h4 class="font-medium text-blue-600 mb-2"  data-aos="fade-up" data-aos-delay="500">Pengalaman Organisasi</h4>
+            <div class="mt-6" data-aos="fade-up" data-aos-delay="500">
+              <h4 class="font-medium text-blue-600 mb-2">Pengalaman Organisasi</h4>
               <div class="space-y-3">
-                <div v-for="(exp, i) in ketua.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1"  data-aos="fade-up" data-aos-delay="500">
+                <div v-for="(exp, i) in ketua.pengalaman" :key="i" class="border-l-2 border-blue-600 pl-3 py-1">
                   <h5 class="font-medium text-gray-800">{{ exp.kegiatan }}</h5>
                   <p class="text-sm text-gray-600">{{ exp.tahun }}</p>
                 </div>
@@ -178,8 +178,6 @@
         <h3 class="text-xl font-medium text-blue-600 mb-4">Dokumentasi Kegiatan</h3>
         <PhotoSlider :photos="bidang.photos" />
       </div>
-      <br/>
-      <br/>
     </div>
   </div>
 </template>

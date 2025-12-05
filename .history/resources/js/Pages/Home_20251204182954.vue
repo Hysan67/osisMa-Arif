@@ -34,7 +34,7 @@
             Yuk, simak kegiatan utama OSIS MA Ma’arif Udanawu!
           </p>
         </div>
-        <div class="grid md:grid-cols-3 gap-8 text">
+        <div class="grid md:grid-cols-3 gap-8">
           <ProgramCard v-for="(p,i) in programs" :key="i" :title="p.title" :desc="p.desc" :delay="i*200" :desc-delay="i*300" />
         </div>
       </div>
@@ -68,7 +68,7 @@
       <div class="max-w-6xl mx-auto px-4 text-center">
         <h2 class="text-3xl font-light text-white mb-4">BIDANG</h2>
         <p class="text-white mb-12 max-w-3xl mx-auto">
-          OSIS MA Ma’arif Udanawu terbagi menjadi 7 bidang untuk fokus menjalankan tugas dan program kerja masing-masing.
+          OSIS MA Ma’arif Udanawu terbagi menjadi 6 bidang untuk fokus menjalankan tugas dan program kerja masing-masing.
         </p>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <BidangCard v-for="b in bidangs" :key="b.id" :bidang="b" :delay="b.id*200"/>
@@ -163,20 +163,20 @@ onMounted(() => {
 const recentEvents = computed(() => eventStore.events.map(e => ({ ...e, image: e.image || `/images/event-${e.id}.jpg` })).slice(0,2))
 
 const programs = [
-  { title: 'Classmeeting', desc: 'Kegiatan yang berisi lomba olahraga, seni, dan permainan antar kelas untuk meningkatkan kekompakan.' },
-  { title: 'Pemilihan Ketua OSIS', desc: 'Proses demokratis memilih ketua OSIS baru melalui kampanye, debat, dan pemungutan suara.' },
+  { title: 'Kegiatan Kerohanian', desc: 'Peringatan Hari Besar Islam, Pengajian Rutin, Bakti Sosial, dan Pembinaan Akhlak Mulia.' },
+  { title: 'Berbagai Jenis Perlombaan', desc: 'MTQ, Cerdas Cermat Agama, Porseni, dan Kompetisi Sains antar kelas.' },
+  { title: 'Nasionalisme & Cinta Tanah Air', desc: 'Upacara Hari Kemerdekaan, Hari Pahlawan, serta kegiatan bela negara berbasis nilai Pancasila.' }
 ]
 
 const bidangs = [
-  { id:1,name:'Bidang I – Badan Pengurus Harian',desc:'Mengatur organisasi dan mengoordinasi seluruh bidang.',image:'../bidang1.jpg'},
-  { id:2,name:'Bidang II – Keamanan & Ketertiban',desc:'Menjaga keamanan acara dan ketertiban lingkungan sekolah.',image:'../bidang2.jpg'},
-  { id:3,name:'Bidang III – Pramuka & Upacara',desc:'Mengelola kegiatan pramuka dan menyiapkan upacara bendera.',image:'../bidang3.jpg'},
-  { id:4,name:'Bidang IV – Keagamaan',desc:'Meningkatkan kegiatan dan wawasan keagamaan.',image:'../bidang4.jpg'},
-  { id:5,name:'Bidang V – Kesehatan',desc:'Memberikan pertolongan pertama dan memantau kesehatan siswa.',image:'../bidang5.jpg'},
-  { id:6,name:'Bidang VI – Seni & Hubungan Masyarakat',desc:'Menyampaikan informasi & publikasi kegiatan.',image:'../bidang6.jpg'},
-  { id:7,name:'Bidang VII – Olahraga',desc:'Meningkatkan minat dan prestasi olahraga.',image:'../bidang7.jpg'}
-];
-
+  { id:1,name:'Bidang I – Badan Pengurus Harian',desc:'Mengatur jalannya organisasi, membuat keputusan penting, mengkoordinasi semua bidang, dan memastikan program berjalan sesuai rencana.',image:'/images/bidang1.jpg'},
+  { id:2,name:'Bidang II – Keamanan & Ketertiban',desc:'Menjaga keamanan acara, mengatur ketertiban siswa, membuat aturan selama kegiatan, serta memastikan lingkungan tetap kondusif.',image:'/images/bidang2.jpg'},
+  { id:3,name:'Bidang III – Pramuka & Upacara',desc:'Mengelola kegiatan kepramukaan, melatih baris-berbaris, menyiapkan upacara bendera, serta memastikan upacara berjalan tertib.',image:'/images/bidang3.jpg'},
+  { id:4,name:'Bidang IV – Keagamaan',desc:'Mengatur kegiatan ibadah, peringatan hari besar keagamaan, pesantren kilat, dan membina kerohanian siswa.',image:'/images/bidang4.jpg'},
+  { id:5,name:'Bidang V – Kesehatan',desc:'Memberikan pertolongan pertama, memantau kondisi kesehatan saat acara, mengkampanyekan pola hidup sehat, dan bekerja sama dengan UKS.',image:'/images/bidang5.jpg'},
+  { id:6,name:'Bidang VI – Seni & Hubungan Masyarakat',desc:'Mengurus publikasi, dokumentasi, desain poster, serta mengembangkan bakat seni seperti musik, tari, dan teater. Menjadi penghubung antara OSIS dengan pihak luar.',image:'/images/bidang6.jpg'},
+  { id:7,name:'Bidang VII – Olahraga',desc:'Mengelola kegiatan olahraga, lomba internal sekolah, latihan rutin, dan menjaga semangat sportifitas siswa.',image:'/images/bidang7.jpg'}
+]
 
 const galleryImages = [
   { id:1,title:'Pengajian Rutin Jumat',image:'/images/gallery1' },
