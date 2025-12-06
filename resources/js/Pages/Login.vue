@@ -108,29 +108,22 @@ const whatsappNumber = "6285755924627"
 const whatsappText = "Permisi, saya perlu bantuan."
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`
 
-const handleLogin = async () => {
-  loading.value = true
-  error.value = ''
-
+async function handleLogin() {
   try {
-    const response = await axios.post('/api/login', {
-      email: form.value.email,
-      password: form.value.password,
-    })
+    const response = await axios.post('/login', {
+      email: email.value,
+      password: password.value
+    });
 
-    const { user } = response.data;
+    const { user, token } = response.data;
 
+    // Simpan token dan user ke localStorage
+    localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
 
-    console.log(response.data.message)
-
-    router.push('/admin');
-
+    router.push('/admin'); // atau halaman lain
   } catch (err) {
-    console.error("Login error:", err); 
-    error.value = err.response?.data?.message || 'Login gagal. Silakan coba lagi.';
-  } finally {
-    loading.value = false
+    error.value = err.response?.data?.message || 'Login gagal';
   }
 }
 </script>

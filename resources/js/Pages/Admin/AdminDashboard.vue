@@ -69,21 +69,15 @@ const message = ref('')
 
 async function handleLogout() {
   try {
-    await axios.get('/sanctum/csrf-cookie', {
-      withCredentials: true
-    })
-    const response = await axios.post('/api/logout', {}, {
-      withCredentials: true  
-    })
-    message.value = response.data.message
-
-    localStorage.removeItem('user')
-    router.push('/login')
-
+    await axios.post('http://localhost:8000/api/logout'); // Token akan dikirim oleh interceptor
   } catch (err) {
-    console.error('Logout error:', err)
+    console.error('Logout error:', err);
+    // Jika logout gagal, tetap hapus lokal
   }
-  
+
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  router.push('/login');
 }
 </script>
 apakah seperti ini?

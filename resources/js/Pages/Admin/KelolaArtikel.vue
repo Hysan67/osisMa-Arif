@@ -11,24 +11,24 @@
       </div>
 
       <div class="bg-white rounded shadow overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-blue-700 text-white">
-          <tr>
-            <th class="py-2 px-4 text-left">Judul</th>
-            <th class="py-2 px-4 text-center w-40">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="artikel in artikels" :key="artikel.id" class="even:bg-white odd:bg-gray-50">
-            <td class="py-2 px-4 border-b">{{ artikel.title }}</td>
-            <td class="py-2 px-4 border-b text-center space-x-2">
-              <button @click="editMember(index)" class="text-yellow-500 hover:text-yellow-600">✏️</button>
-              <button @click="hapusMember(index)" class="text-red-600 hover:text-red-700">🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <table class="w-full">
+          <thead class="bg-blue-700 text-white">
+            <tr>
+              <th class="py-2 px-4 text-left">Judul</th>
+              <th class="py-2 px-4 text-center w-40">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="artikel in artikels" :key="artikel.id" class="even:bg-white odd:bg-gray-50">
+              <td class="py-2 px-4 border-b">{{ artikel.judul }}</td>
+              <td class="py-2 px-4 border-b text-center space-x-2">
+                <button @click="openForm(artikel)" class="text-yellow-500 hover:text-yellow-600">✏️</button>
+                <button @click="deleteArtikel(artikel.id)" class="text-red-600 hover:text-red-700">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- FORM MODAL -->
       <div v-if="showForm" class="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
@@ -38,12 +38,25 @@
           <form @submit.prevent="saveArtikel">
             <div class="mb-4">
               <label class="block mb-1 font-medium">Judul</label>
-              <input v-model="form.title" class="w-full border px-3 py-2 rounded" required />
+              <input v-model="form.judul" class="w-full border px-3 py-2 rounded" required />
             </div>
 
             <div class="mb-4">
               <label class="block mb-1 font-medium">Isi Singkat</label>
-              <textarea v-model="form.content" rows="4" class="w-full border px-3 py-2 rounded" required></textarea>
+              <textarea v-model="form.deskripsi" rows="4" class="w-full border px-3 py-2 rounded" required></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="block mb-1 font-medium">Jenis Artikel</label>
+              <select v-model="form.jenis_artikel" class="w-full border px-3 py-2 rounded" required>
+                <option value="artikel">Artikel</option>
+                <option value="event">Event</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="block mb-1 font-medium">Gambar (Opsional)</label>
+              <input type="file" @change="handleFileUpload" class="w-full border px-3 py-2 rounded" accept="image/*" />
             </div>
 
             <div class="flex justify-end space-x-3">
@@ -65,60 +78,140 @@
     </main>
   </div>
 </template>
-
 <script setup>
-import { ref } from "vue";
-
-const artikels = ref([
-  { id: 1, title: "Artikel 1", content: "Isi artikel 1" },
-  { id: 2, title: "Artikel 2", content: "Isi artikel 2" },
-]);
-
-const showForm = ref(false);
-const isEdit = ref(false);
-const form = ref({ id: null, title: "", content: "" });
-
-const alert = ref({ show: false, message: "", color: "bg-green-500" });
-
-function showAlert(msg, type = "success") {
-  alert.value = {
-    show: true,
-    message: msg,
-    color: type === "success" ? "bg-green-500" : "bg-red-500",
-  };
-  setTimeout(() => (alert.value.show = false), 3000);
-}
-
-function openForm(data = null) {
-  isEdit.value = !!data;
-  form.value = data ? { ...data } : { id: null, title: "", content: "" };
-  showForm.value = true;
-}
-
-function closeForm() {
-  showForm.value = false;
-}
-
-function saveArtikel() {
-  if (isEdit.value) {
-    const idx = artikels.value.findIndex((a) => a.id === form.value.id);
-    artikels.value[idx] = { ...form.value };
-    showAlert("Artikel berhasil diperbarui");
-  } else {
-    const id = Date.now();
-    artikels.value.push({ ...form.value, id });
-    showAlert("Artikel baru berhasil ditambahkan");
+  import { ref, onMounted } from "vue";
+  import axios from "axios";
+  
+  const artikels = ref([]);
+  const showForm = ref(false);
+  const isEdit = ref(false);
+  const form = ref({
+    id: null,
+    judul: "",
+    deskripsi: "",
+    jenis_artikel: "artikel",
+    img: null,
+  });
+  
+  const alert = ref({ show: false, message: "", color: "bg-green-500" });
+  
+  function showAlert(msg, type = "success") {
+    alert.value = {
+      show: true,
+      message: msg,
+      color: type === "success" ? "bg-green-500" : "bg-red-500",
+    };
+    setTimeout(() => (alert.value.show = false), 3000);
   }
-  showForm.value = false;
-}
-
-function deleteArtikel(id) {
-  if (confirm("Hapus artikel ini?")) {
-    artikels.value = artikels.value.filter((a) => a.id !== id);
-    showAlert("Artikel berhasil dihapus", "error");
+  
+  function handleFileUpload(e) {
+    form.value.img = e.target.files[0];
   }
-}
-</script>
+  
+  function openForm(data = null) {
+    isEdit.value = !!data;
+    if (data) {
+      form.value = {
+        id: data.id,
+        judul: data.judul,
+        deskripsi: data.deskripsi,
+        jenis_artikel: data.jenis_artikel || "artikel",
+        img: null,
+      };
+    } else {
+      form.value = {
+        id: null,
+        judul: "",
+        deskripsi: "",
+        jenis_artikel: "artikel",
+        img: null,
+      };
+    }
+    showForm.value = true;
+  }
+  
+  function closeForm() {
+    showForm.value = false;
+  }
+  
+  // Di Vue component
+  async function saveArtikel() {
+    try {
+      const formData = new FormData();
+      formData.append('judul', form.value.judul);
+      formData.append('deskripsi', form.value.deskripsi);
+      formData.append('jenis_artikel', form.value.jenis_artikel);
+  
+      if (form.value.img) {
+        formData.append('img', form.value.img);
+      }
+  
+      let response;
+      if (isEdit.value) {
+        // Interceptor axios akan otomatis menambahkan Authorization header
+        response = await axios.post(`/artikels/${form.value.id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+          // JANGAN tambahkan header X-CSRF-TOKEN
+        });
+        showAlert("Artikel berhasil diperbarui");
+      } else {
+        // Interceptor axios akan otomatis menambahkan Authorization header
+        response = await axios.post('/artikels', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+          // JANGAN tambahkan header X-CSRF-TOKEN
+        });
+        showAlert("Artikel baru berhasil ditambahkan");
+      }
+      closeForm();
+      fetchArtikels(); // Refresh data
+    } catch (err) {
+      console.error("Error detail:", err);
+      showAlert("Gagal menyimpan artikel: " + (err.response?.data?.message || "Error"), "error");
+    }
+  }
+  
+  async function deleteArtikel(id) {
+    if (confirm("Hapus artikel ini?")) {
+      try {
+        await axios.delete(`/artikels/${id}`, {
+          withCredentials: true // <-- Hapus ini, karena kamu pakai Sanctum token
+        });
+        showAlert("Artikel berhasil dihapus", "error");
+        fetchArtikels(); // Refresh data
+      } catch (err) {
+        console.error(err);
+        showAlert("Gagal menghapus artikel: " + (err.response?.data?.message || "Error"), "error");
+      }
+    }
+  }
+  
+  async function fetchArtikels() {
+  try {
+    const response = await axios.get('/artikels', {
+      // Hapus withCredentials: true, karena kamu pakai Sanctum token
+    });
+
+    // Jika API mengembalikan pagination (dengan key 'data')
+    if (response.data.data) {
+      artikels.value = response.data.data; // <-- Ambil array dari key 'data'
+    } else {
+      // Jika API mengembalikan array langsung
+      artikels.value = response.data;
+    }
+
+    console.log('Data artikel:', artikels.value); // Tambahkan ini untuk debugging
+  } catch (err) {
+    console.error(err);
+    showAlert("Gagal memuat artikel: " + (err.response?.data?.message || "Error"), "error");
+  }
+} 
+  
+  // --- TAMBAHKAN INI ---
+  onMounted(() => {
+    fetchArtikels();
+  });
+  // -------------------
+  </script>
 
 <style>
 .font-cursive {
