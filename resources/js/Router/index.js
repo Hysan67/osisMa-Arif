@@ -26,6 +26,7 @@ const routes = [
   { path: '/login', name: 'Login', component: Login, meta: { requiresGuest: true } },
   {
     path: '/admin',
+    name: 'Admin',
     component: AdminDashboard,
     meta: { requiresAuth: true },
     children: [ 
@@ -76,13 +77,13 @@ router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('user') !== null;
 
     if (isAuthenticated) {
-      next({ name: 'AdminDashboard' })
+      next({ name: 'Admin' })
     } else {
       next()
     }
   }
   else {
-    next() // Izinkan akses ke halaman publik
+    next()
   }
 })
 
