@@ -96,8 +96,8 @@ import axios from 'axios'
 const router = useRouter()
 
 const form = ref({
-  email: 'admin@gmail.com',
-  password: '123'
+  email: 'admin@example.com',
+  password: 'password123'
 })
 
 const loading = ref(false)
@@ -105,26 +105,32 @@ const error = ref('')
 const showPassword = ref(false)
 
 const whatsappNumber = "6285755924627"
-const whatsappText = "Permisi, saya perlu bantuan"
+const whatsappText = "Permisi, saya perlu bantuan."
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`
-
-// ... bagian lain dari script setup ...
 
 const handleLogin = async () => {
   loading.value = true
   error.value = ''
+
   try {
-    const response = await axios.post('/api/login', { // atau URL lengkap
+    const response = await axios.post('/api/login', {
       email: form.value.email,
       password: form.value.password,
     })
+
+    const { user } = response.data;
+
+    localStorage.setItem('user', JSON.stringify(user));
+
     console.log(response.data.message)
-    // successMessage.value = response.data.message
+
+    router.push('/admin');
+
   } catch (err) {
-    error.value = err.response?.data?.message || 'Login failed'
+    console.error("Login error:", err); 
+    error.value = err.response?.data?.message || 'Login gagal. Silakan coba lagi.';
   } finally {
     loading.value = false
-    router.push('/admin')
   }
 }
 </script>

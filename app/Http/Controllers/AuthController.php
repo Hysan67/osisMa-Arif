@@ -2,47 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User; // Pastikan model User diimpor
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
-        // Ambil user berdasarkan email
-        $user = User::where('email', $request->email)->first();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        // Periksa apakah user ditemukan DAN password cocok
-        if (! $user ) {
             return response()->json([
-                'message' => 'Invalid credentials'
-            ], 401);
+                'message' => 'Login berhasil',
+                'user' => Auth::user(),
+            ]);
         }
-        return response()->json([
-            'message' => 'Login successful',
-            'token_type' => 'Bearer', // Opsional
-            'user' => $user // Opsional: kembalikan data user
-        ]);
+
+        return response()->json(['message' => 'Email atau password salah'], 401);
     }
 
-    // Jika kamu menambahkan logout
     public function logout(Request $request)
     {
-        // Ambil user yang sedang login berdasarkan token Sanctum
-        $user = $request->user(); // Ini bekerja karena middleware 'auth:sanctum'
-
-        if ($user) {
-            // Hapus token yang sedang digunakan
-            $user->currentAccessToken()->delete();
-            return response()->json(['message' => 'Logged out successfully']);
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
         }
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'No active session'], 401);
+        return response()->json(['message' => 'Logout berhasil']);
     }
 }

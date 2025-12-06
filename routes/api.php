@@ -1,10 +1,14 @@
-<?php // Pastikan ini adalah baris pertama
-
+<?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController; // Pastikan ini diimpor
 
-Route::post('/login', [AuthController::class, 'login']); // Baris ini harus ada
+use App\Http\Controllers\AuthController;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-});
+Route::middleware([\Illuminate\Session\Middleware\StartSession::class])
+    ->group(function () {
+        Route::post('/login', [AuthController::class, 'login']);
+    });
+
+Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, \Illuminate\Session\Middleware\StartSession::class])
+    ->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth.session');
+    });

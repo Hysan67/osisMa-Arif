@@ -46,6 +46,9 @@
         >
           Logout
         </button>
+        <div v-if="message" class="mt-2 text-center text-sm text-green-300">
+          {{ message }}
+        </div>
       </div>
     </aside>
 
@@ -57,13 +60,30 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
+const message = ref('')
 
-function handleLogout() {
-  const authStore = useAuthStore();
-  authStore.logout();
-  router.push('/login')
+async function handleLogout() {
+  try {
+    await axios.get('/sanctum/csrf-cookie', {
+      withCredentials: true
+    })
+    const response = await axios.post('/api/logout', {}, {
+      withCredentials: true  
+    })
+    message.value = response.data.message
+
+    localStorage.removeItem('user')
+    router.push('/login')
+
+  } catch (err) {
+    console.error('Logout error:', err)
+  }
+  
 }
 </script>
+apakah seperti ini?

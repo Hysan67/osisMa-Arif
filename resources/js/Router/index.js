@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/Pages/Home.vue'  // ← Path diperbaiki
+import Home from '@/Pages/Home.vue'
 import Event from '@/Pages/Event.vue'
 import EventDetail from '@/Pages/EventDetail.vue'
 import Generasi from '@/Pages/Generasi.vue'
@@ -9,8 +9,7 @@ import Login from '@/Pages/Login.vue'
 import EventForm from '@/Pages/Admin/EventForm.vue'
 import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
 import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
-import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue' // ← Pastikan file ini ada
-import { useAuthStore } from '@/store/useAuthStore.js' // ← Path diperbaiki
+import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -24,33 +23,29 @@ const routes = [
     component: BidangDetail,
     props: true
   },
-  { path: '/login', name: 'Login', component: Login },
+  { path: '/login', name: 'Login', component: Login, meta: { requiresGuest: true } },
   {
     path: '/admin',
     component: AdminDashboard,
-    // beforeEnter: (to, from, next) => {
-    //   const authStore = useAuthStore()
-    //   if (authStore.isAuthenticated) {
-    //     next()
-    //   } else {
-    //     next('/login')
-    //   }
-    // },
+    meta: { requiresAuth: true },
     children: [ 
       {
         path: 'event-form',
         name: 'EventForm',
-        component: EventForm
+        component: EventForm,
+        meta: { requiresAuth: true }
       },
       {
         path: 'kelola-artikel',
         name: 'KelolaArtikel',
-        component: KelolaArtikel
+        component: KelolaArtikel,
+        meta: { requiresAuth: true }
       },
       {
         path: 'member-osis',
         name: 'MemberOsis',
-        component: MemberOsis
+        component: MemberOsis,
+        meta: { requiresAuth: true }
       }
     ]
   }
@@ -67,7 +62,28 @@ const scrollPositions = {}
 router.beforeEach((to, from, next) => {
   // Simpan scroll dari halaman sebelumnya
   scrollPositions[from.fullPath] = window.scrollY
-  next()
+
+  if (to.meta.requiresAuth) {
+    const isAuthenticated = localStorage.getItem('user') !== null;
+
+    if (isAuthenticated) {
+      next()
+    } else {
+      next({ name: 'Login' })
+    }
+  }
+  else if (to.meta.requiresGuest) {
+    const isAuthenticated = localStorage.getItem('user') !== null;
+
+    if (isAuthenticated) {
+      next({ name: 'AdminDashboard' })
+    } else {
+      next()
+    }
+  }
+  else {
+    next() // Izinkan akses ke halaman publik
+  }
 })
 
 router.afterEach((to) => {
