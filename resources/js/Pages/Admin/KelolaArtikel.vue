@@ -109,7 +109,7 @@
     form.value.img = e.target.files[0];
   }
   
-  function openForm(data = null) {
+  function openForm(data) {
     isEdit.value = !!data;
     if (data) {
       form.value = {
@@ -139,17 +139,15 @@
   async function saveArtikel() {
   try {
     const formData = new FormData();
-    
-    // Tambahkan logging
-    console.log('Form data:', {
-      judul: form.value.judul,
-      deskripsi: form.value.deskripsi,
-      jenis_artikel: form.value.jenis_artikel
-    });
-
     formData.append('judul', form.value.judul);
     formData.append('deskripsi', form.value.deskripsi);
     formData.append('jenis_artikel', form.value.jenis_artikel);
+
+    // Debug: Tampilkan isi FormData
+    console.log('FormData contents:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ', pair[1]);
+    }
 
     if (form.value.img) {
       formData.append('img', form.value.img);
@@ -158,8 +156,19 @@
     let response;
     if (isEdit.value) {
       console.log('Updating artikel ID:', form.value.id);
-      response = await axios.put(`/artikels/${form.value.id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      console.log('Form data:', {
+        judul: form.value.judul,
+        deskripsi: form.value.deskripsi,
+        jenis_artikel: form.value.jenis_artikel,
+        hasImage: !!form.value.img
+      });
+
+      // Ganti PUT dengan POST + _method field
+      formData.append('_method', 'PUT'); // Tambahkan ini
+      response = await axios.post(`/artikels/${form.value.id}`, formData, {
+        headers: { 
+          'Content-Type': 'multipart/form-data'
+        }
       });
       console.log('Update response:', response.data);
       showAlert("Artikel berhasil diperbarui");

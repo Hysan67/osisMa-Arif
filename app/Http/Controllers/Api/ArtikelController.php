@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Artikel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArtikelController extends Controller
 {
@@ -76,28 +77,68 @@ class ArtikelController extends Controller
     }
 
     public function update(Request $request, Artikel $artikel)
-    {
-        $validated = $request->validate([
-            'judul' => 'sometimes|required|string|max:255',
-            'deskripsi' => 'sometimes|required',
-            'jenis_artikel' => 'sometimes|required|in:artikel,event',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $data = $request->only(['judul', 'deskripsi', 'jenis_artikel']);
-        
-        if ($request->hasFile('img')) {
-            $data['img'] = $request->file('img')->store('artikels', 'public');
-        }
-
-        $artikel->fill($data);
-        $artikel->save();
-        return response()->json($artikel->fresh());
+{
+    // Validasi hanya data yang dikirim
+    $rules = [];
+    
+    if ($request->has('judul')) {
+        $rules['judul'] = 'required|string|max:255';
     }
+    
+    if ($request->has('deskripsi')) {
+        $rules['deskripsi'] = 'required';
+    }
+    
+    if ($request->has('jenis_artikel')) {
+        $rules['jenis_artikel'] = 'required|in:artikel,event';
+    }
+    
+    if ($request->hasFile('img')) {
+        $rules['img'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+    }
+
+    // Update data berdasarkan input yang diberikan
+    if ($request->has('judul')) {
+        $artikel->judul = $request->judul;
+    }
+    
+    if ($request->has('deskripsi')) {
+        $artikel->deskripsi = $request->deskripsi;
+    }
+    
+    if ($request->has('jenis_artikel')) {
+        $artikel->jenis_artikel = $request->jenis_artikel;
+    }
+    
+    if ($request->hasFile('img')) {
+        // Hapus gambar lama jika ada
+        if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
+            Storage::disk('public')->delete($artikel->img);
+        }
+        $artikel->img = $request->file('img')->store('artikels', 'public');
+    }
+
+    $artikel->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Artikel berhasil diperbarui',
+        'data' => $artikel->fresh()
+    ]);
+}
 
     public function destroy(Artikel $artikel)
     {
+        // Hapus gambar jika ada
+        if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
+            Storage::disk('public')->delete($artikel->img);
+        }
+        
         $artikel->delete();
-        return response()->json(['message' => 'Artikel deleted successfully']);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Artikel berhasil dihapus'
+        ]);
     }
 }
