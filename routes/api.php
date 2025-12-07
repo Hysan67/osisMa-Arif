@@ -1,14 +1,16 @@
 <?php
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\AuthController;
 
-Route::middleware([\Illuminate\Session\Middleware\StartSession::class])
-    ->group(function () {
-        Route::post('/login', [AuthController::class, 'login']);
-    });
+Route::get('/artikels', [ArtikelController::class, 'index']);
+Route::get('/artikels/{artikel}', [ArtikelController::class, 'show']);
 
-Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, \Illuminate\Session\Middleware\StartSession::class])
-    ->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth.session');
-    });
+Route::post('/artikels', [ArtikelController::class, 'store']);
+Route::put('/artikels/{artikel}', [ArtikelController::class, 'update']);
+Route::delete('/artikels/{artikel}', [ArtikelController::class, 'destroy']);
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('deskripsi');
             $table->string('jenis_artikel')->nullable();
-            $table->foreignId('admin_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
