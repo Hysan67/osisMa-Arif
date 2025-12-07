@@ -6,7 +6,6 @@ import Generasi from '@/Pages/Generasi.vue'
 import BidangDetail from '@/Pages/BidangDetail.vue'
 import FormAspirasi from '@/Pages/FormAspirasi.vue'
 import Login from '@/Pages/Login.vue'
-import EventForm from '@/Pages/Admin/EventForm.vue'
 import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
 import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
@@ -29,13 +28,7 @@ const routes = [
     name: 'Admin',
     component: AdminDashboard,
     meta: { requiresAuth: true },
-    children: [ 
-      {
-        path: 'event-form',
-        name: 'EventForm',
-        component: EventForm,
-        meta: { requiresAuth: true }
-      },
+    children: [
       {
         path: 'kelola-artikel',
         name: 'KelolaArtikel',

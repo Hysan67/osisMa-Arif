@@ -16,17 +16,7 @@
           <i class="fas fa-newspaper w-5"></i>
           <span>Kelola Artikel</span>
         </router-link>
-
-        <router-link
-          to="/admin/event-form"
-          class="flex items-center gap-3 p-3 rounded-md hover:bg-blue-700 transition"
-          active-class="bg-blue-800"
-        >
-          <i class="fa-solid fa-calendar-days text-lg w-5 text-white"></i>
-          <i class="fas fa-table w-5"></i>
-          <span>Kelola Event</span>
-        </router-link>
-
+        
         <router-link
           to="/admin/member-osis"
           class="flex items-center gap-3 p-3 rounded-md hover:bg-blue-700 transition"
