@@ -13,6 +13,7 @@ class ArtikelController extends Controller
     public function index()
     {
         $artikels = Artikel::select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'created_at', 'updated_at'])
+                          ->whereNull('deleted_at')
                           ->latest()
                           ->get()
                           ->toArray();
@@ -23,8 +24,6 @@ class ArtikelController extends Controller
     public function indexAlternative()
     {
         $artikels = Artikel::latest()->get();
-        
-        // Konversi ke array untuk menghindari masalah serialisasi
         $data = [];
         foreach ($artikels as $artikel) {
             $data[] = [
@@ -77,59 +76,57 @@ class ArtikelController extends Controller
     }
 
     public function update(Request $request, Artikel $artikel)
-{
-    // Validasi hanya data yang dikirim
-    $rules = [];
-    
-    if ($request->has('judul')) {
-        $rules['judul'] = 'required|string|max:255';
-    }
-    
-    if ($request->has('deskripsi')) {
-        $rules['deskripsi'] = 'required';
-    }
-    
-    if ($request->has('jenis_artikel')) {
-        $rules['jenis_artikel'] = 'required|in:artikel,event';
-    }
-    
-    if ($request->hasFile('img')) {
-        $rules['img'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
-    }
-
-    // Update data berdasarkan input yang diberikan
-    if ($request->has('judul')) {
-        $artikel->judul = $request->judul;
-    }
-    
-    if ($request->has('deskripsi')) {
-        $artikel->deskripsi = $request->deskripsi;
-    }
-    
-    if ($request->has('jenis_artikel')) {
-        $artikel->jenis_artikel = $request->jenis_artikel;
-    }
-    
-    if ($request->hasFile('img')) {
-        // Hapus gambar lama jika ada
-        if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
-            Storage::disk('public')->delete($artikel->img);
+    {
+        $rules = [];
+        
+        if ($request->has('judul')) {
+            $rules['judul'] = 'required|string|max:255';
         }
-        $artikel->img = $request->file('img')->store('artikels', 'public');
+        
+        if ($request->has('deskripsi')) {
+            $rules['deskripsi'] = 'required';
+        }
+        
+        if ($request->has('jenis_artikel')) {
+            $rules['jenis_artikel'] = 'required|in:artikel,event';
+        }
+        
+        if ($request->hasFile('img')) {
+            $rules['img'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+        }
+
+        // Update data berdasarkan input yang diberikan
+        if ($request->has('judul')) {
+            $artikel->judul = $request->judul;
+        }
+        
+        if ($request->has('deskripsi')) {
+            $artikel->deskripsi = $request->deskripsi;
+        }
+        
+        if ($request->has('jenis_artikel')) {
+            $artikel->jenis_artikel = $request->jenis_artikel;
+        }
+        
+        if ($request->hasFile('img')) {
+            // Hapus gambar lama jika ada
+            if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
+                Storage::disk('public')->delete($artikel->img);
+            }
+            $artikel->img = $request->file('img')->store('artikels', 'public');
+        }
+
+        $artikel->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Artikel berhasil diperbarui',
+            'data' => $artikel->fresh()
+        ]);
     }
-
-    $artikel->save();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Artikel berhasil diperbarui',
-        'data' => $artikel->fresh()
-    ]);
-}
 
     public function destroy(Artikel $artikel)
     {
-        // Hapus gambar jika ada
         if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
             Storage::disk('public')->delete($artikel->img);
         }
@@ -139,6 +136,74 @@ class ArtikelController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Artikel berhasil dihapus'
+        ]);
+    }
+
+    public function trash()
+    {
+        
+        try {
+            $deletedArtikels = Artikel::onlyTrashed()
+                ->select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'created_at', 'deleted_at'])
+                ->latest('deleted_at')
+                ->get();
+                
+            
+            return response()->json([
+                'success' => true,
+                'data' => $deletedArtikels
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Method untuk restore artikel
+    public function restore($id)
+    {
+        $artikel = Artikel::withTrashed()->find($id);
+        
+        if (!$artikel) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel tidak ditemukan'
+            ], 404);
+        }
+        
+        $artikel->restore();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Artikel berhasil dikembalikan',
+            'data' => $artikel
+        ]);
+    }
+
+    // Method untuk force delete
+    public function forceDelete($id)
+    {
+        $artikel = Artikel::withTrashed()->find($id);
+        
+        if (!$artikel) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Artikel tidak ditemukan'
+            ], 404);
+        }
+        
+        // Hapus gambar fisik jika ada
+        if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
+            Storage::disk('public')->delete($artikel->img);
+        }
+        
+        $artikel->forceDelete();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Artikel berhasil dihapus permanen'
         ]);
     }
 }
