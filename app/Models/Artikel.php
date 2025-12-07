@@ -21,9 +21,4 @@ class Artikel extends Model
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'artikel_id');
-    }
 }

@@ -10,7 +10,7 @@ import { useAuthStore } from './store/useAuthStore.js'
 import axios from 'axios';
 
 // Set default base URL
-axios.defaults.baseURL = 'http://localhost:8000/api';
+axios.defaults.baseURL = '/api';
 
 // Interceptor untuk menyisipkan token
 axios.interceptors.request.use(

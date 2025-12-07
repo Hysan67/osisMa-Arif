@@ -81,6 +81,7 @@
 <script setup>
   import { ref, onMounted } from "vue";
   import axios from "axios";
+  import { toRaw } from 'vue'
   
   const artikels = ref([]);
   const showForm = ref(false);
@@ -136,39 +137,53 @@
   
   // Di Vue component
   async function saveArtikel() {
-    try {
-      const formData = new FormData();
-      formData.append('judul', form.value.judul);
-      formData.append('deskripsi', form.value.deskripsi);
-      formData.append('jenis_artikel', form.value.jenis_artikel);
-  
-      if (form.value.img) {
-        formData.append('img', form.value.img);
-      }
-  
-      let response;
-      if (isEdit.value) {
-        // Interceptor axios akan otomatis menambahkan Authorization header
-        response = await axios.post(`/artikels/${form.value.id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-          // JANGAN tambahkan header X-CSRF-TOKEN
-        });
-        showAlert("Artikel berhasil diperbarui");
-      } else {
-        // Interceptor axios akan otomatis menambahkan Authorization header
-        response = await axios.post('/artikels', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-          // JANGAN tambahkan header X-CSRF-TOKEN
-        });
-        showAlert("Artikel baru berhasil ditambahkan");
-      }
-      closeForm();
-      fetchArtikels(); // Refresh data
-    } catch (err) {
-      console.error("Error detail:", err);
-      showAlert("Gagal menyimpan artikel: " + (err.response?.data?.message || "Error"), "error");
+  try {
+    const formData = new FormData();
+    
+    // Tambahkan logging
+    console.log('Form data:', {
+      judul: form.value.judul,
+      deskripsi: form.value.deskripsi,
+      jenis_artikel: form.value.jenis_artikel
+    });
+
+    formData.append('judul', form.value.judul);
+    formData.append('deskripsi', form.value.deskripsi);
+    formData.append('jenis_artikel', form.value.jenis_artikel);
+
+    if (form.value.img) {
+      formData.append('img', form.value.img);
     }
+
+    let response;
+    if (isEdit.value) {
+      console.log('Updating artikel ID:', form.value.id);
+      response = await axios.put(`/artikels/${form.value.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      console.log('Update response:', response.data);
+      showAlert("Artikel berhasil diperbarui");
+    } else {
+      response = await axios.post('/artikels', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      showAlert("Artikel baru berhasil ditambahkan");
+    }
+    
+    closeForm();
+    await fetchArtikels();
+  } catch (err) {
+    console.error("Error detail:", err);
+    console.error("Error response:", err.response?.data);
+    let errorMessage = "Gagal menyimpan artikel";
+    if (err.response?.data?.message) {
+      errorMessage = err.response.data.message;
+    } else if (err.response?.data?.errors) {
+      errorMessage = Object.values(err.response.data.errors).flat().join(', ');
+    }
+    showAlert(errorMessage, "error");
   }
+}
   
   async function deleteArtikel(id) {
     if (confirm("Hapus artikel ini?")) {
@@ -188,18 +203,13 @@
   async function fetchArtikels() {
   try {
     const response = await axios.get('/artikels', {
-      // Hapus withCredentials: true, karena kamu pakai Sanctum token
     });
 
-    // Jika API mengembalikan pagination (dengan key 'data')
     if (response.data.data) {
-      artikels.value = response.data.data; // <-- Ambil array dari key 'data'
+      artikels.value = response.data.data;
     } else {
-      // Jika API mengembalikan array langsung
       artikels.value = response.data;
     }
-
-    console.log('Data artikel:', artikels.value); // Tambahkan ini untuk debugging
   } catch (err) {
     console.error(err);
     showAlert("Gagal memuat artikel: " + (err.response?.data?.message || "Error"), "error");

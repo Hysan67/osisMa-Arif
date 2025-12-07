@@ -1,20 +1,16 @@
 <?php
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\ArtikelController;
+use App\Http\Controllers\AuthController;
 
-// Grup untuk route yang perlu CORS dan otentikasi Sanctum
-Route::middleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class])
-    ->group(function () {
+Route::get('/artikels', [ArtikelController::class, 'index']);
+Route::get('/artikels/{artikel}', [ArtikelController::class, 'show']);
 
-        // Route login/logout (otentikasi Sanctum)
-        Route::post('/login', [AuthController::class, 'login']);
-        Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/artikels', [ArtikelController::class, 'store']);
+Route::put('/artikels/{artikel}', [ArtikelController::class, 'update']);
+Route::delete('/artikels/{artikel}', [ArtikelController::class, 'destroy']);
 
-        // Grup untuk CRUD Artikel (dilindungi oleh Sanctum)
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::apiResource('artikels', ArtikelController::class);
-            Route::patch('/artikels/{id}/restore', [ArtikelController::class, 'restore']);
-        });
-    });
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
