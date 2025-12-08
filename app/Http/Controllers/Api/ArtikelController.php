@@ -53,6 +53,8 @@ class ArtikelController extends Controller
         $data = $request->only(['judul', 'deskripsi', 'jenis_artikel']);
         
         $data['admin_id'] = auth()->id();
+
+        
         if ($request->hasFile('img')) {
             $data['img'] = $request->file('img')->store('artikels', 'public');
         }

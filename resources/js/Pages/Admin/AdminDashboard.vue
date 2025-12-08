@@ -10,8 +10,10 @@
           </div>
         </div>
       </div>
+      
       <!-- Navigation Menu -->
       <nav class="px-4 py-6 space-y-1">
+        <!-- Kelola Artikel -->
         <router-link
           to="/admin/kelola-artikel"
           class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group"
@@ -29,6 +31,25 @@
           <div v-if="$route.path === '/admin/kelola-artikel'" class="ml-auto w-2 h-2 bg-blue-300 rounded-full"></div>
         </router-link>
         
+        <!-- Kelola Bidang -->
+        <router-link
+          to="/admin/kelola-bidang"
+          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group"
+          :class="{
+            'bg-blue-700 shadow-lg': $route.path === '/admin/kelola-bidang',
+            'hover:bg-blue-700/50': $route.path !== '/admin/kelola-bidang'
+          }"
+        >
+          <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600/20 group-hover:bg-blue-600/30">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+          <span class="font-medium">Kelola Bidang</span>
+          <div v-if="$route.path === '/admin/kelola-bidang'" class="ml-auto w-2 h-2 bg-blue-300 rounded-full"></div>
+        </router-link>
+        
+        <!-- Member OSIS -->
         <router-link
           to="/admin/member-osis"
           class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group"
@@ -62,7 +83,6 @@
         <div v-if="message" class="mt-3 p-2 bg-green-500/20 border border-green-500/30 rounded-lg">
           <p class="text-xs text-center text-green-300">{{ message }}</p>
         </div>
-
       </div>
     </aside>
 
@@ -71,13 +91,12 @@
       <div class="p-8">
         <router-view />
       </div>
-
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 

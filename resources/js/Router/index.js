@@ -9,6 +9,7 @@ import Login from '@/Pages/Login.vue'
 import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
 import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
+import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -33,6 +34,12 @@ const routes = [
         path: 'kelola-artikel',
         name: 'KelolaArtikel',
         component: KelolaArtikel,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/admin/kelola-bidang',
+        name: 'KelolaBidang',
+        component: KelolaBidang,
         meta: { requiresAuth: true }
       },
       {
