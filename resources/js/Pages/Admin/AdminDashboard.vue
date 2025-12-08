@@ -1,73 +1,146 @@
 <template>
-  <div class="min-h-screen flex bg-gray-100">
+  <div class="min-h-screen flex bg-gray-50">
     <!-- Sidebar -->
-    <aside class="w-64 h-screen overflow-y-auto bg-[#1E40AF] text-white flex flex-col fixed z-50">
-      <div class="text-center py-6 text-2xl font-semibold border-b border-blue-700">
-        OSIS Admin
+    <aside class="w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white shadow-xl fixed h-full z-50">
+      <div class="flex items-center justify-center h-20 border-b border-blue-700/50">
+        <div class="flex items-center space-x-3">
+          <div>
+            <h1 class="text-xl font-bold tracking-tight">OSIS Admin</h1>
+            <p class="text-xs text-blue-300">Management System</p>
+          </div>
+        </div>
       </div>
-
-      <nav class="flex-1 px-4 py-6 space-y-2">
+      <!-- Navigation Menu -->
+      <nav class="px-4 py-6 space-y-1">
         <router-link
           to="/admin/kelola-artikel"
-          class="flex items-center gap-3 p-3 rounded-md hover:bg-blue-700 transition"
-          active-class="bg-blue-800"
+          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group"
+          :class="{
+            'bg-blue-700 shadow-lg': $route.path === '/admin/kelola-artikel',
+            'hover:bg-blue-700/50': $route.path !== '/admin/kelola-artikel'
+          }"
         >
-          <i class="fa-solid fa-newspaper text-lg w-5 text-white"></i>
-          <i class="fas fa-newspaper w-5"></i>
-          <span>Kelola Artikel</span>
+          <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600/20 group-hover:bg-blue-600/30">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+            </svg>
+          </div>
+          <span class="font-medium">Kelola Artikel</span>
+          <div v-if="$route.path === '/admin/kelola-artikel'" class="ml-auto w-2 h-2 bg-blue-300 rounded-full"></div>
         </router-link>
         
         <router-link
           to="/admin/member-osis"
-          class="flex items-center gap-3 p-3 rounded-md hover:bg-blue-700 transition"
-          active-class="bg-blue-800"
+          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group"
+          :class="{
+            'bg-blue-700 shadow-lg': $route.path === '/admin/member-osis',
+            'hover:bg-blue-700/50': $route.path !== '/admin/member-osis'
+          }"
         >
-          <i class="fa-solid fa-users text-lg w-5 text-white"></i>
-          <i class="fas fa-users w-5"></i>
-          <span>Member OSIS</span>
+          <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600/20 group-hover:bg-blue-600/30">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.67 3.623a10 10 0 01-.67 3.376"></path>
+            </svg>
+          </div>
+          <span class="font-medium">Member OSIS</span>
+          <div v-if="$route.path === '/admin/member-osis'" class="ml-auto w-2 h-2 bg-blue-300 rounded-full"></div>
         </router-link>
       </nav>
 
-      <!-- Logout -->
-      <div class="p-4 border-t border-blue-700">
+      <!-- Logout Section -->
+      <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-700/50 bg-blue-900/30">
         <button
           @click="handleLogout"
-          class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md"
+          class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
         >
-          Logout
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+          </svg>
+          <span class="font-medium">Logout</span>
         </button>
-        <div v-if="message" class="mt-2 text-center text-sm text-green-300">
-          {{ message }}
+        
+        <div v-if="message" class="mt-3 p-2 bg-green-500/20 border border-green-500/30 rounded-lg">
+          <p class="text-xs text-center text-green-300">{{ message }}</p>
         </div>
+
       </div>
     </aside>
 
-    <!-- KONTEN ADMIN -->
-    <main class="flex-1 ml-64 p-6">
-      <router-view />
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div class="p-8">
+        <router-view />
+      </div>
+
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 
 const router = useRouter()
+const route = useRoute()
 const message = ref('')
+const user = ref(null)
+
+// Get user data from localStorage
+onMounted(() => {
+  const userData = localStorage.getItem('user')
+  if (userData) {
+    user.value = JSON.parse(userData)
+  }
+})
 
 async function handleLogout() {
   try {
-    await axios.post('http://localhost:8000/api/logout'); // Token akan dikirim oleh interceptor
+    await axios.post('/logout');
+    message.value = 'Logout berhasil!'
+    
+    setTimeout(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      router.push('/login');
+    }, 1000);
+    
   } catch (err) {
     console.error('Logout error:', err);
-    // Jika logout gagal, tetap hapus lokal
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/login');
   }
-
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  router.push('/login');
 }
 </script>
-apakah seperti ini?
+
+<style scoped>
+/* Smooth transitions */
+.router-link-active {
+  position: relative;
+}
+
+/* Custom scrollbar for sidebar */
+aside::-webkit-scrollbar {
+  width: 6px;
+}
+
+aside::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Animation for dropdown */
+.group:hover .group-hover\:visible {
+  visibility: visible;
+  opacity: 1;
+}
+</style>

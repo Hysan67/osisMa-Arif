@@ -12,7 +12,7 @@ class ArtikelController extends Controller
 {
     public function index()
     {
-        $artikels = Artikel::select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'created_at', 'updated_at'])
+        $artikels = Artikel::select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'admin_id', 'created_at', 'updated_at'])
                           ->whereNull('deleted_at')
                           ->latest()
                           ->get()
@@ -32,6 +32,7 @@ class ArtikelController extends Controller
                 'deskripsi' => $artikel->deskripsi,
                 'jenis_artikel' => $artikel->jenis_artikel,
                 'img' => $artikel->img,
+                'admin_id' => $artikel->admin_id,
                 'created_at' => $artikel->created_at,
                 'updated_at' => $artikel->updated_at,
             ];
@@ -46,18 +47,18 @@ class ArtikelController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required',
             'jenis_artikel' => 'required|in:artikel,event',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         $data = $request->only(['judul', 'deskripsi', 'jenis_artikel']);
         
+        $data['admin_id'] = auth()->id();
         if ($request->hasFile('img')) {
             $data['img'] = $request->file('img')->store('artikels', 'public');
         }
 
         $artikel = Artikel::create($data);
         
-        // Pastikan mengembalikan data yang di-refresh dari database
         return response()->json($artikel->fresh());
     }
 
@@ -70,6 +71,7 @@ class ArtikelController extends Controller
             'deskripsi' => $artikel->deskripsi,
             'jenis_artikel' => $artikel->jenis_artikel,
             'img' => $artikel->img,
+            'admin_id' => $artikel->admin_id,
             'created_at' => $artikel->created_at,
             'updated_at' => $artikel->updated_at,
         ]);
@@ -92,10 +94,9 @@ class ArtikelController extends Controller
         }
         
         if ($request->hasFile('img')) {
-            $rules['img'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['img'] = 'image|mimes:jpeg,png,jpg,gif';
         }
 
-        // Update data berdasarkan input yang diberikan
         if ($request->has('judul')) {
             $artikel->judul = $request->judul;
         }
@@ -144,7 +145,7 @@ class ArtikelController extends Controller
         
         try {
             $deletedArtikels = Artikel::onlyTrashed()
-                ->select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'created_at', 'deleted_at'])
+                ->select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img','admin_id', 'created_at', 'deleted_at'])
                 ->latest('deleted_at')
                 ->get();
                 

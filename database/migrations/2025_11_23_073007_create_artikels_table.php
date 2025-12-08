@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('img')->nullable();
             $table->string('judul');
-            $table->text('deskripsi');
+            $table->longText('deskripsi');
             $table->string('jenis_artikel')->nullable();
             $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
