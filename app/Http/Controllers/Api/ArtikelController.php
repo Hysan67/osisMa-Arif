@@ -47,7 +47,7 @@ class ArtikelController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required',
             'jenis_artikel' => 'required|in:artikel,event',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+           'img' => 'nullable|image|max:2048', 
         ]);
 
         $data = $request->only(['judul', 'deskripsi', 'jenis_artikel']);
