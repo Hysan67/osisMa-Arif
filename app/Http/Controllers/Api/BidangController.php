@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class BidangController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         try {

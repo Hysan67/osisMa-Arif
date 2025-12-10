@@ -40,19 +40,33 @@ class AnggotaController extends Controller
             'quote' => 'nullable|string',
             'pengalaman_prestasi' => 'nullable|string',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            // Custom error messages
+            'nama.required' => 'Nama wajib diisi',
+            'posisi.required' => 'Posisi wajib diisi',
+            'status.required' => 'Status wajib dipilih',
+            'masa_bakti.required' => 'Masa bakti wajib diisi',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors(),
-                'message' => 'Validasi gagal'
+                'message' => 'Validasi gagal. Silakan periksa data yang dikirim.'
             ], 422);
         }
 
         try {
             $data = $request->except('img');
+            
+            if (empty($data['quote'])) {
+                $data['quote'] = '-';
+            }
 
+            if (empty($data['pengalaman_prestasi'])) {
+                $data['pengalaman_prestasi'] = '-';
+            }
+            
             if ($request->hasFile('img')) {
                 $image = $request->file('img');
                 $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
@@ -70,7 +84,8 @@ class AnggotaController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan anggota: ' . $e->getMessage()
+                'message' => 'Gagal menambahkan anggota: ' . $e->getMessage(),
+                'trace' => config('app.debug') ? $e->getTrace() : []
             ], 500);
         }
     }

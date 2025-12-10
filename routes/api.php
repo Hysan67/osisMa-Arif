@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\ArtikelController;
 use App\Http\Controllers\Api\BidangController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\AnggotaController;
+use App\Http\Controllers\Api\Admin\AspirasiController;
+use App\Http\Controllers\Api\PublicAspirasiController;
 
 Route::middleware('auth:sanctum')->group(function () {
    Route::post('/artikels', [ArtikelController::class, 'store']);
@@ -33,6 +35,15 @@ Route::prefix('anggota')->group(function () {
    Route::post('/{id}', [AnggotaController::class, 'update']);
    Route::delete('/{id}', [AnggotaController::class, 'destroy']);
 });
+
+Route::prefix('admin')->group(function () {
+   Route::get('/aspirasi', [AspirasiController::class, 'index']);
+   Route::post('/aspirasi/bulk-update', [AspirasiController::class, 'bulkUpdate']);
+   Route::post('/aspirasi/{id}/update-status', [AspirasiController::class, 'updateStatus']);
+   Route::delete('/aspirasi/{id}', [AspirasiController::class, 'destroy']);
+});
+
+Route::post('/aspirasi', [PublicAspirasiController::class, 'store']);
 
 Route::get('/artikels', [ArtikelController::class, 'index']);
 Route::get('/artikels/{artikel}', [ArtikelController::class, 'show']);

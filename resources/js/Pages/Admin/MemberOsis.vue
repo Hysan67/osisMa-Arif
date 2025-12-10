@@ -7,7 +7,7 @@
         <p class="text-gray-600 text-sm mt-1">Kelola data anggota OSIS per bidang dan status</p>
       </div>
       <button 
-        @click="openForm('add')" 
+        @click="openForm()" 
         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition"
       >
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600">Total Anggota</p>
-            <p class="text-2xl font-semibold text-gray-900">{{ anggotaStore.anggotas.length }}</p>
+            <p class="text-2xl font-semibold text-gray-900">{{ anggotas.length }}</p>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600">Total Bidang</p>
-            <p class="text-2xl font-semibold text-gray-900">{{ bidangStore.bidangs.length }}</p>
+            <p class="text-2xl font-semibold text-gray-900">{{ bidangs.length }}</p>
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@
               class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Semua Bidang</option>
-              <option v-for="bidang in bidangStore.bidangs" :key="bidang.id" :value="bidang.id">
+              <option v-for="bidang in bidangs" :key="bidang.id" :value="bidang.id">
                 {{ bidang.nama }}
               </option>
             </select>
@@ -182,22 +182,22 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="anggotaStore.loading && anggotaStore.anggotas.length === 0" class="text-center py-12">
+    <div v-if="loading && anggotas.length === 0" class="text-center py-12">
       <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       <p class="mt-4 text-gray-600">Memuat data anggota...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="anggotaStore.error && anggotaStore.anggotas.length === 0" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+    <div v-else-if="error && anggotas.length === 0" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
       <div class="text-red-600 mb-2">
         <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
       </div>
       <h3 class="text-lg font-medium text-red-800 mb-2">Gagal memuat data</h3>
-      <p class="text-red-700 mb-4">{{ anggotaStore.error }}</p>
+      <p class="text-red-700 mb-4">{{ error }}</p>
       <button
-        @click="fetchAnggota"
+        @click="fetchData"
         class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
       >
         Coba Lagi
@@ -212,7 +212,7 @@
       <h3 class="text-xl font-semibold text-gray-900 mb-2">Belum ada anggota</h3>
       <p class="text-gray-600 mb-6">Mulai dengan menambahkan anggota pertama Anda</p>
       <button
-        @click="openForm('add')"
+        @click="openForm()"
         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
       >
         Tambah Anggota Pertama
@@ -220,11 +220,11 @@
     </div>
 
     <!-- Display Mode Toggle -->
-    <div class="flex justify-between items-center mb-4">
+    <div v-else class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-semibold text-gray-800">
         Daftar Anggota 
         <span class="text-sm font-normal text-gray-600">
-          ({{ filteredAnggota.length }} dari {{ anggotaStore.anggotas.length }})
+          ({{ filteredAnggota.length }} dari {{ anggotas.length }})
         </span>
       </h3>
       <div class="flex space-x-2">
@@ -252,7 +252,7 @@
     </div>
 
     <!-- Grid View -->
-    <div v-if="displayMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div v-if="displayMode === 'grid' && filteredAnggota.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <div
         v-for="anggota in filteredAnggota"
         :key="anggota.id"
@@ -333,7 +333,7 @@
     </div>
 
     <!-- Table View -->
-    <div v-else class="bg-white rounded-lg shadow overflow-hidden">
+    <div v-else-if="displayMode === 'table' && filteredAnggota.length > 0" class="bg-white rounded-lg shadow overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -343,7 +343,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posisi</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bidang</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Masa Bakti</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Masa Bakti</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
             </tr>
           </thead>
@@ -420,22 +420,31 @@
       </div>
     </div>
 
-    <!-- Modal Form -->
-    <AnggotaModal
-      v-if="showModal"
-      :show="showModal"
-      :mode="modalMode"
-      :anggota="selectedAnggota"
-      :bidangs="bidangStore.bidangs"
-      @close="closeModal"
-      @saved="handleSaved"
+    <!-- Modals -->
+    <AnggotaModal 
+    v-if="showForm"
+    :show="showForm"
+    :is-edit="isEdit"
+    :form-data="form"
+    :bidangs="bidangs"
+    @save="saveAnggota"
+    @close="closeForm"
+  />
+
+    <AnggotaDetailModal
+      v-if="showDetailModal"
+      :anggota="detailAnggota"
+      :bidang="getBidang(detailAnggota?.bidang_id)"
+      :show="showDetailModal"
+      @close="closeDetailModal"
+      @edit="editAnggota(detailAnggota)"
     />
 
-    <!-- Delete Confirmation Modal -->
     <ConfirmationModal
+      v-if="showDeleteModal"
       :show="showDeleteModal"
       @close="showDeleteModal = false"
-      @confirmed="handleDelete"
+      @confirmed="deleteAnggota"
     >
       <template #title>
         Hapus Anggota
@@ -446,286 +455,333 @@
       </template>
     </ConfirmationModal>
 
-    <!-- Detail Modal -->
-    <AnggotaDetailModal
-      v-if="showDetailModal"
-      :anggota="detailAnggota"
-      :bidang="getBidang(detailAnggota?.bidang_id)"
-      @close="showDetailModal = false"
-      @edit="editAnggota(detailAnggota)"
-    />
+    <!-- Alert -->
+    <transition name="fade-slide">
+      <div v-if="alert.show" class="fixed bottom-6 right-6 px-4 py-3 rounded-lg shadow-lg text-white z-50" :class="alert.color">
+        {{ alert.message }}
+      </div>
+    </transition>
   </div>
 </template>
 
-<script>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
-import AnggotaModal from '@/Components/Modals/AnggotaModal.vue'
-import AnggotaDetailModal from '@/Components/Modals/AnggotaDetailModal.vue'
-import ConfirmationModal from '@/Components/Modals/ConfirmationModal.vue'
+<script setup>
+import { ref, reactive, computed, onMounted } from "vue";
+import axios from "axios";
 
-export default {
-  name: 'MemberOsis',
-  
-  components: {
-    AnggotaModal,
-    AnggotaDetailModal,
-    ConfirmationModal
-  },
-  
-  setup() {
-    // Store data (simulated - in real app, use Pinia/Vuex)
-    const anggotaStore = reactive({
-      anggotas: [],
-      loading: false,
-      error: null
-    })
+import AnggotaModal from '@/Components/Modals/AnggotaModal.vue';
+import AnggotaDetailModal from '@/Components/Modals/AnggotaDetailModal.vue';
+import ConfirmationModal from '@/Components/Modals/ConfirmationModal.vue';
 
-    const bidangStore = reactive({
-      bidangs: []
-    })
+// State
+const anggotas = ref([]);
+const bidangs = ref([]);
+const loading = ref(false);
+const error = ref("");
+const displayMode = ref("grid");
 
-    // Display mode
-    const displayMode = ref('grid')
+// Modal states
+const showForm = ref(false);
+const showDetailModal = ref(false);
+const showDeleteModal = ref(false);
+const isEdit = ref(false);
+
+// Data for modals
+const detailAnggota = ref(null);
+const anggotaToDelete = ref(null);
+
+// Form data
+const form = ref({
+  id: null,
+  nama: "",
+  posisi: "",
+  bidang_id: "",
+  status: "aktif",
+  masa_bakti: "",
+  quote: "",
+  pengalaman_prestasi: "",
+  img: null,
+  imgPreview: null,
+});
+
+// Filters
+const filters = reactive({
+  status: "",
+  bidang_id: "",
+  posisi: "",
+  search: ""
+});
+
+// Alert
+const alert = ref({ show: false, message: "", color: "bg-green-500" });
+
+// Constants
+const posisiOptions = [
+  'Ketua OSIS',
+  'Wakil Ketua OSIS',
+  'Sekretaris',
+  'Bendahara',
+  'Ketua Bidang',
+  'Anggota'
+];
+
+// Computed Properties
+const hasActiveFilters = computed(() => {
+  return filters.status || filters.bidang_id || filters.posisi || filters.search;
+});
+
+const filteredAnggota = computed(() => {
+  return anggotas.value.filter(anggota => {
+    if (filters.status && anggota.status !== filters.status) return false;
+    if (filters.bidang_id && anggota.bidang_id != filters.bidang_id) return false;
+    if (filters.posisi && anggota.posisi !== filters.posisi) return false;
     
-    // Modal state
-    const showModal = ref(false)
-    const modalMode = ref('add')
-    const selectedAnggota = ref(null)
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      return (
+        anggota.nama.toLowerCase().includes(searchLower) ||
+        anggota.posisi.toLowerCase().includes(searchLower) ||
+        (anggota.quote && anggota.quote.toLowerCase().includes(searchLower)) ||
+        (anggota.pengalaman_prestasi && anggota.pengalaman_prestasi.toLowerCase().includes(searchLower))
+      );
+    }
     
-    // Detail modal
-    const showDetailModal = ref(false)
-    const detailAnggota = ref(null)
+    return true;
+  });
+});
+
+// Methods
+function showAlert(msg, type = "success") {
+  alert.value = { show: true, message: msg, color: type === "success" ? "bg-green-500" : "bg-red-500" };
+  setTimeout(() => (alert.value.show = false), 3000);
+}
+
+function getImageUrl(imgPath) {
+  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image';
+  if (imgPath.startsWith('http')) return imgPath;
+  if (imgPath.startsWith('public/')) imgPath = imgPath.replace('public/', '');
+  if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
+  return `/storage/${imgPath}`;
+}
+
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      showAlert('Format file harus JPG, PNG, atau GIF', 'error');
+      return;
+    }
     
-    // Delete confirmation
-    const showDeleteModal = ref(false)
-    const anggotaToDelete = ref(null)
-    
-    // Filters
-    const filters = reactive({
-      status: '',
-      bidang_id: '',
-      posisi: '',
-      search: ''
-    })
-
-    // Posisi options
-    const posisiOptions = [
-      'Ketua OSIS',
-      'Wakil Ketua OSIS',
-      'Sekretaris',
-      'Bendahara',
-      'Ketua Bidang',
-      'Anggota'
-    ]
-
-    // Computed
-    const hasActiveFilters = computed(() => {
-      return filters.status || filters.bidang_id || filters.posisi || filters.search
-    })
-
-    const filteredAnggota = computed(() => {
-      return anggotaStore.anggotas.filter(anggota => {
-        // Filter by status
-        if (filters.status && anggota.status !== filters.status) return false
-        
-        // Filter by bidang
-        if (filters.bidang_id && anggota.bidang_id != filters.bidang_id) return false
-        
-        // Filter by posisi
-        if (filters.posisi && anggota.posisi !== filters.posisi) return false
-        
-        // Filter by search
-        if (filters.search) {
-          const searchLower = filters.search.toLowerCase()
-          return (
-            anggota.nama.toLowerCase().includes(searchLower) ||
-            anggota.posisi.toLowerCase().includes(searchLower) ||
-            anggota.quote.toLowerCase().includes(searchLower) ||
-            anggota.pengalaman_prestasi.toLowerCase().includes(searchLower)
-          )
-        }
-        
-        return true
-      })
-    })
-
-    // Methods
-    const fetchAnggota = async () => {
-      anggotaStore.loading = true
-      try {
-        const token = localStorage.getItem('token')
-        const response = await fetch('/api/anggota', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
-          }
-        })
-        
-        if (response.ok) {
-          const data = await response.json()
-          anggotaStore.anggotas = data.data || data
-        }
-      } catch (error) {
-        anggotaStore.error = 'Gagal memuat data anggota'
-        console.error('Error fetching anggota:', error)
-      } finally {
-        anggotaStore.loading = false
-      }
-    }
-
-    const fetchBidangs = async () => {
-      try {
-        const token = localStorage.getItem('token')
-        const response = await fetch('/api/bidang', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
-          }
-        })
-        
-        if (response.ok) {
-          const data = await response.json()
-          bidangStore.bidangs = data.data || data
-        }
-      } catch (error) {
-        console.error('Error fetching bidangs:', error)
-      }
-    }
-
-    const getCountByStatus = (status) => {
-      return anggotaStore.anggotas.filter(a => a.status === status).length
-    }
-
-    const getBidangName = (bidangId) => {
-      const bidang = bidangStore.bidangs.find(b => b.id == bidangId)
-      return bidang ? bidang.nama : ''
-    }
-
-    const getBidang = (bidangId) => {
-      return bidangStore.bidangs.find(b => b.id == bidangId)
-    }
-
-    const resetFilters = () => {
-      filters.status = ''
-      filters.bidang_id = ''
-      filters.posisi = ''
-      filters.search = ''
-    }
-
-    const openForm = (mode, anggota = null) => {
-      modalMode.value = mode
-      selectedAnggota.value = anggota
-      showModal.value = true
-    }
-
-    const closeModal = () => {
-      showModal.value = false
-      selectedAnggota.value = null
-    }
-
-    const handleSaved = () => {
-      closeModal()
-      fetchAnggota()
-    }
-
-    const editAnggota = (anggota) => {
-      openForm('edit', anggota)
-      showDetailModal.value = false
-    }
-
-    const viewDetail = (anggota) => {
-      detailAnggota.value = anggota
-      showDetailModal.value = true
-    }
-
-    const confirmDelete = (anggota) => {
-      anggotaToDelete.value = anggota
-      showDeleteModal.value = true
-    }
-
-    const handleDelete = async () => {
-      if (!anggotaToDelete.value) return
-      
-      try {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`/api/anggota/${anggotaToDelete.value.id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
-          }
-        })
-        
-        if (response.ok) {
-          await fetchAnggota()
-          showDeleteModal.value = false
-          anggotaToDelete.value = null
-        }
-      } catch (error) {
-        console.error('Error deleting anggota:', error)
-        alert('Gagal menghapus anggota')
-      }
-    }
-
-    const getImageUrl = (imgPath) => {
-      if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image'
-      if (imgPath.startsWith('http')) return imgPath
-      return `/storage/${imgPath}`
-    }
-
-    const handleImageError = (event) => {
-      event.target.src = 'https://via.placeholder.com/400x300?text=No+Image'
-    }
-
-    const truncateText = (text, length) => {
-      if (!text) return ''
-      return text.length > length ? text.substring(0, length) + '...' : text
-    }
-
-    // Lifecycle
-    onMounted(() => {
-      fetchAnggota()
-      fetchBidangs()
-    })
-
-    return {
-      // State
-      anggotaStore,
-      bidangStore,
-      displayMode,
-      showModal,
-      modalMode,
-      selectedAnggota,
-      showDetailModal,
-      detailAnggota,
-      showDeleteModal,
-      anggotaToDelete,
-      filters,
-      posisiOptions,
-      
-      // Computed
-      hasActiveFilters,
-      filteredAnggota,
-      
-      // Methods
-      fetchAnggota,
-      getCountByStatus,
-      getBidangName,
-      getBidang,
-      resetFilters,
-      openForm,
-      closeModal,
-      handleSaved,
-      editAnggota,
-      viewDetail,
-      confirmDelete,
-      handleDelete,
-      getImageUrl,
-      handleImageError,
-      truncateText
-    }
+    form.value.img = file;
+    const reader = new FileReader();
+    reader.onload = (e) => form.value.imgPreview = e.target.result;
+    reader.readAsDataURL(file);
   }
 }
+
+function getCountByStatus(status) {
+  return anggotas.value.filter(a => a.status === status).length;
+}
+
+function getBidangName(bidangId) {
+  const bidang = bidangs.value.find(b => b.id == bidangId);
+  return bidang ? bidang.nama : '';
+}
+
+function getBidang(bidangId) {
+  return bidangs.value.find(b => b.id == bidangId);
+}
+
+function resetFilters() {
+  filters.status = '';
+  filters.bidang_id = '';
+  filters.posisi = '';
+  filters.search = '';
+}
+
+function truncateText(text, length) {
+  if (!text) return '';
+  return text.length > length ? text.substring(0, length) + '...' : text;
+}
+
+// Form Methods
+function openForm(data = null) {
+  isEdit.value = !!data;
+  if (data) {
+    form.value = {
+      id: data.id,
+      nama: data.nama,
+      posisi: data.posisi,
+      bidang_id: data.bidang_id || "",
+      status: data.status || "aktif",
+      masa_bakti: data.masa_bakti,
+      quote: data.quote || "",
+      pengalaman_prestasi: data.pengalaman_prestasi || "",
+      img: null,
+      imgPreview: data.img ? getImageUrl(data.img) : null,
+    };
+  } else {
+    form.value = {
+      id: null,
+      nama: "",
+      posisi: "",
+      bidang_id: "",
+      status: "aktif",
+      masa_bakti: "",
+      quote: "",
+      pengalaman_prestasi: "",
+      img: null,
+      imgPreview: null,
+    };
+  }
+  showForm.value = true;
+}
+
+function closeForm() {
+  showForm.value = false;
+  form.value.imgPreview = null;
+}
+
+function editAnggota(anggota) {
+  isEdit.value = true;
+  form.value = {
+    id: anggota.id,
+    nama: anggota.nama || "",
+    posisi: anggota.posisi || "",
+    bidang_id: anggota.bidang_id || "",
+    status: anggota.status || "aktif",
+    masa_bakti: anggota.masa_bakti || "",
+    quote: anggota.quote || "",
+    pengalaman_prestasi: anggota.pengalaman_prestasi || "",
+    img: null,
+    imgPreview: anggota.img ? getImageUrl(anggota.img) : null,
+  };
+  showForm.value = true;
+  showDetailModal.value = false;
+}
+
+function viewDetail(anggota) {
+  detailAnggota.value = {
+    ...anggota,
+    img: anggota.img,
+    nama: anggota.nama,
+    posisi: anggota.posisi,
+    quote: anggota.quote || "",
+    pengalaman_prestasi: anggota.pengalaman_prestasi || "-",
+    masa_bakti: anggota.masa_bakti,
+    status: anggota.status,
+    bidang_id: anggota.bidang_id,
+    created_at: anggota.created_at,
+    updated_at: anggota.updated_at
+  };
+  showDetailModal.value = true;
+}
+
+function closeDetailModal() {
+  showDetailModal.value = false;
+  detailAnggota.value = null;
+}
+
+function confirmDelete(anggota) {
+  anggotaToDelete.value = anggota;
+  showDeleteModal.value = true;
+}
+
+// API Functions
+async function fetchData() {
+  loading.value = true;
+  error.value = "";
+  
+  try {
+    // Fetch anggotas
+    const anggotaResponse = await axios.get('/anggota', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Accept': 'application/json'
+      }
+    });
+    anggotas.value = anggotaResponse.data.data || anggotaResponse.data;
+    
+    // Fetch bidangs
+    const bidangResponse = await axios.get('/bidang', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Accept': 'application/json'
+      }
+    });
+    bidangs.value = bidangResponse.data.data || bidangResponse.data;
+  } catch (err) {
+    console.error('Error fetching data:', err);
+    error.value = 'Gagal memuat data. Silakan coba lagi.';
+    showAlert("Gagal memuat data: " + (err.response?.data?.message || "Error"), "error");
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function saveAnggota(formData) {
+  try {
+    const token = localStorage.getItem('token');
+    
+    if (isEdit.value) {
+      formData.append('_method', 'PUT');
+      await axios.post(`/anggota/${form.value.id}`, formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      showAlert("Anggota berhasil diperbarui");
+    } else {
+      await axios.post('/anggota', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      showAlert("Anggota baru berhasil ditambahkan");
+    }
+    
+    closeForm();
+    await fetchData();
+  } catch (err) {
+    console.error("Error detail:", err);
+    let errorMessage = "Gagal menyimpan anggota";
+    if (err.response?.data?.message) {
+      errorMessage = err.response.data.message;
+    } else if (err.response?.data?.errors) {
+      errorMessage = Object.values(err.response.data.errors).flat().join(', ');
+    }
+    showAlert(errorMessage, "error");
+  }
+}
+
+async function deleteAnggota() {
+  if (!anggotaToDelete.value) return;
+  
+  try {
+    await axios.delete(`/anggota/${anggotaToDelete.value.id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Accept': 'application/json'
+      }
+    });
+    showAlert("Anggota berhasil dihapus", "success");
+    showDeleteModal.value = false;
+    anggotaToDelete.value = null;
+    await fetchData();
+  } catch (err) {
+    console.error(err);
+    showAlert("Gagal menghapus anggota: " + (err.response?.data?.message || "Error"), "error");
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <style scoped>
@@ -740,5 +796,15 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.4s ease;
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>

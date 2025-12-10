@@ -10,6 +10,7 @@ import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
 import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
 import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
+import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -31,13 +32,17 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
+        path: '',
+        redirect: '/admin/member-osis'
+      },
+      {
         path: 'kelola-artikel',
         name: 'KelolaArtikel',
         component: KelolaArtikel,
         meta: { requiresAuth: true }
       },
       {
-        path: '/admin/kelola-bidang',
+        path: 'kelola-bidang',
         name: 'KelolaBidang',
         component: KelolaBidang,
         meta: { requiresAuth: true }
@@ -46,6 +51,12 @@ const routes = [
         path: 'member-osis',
         name: 'MemberOsis',
         component: MemberOsis,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'kelola-aspirasi',
+        name: 'KelolaAspirasi',
+        component: Aspirasi,
         meta: { requiresAuth: true }
       }
     ]
@@ -88,7 +99,6 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to) => {
-  // Jika user kembali ke halaman yang sudah pernah dibuka → restore scroll
   setTimeout(() => {
     const saved = scrollPositions[to.fullPath]
     if (saved !== undefined) {
@@ -97,7 +107,6 @@ router.afterEach((to) => {
         behavior: 'instant'
       })
     } else {
-      // Jika halaman baru pertama dikunjungi → scroll ke atas
       window.scrollTo({ top: 0 })
     }
   }, 0)

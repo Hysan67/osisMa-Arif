@@ -127,11 +127,7 @@
        if (imgPath.startsWith('http')) return imgPath
        return `/storage/${imgPath}`
      }
- 
-     const handleImageError = (event) => {
-       event.target.src = 'https://via.placeholder.com/400x300?text=No+Image'
-     }
- 
+     
      const formatDate = (dateString) => {
        if (!dateString) return ''
        const date = new Date(dateString)
