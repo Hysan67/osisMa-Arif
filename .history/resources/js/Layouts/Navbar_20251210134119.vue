@@ -388,11 +388,10 @@
                      >
                   </li>
                   <li>
-                     <router-link
+                     <a
                         to="/form-aspirasi-siswa"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Aspirasi Siswa</router-link
+                        >Aspirasi Siswa</a
                      >
                   </li>
                </ul>

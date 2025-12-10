@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-2xl mx-auto p-6 py-24">
+  <div class="max-w-2xl mx-auto p-6 py-10">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <div class="text-center mb-6">
         <h2 class="text-2xl font-bold text-gray-800">📧 Kirim Aspirasi ke OSIS</h2>

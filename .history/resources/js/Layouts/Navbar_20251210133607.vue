@@ -168,16 +168,15 @@
                   <li>
                      <a
                         href="https://www.ma-almablitar.sch.id/"
-                        class="block py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
+                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         >Website Sekolah</a
                      >
                   </li>
                   <li>
-                     <router-link
+                     <a
                         to="/form-aspirasi-siswa"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Aspirasi Siswa</router-link
+                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
+                        >Aspirasi Siswa</a
                      >
                   </li>
                </ul>
@@ -385,14 +384,6 @@
                         href="https://www.ma-almablitar.sch.id/"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         >Website Sekolah</a
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/form-aspirasi-siswa"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Aspirasi Siswa</router-link
                      >
                   </li>
                </ul>

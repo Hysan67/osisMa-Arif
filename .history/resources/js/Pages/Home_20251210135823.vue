@@ -34,10 +34,7 @@
             Yuk, simak kegiatan utama OSIS MA Ma’arif Udanawu!
           </p>
         </div>
-        <div class="grid gap-8 justify-center 
-            grid-cols-1 sm:grid-cols-2 
-            md:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] 
-            place-items-center">
+        <div class="grid md:grid-cols-3 gap-8 text">
           <ProgramCard v-for="(p,i) in programs" :key="i" :title="p.title" :desc="p.desc" :delay="i*200" :desc-delay="i*300" />
         </div>
       </div>
@@ -95,7 +92,7 @@
     <!-- Event Besar -->
     <EventBesarSection />
 
- 
+
   </div>
 </template>
 
@@ -108,7 +105,9 @@ import ProgramCard from '../Pages/ProgramCard.vue'
 import EventCard from '../Pages/EventCard.vue'
 import BidangCard from '../Pages/BidangCard.vue'
 import GalleryCarousel from '../Pages/GalleryCarousel.vue'
+import SocialLink from '../Pages/SocialLink.vue'
 import EventBesarSection from '../Pages/EventBesarSection.vue'
+import FindUsSection from '../Pages/FindUsSection.vue'
 import AspirasiSection from '../Pages/AspirasiSection.vue'
 
 
