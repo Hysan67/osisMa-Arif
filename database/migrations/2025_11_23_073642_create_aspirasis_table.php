@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nama')->nullable(); // nama pengirim aspirasi
             $table->string('kelas')->nullable();
             $table->string('email')->nullable();
+            $table->string('no_whatsapp')->nullable(); // kontak pengirim aspirasi
             $table->string('judul'); // subjek aspirasi
             $table->text('pesan'); // isi aspirasi
             $table->text('balasan')->nullable(); // balasan dari admin

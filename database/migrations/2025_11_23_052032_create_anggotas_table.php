@@ -9,15 +9,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('anggotas', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing ID
-            $table->string('img')->nullable(); // path gambar anggota
+            $table->id();
+            $table->string('img')->nullable();
             $table->string('nama');
             $table->string('posisi');
             $table->text('quote');
             $table->text('pengalaman_prestasi');
             $table->string('masa_bakti');
             $table->string('status')->default('aktif');
-            $table->foreignId('bidang_id')->nullable()->constrained('bidangs')->onDelete('set null'); // jika bidang dihapus, anggota tetap ada
+            $table->foreignId('bidang_id')->nullable()->constrained('bidangs')->onDelete('set null');
             $table->timestamps();
         });
     }

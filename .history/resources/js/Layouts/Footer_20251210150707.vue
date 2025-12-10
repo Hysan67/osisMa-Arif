@@ -81,8 +81,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import FindUsSection from '../Pages/FindUsSection.vue'
-import SocialLink from '../Pages/SocialLink.vue'
+import FindUsSection from '../FindUsSection.vue'
+import SocialLink from '../SocialLink.vue'
 
 const logoHover = ref(false)
 const tooltip = ref('')
