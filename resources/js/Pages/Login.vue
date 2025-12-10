@@ -121,7 +121,7 @@ async function handleLogin() {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
 
-    router.push('/admin'); // atau halaman lain
+    router.push('/admin/member-osis'); // atau halaman lain
   } catch (err) {
     error.value = err.response?.data?.message || 'Login gagal';
   }
