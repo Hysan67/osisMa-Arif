@@ -1,6 +1,8 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-300 to-blue-200">
-    <div class="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl w-full max-w-md border border-white/50">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-300 to-blue-200 px-4 sm:px-6 md:px-0">
+    <div class="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl w-full max-w-sm sm:max-w-md md:max-w-lg 
+            border border-white/50">
+
       
       <h2 class="text-3xl font-bold text-center mb-6 text-gray-800 tracking-wide">
         Login Admin
