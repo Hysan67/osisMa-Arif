@@ -95,8 +95,16 @@
    }
  });
  
- defineEmits(['close', 'restore', 'permanent-delete']);
-
+ defineEmits(['close', 'restore', 'permanent-delete', 'preview-image']);
+ 
+ function getImageUrl(imgPath) {
+   if (!imgPath) return '';
+   if (imgPath.startsWith('http') || imgPath.startsWith('data:')) return imgPath;
+   if (imgPath.startsWith('public/')) imgPath = imgPath.replace('public/', '');
+   if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
+   return `/storage/${imgPath}`;
+ }
+ 
  function formatDate(dateString) {
    if (!dateString) return '-';
    const date = new Date(dateString);

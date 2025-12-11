@@ -59,52 +59,50 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
+    history: createWebHistory(),
+    routes,
+});
 
 // Simpan posisi scroll per halaman
-const scrollPositions = {}
+const scrollPositions = {};
 
 router.beforeEach((to, from, next) => {
-  // Simpan scroll dari halaman sebelumnya
-  scrollPositions[from.fullPath] = window.scrollY
+    // Simpan scroll dari halaman sebelumnya
+    scrollPositions[from.fullPath] = window.scrollY;
 
-  if (to.meta.requiresAuth) {
-    const isAuthenticated = localStorage.getItem('user') !== null;
+    if (to.meta.requiresAuth) {
+        const isAuthenticated = localStorage.getItem("user") !== null;
 
-    if (isAuthenticated) {
-      next()
+        if (isAuthenticated) {
+            next();
+        } else {
+            next({ name: "Login" });
+        }
+    } else if (to.meta.requiresGuest) {
+        const isAuthenticated = localStorage.getItem("user") !== null;
+
+        if (isAuthenticated) {
+            next({ name: "Admin" });
+        } else {
+            next();
+        }
     } else {
-      next({ name: 'Login' })
+        next();
     }
-  }
-  else if (to.meta.requiresGuest) {
-    const isAuthenticated = localStorage.getItem('user') !== null;
-
-    if (isAuthenticated) {
-      next({ name: 'Admin' })
-    } else {
-      next()
-    }
-  }
-  else {
-    next()
-  }
-})
+});
 
 router.afterEach((to) => {
-  setTimeout(() => {
-    const saved = scrollPositions[to.fullPath]
-    if (saved !== undefined) {
-      window.scrollTo({
-        top: saved,
-        behavior: 'instant'
-      })
-    } else {
-      window.scrollTo({ top: 0 })
-    }
-  }, 0)
-})
+    setTimeout(() => {
+        const saved = scrollPositions[to.fullPath];
+        if (saved !== undefined) {
+            window.scrollTo({
+                top: saved,
+                behavior: "instant",
+            });
+        } else {
+            window.scrollTo({ top: 0 });
+        }
+    }, 0);
+});
 
-export default router
+export default router;

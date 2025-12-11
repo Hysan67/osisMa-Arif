@@ -405,10 +405,6 @@ function removeImage() {
   form.value.imgPreview = null;
 }
 
-function handleImageError(event) {
-  event.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
-}
-
 function formatDate(dateString) {
   if (!dateString) return '';
   const date = new Date(dateString);

@@ -16,28 +16,23 @@ export const useEventStore = defineStore("event", {
                 }
                 const artikels = await response.json();
 
-                // Filter hanya yang jenis_artikel = 'event'
-                // Lalu sesuaikan struktur field agar cocok dengan Event.vue
-                this.events = artikels
-                    .filter((a) => a.jenis_artikel === "event")
-                    .map((a) => ({
-                        id: a.id,
-                        title: a.judul, // ← dari database
-                        desc: a.deskripsi, // ← dari database
-                        image: a.img ? `/storage/${a.img}` : null, // ← Laravel: stored di storage/app/public
-                        date: a.created_at
-                            ? new Date(a.created_at).toLocaleDateString(
-                                  "id-ID",
-                                  {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                  }
-                              )
-                            : "Tanggal tidak tersedia",
-                    }));
+                this.events = artikels.map((a) => ({
+                    id: a.id,
+                    title: a.judul,
+                    desc: a.deskripsi,
+                    image: a.img ? `/storage/${a.img}` : null,
+                    date: a.created_at
+                        ? new Date(a.created_at).toLocaleDateString("id-ID", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                          })
+                        : "Tanggal tidak tersedia",
+                    // ✅ SERTAKAN jenis_artikel!
+                    jenis_artikel: a.jenis_artikel, // ← INI YANG KURANG!
+                }));
             } catch (error) {
-                console.error("Gagal memuat event:", error);
+                console.error("Gagal memuat Artikel:", error);
                 this.events = [];
             } finally {
                 this.loading = false;
@@ -48,14 +43,9 @@ export const useEventStore = defineStore("event", {
             try {
                 const response = await fetch(`/api/artikels/${id}`);
                 if (!response.ok) {
-                    throw new Error("Event tidak ditemukan");
+                    throw new Error("Artikel tidak ditemukan");
                 }
                 const artikel = await response.json();
-
-                // Pastikan ini benar-benar event
-                if (artikel.jenis_artikel !== "event") {
-                    return null;
-                }
 
                 return {
                     id: artikel.id,
@@ -72,13 +62,11 @@ export const useEventStore = defineStore("event", {
                               }
                           )
                         : "",
-                    // Jika nanti tambah kolom seperti 'story', 'theme', dll di database,
-                    // tambahkan di sini, contoh:
-                    // story: artikel.story || '',
-                    // theme: artikel.theme || '',
+                    // ✅ SERTAKAN juga di sini
+                    jenis_artikel: artikel.jenis_artikel,
                 };
             } catch (error) {
-                console.error("Gagal memuat detail event:", error);
+                console.error("Gagal memuat detail artikel:", error);
                 return null;
             }
         },

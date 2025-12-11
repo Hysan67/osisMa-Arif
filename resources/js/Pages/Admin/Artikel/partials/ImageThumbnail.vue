@@ -36,11 +36,6 @@
    if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
    return `/storage/${imgPath}`;
  }
- 
- function handleImageError(event) {
-   event.target.src = 'https://via.placeholder.com/48x48?text=No+Image';
-   event.target.onerror = null;
- }
  </script>
  
  <style scoped>
