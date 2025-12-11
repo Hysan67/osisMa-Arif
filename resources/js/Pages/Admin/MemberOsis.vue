@@ -264,7 +264,6 @@
             :src="getImageUrl(anggota.img)"
             :alt="anggota.nama"
             class="w-full h-full object-cover"
-            @error="handleImageError"
           />
           <!-- Status Badge -->
           <div class="absolute top-3 right-3">
@@ -355,7 +354,6 @@
                     :src="getImageUrl(anggota.img)"
                     :alt="anggota.nama"
                     class="h-10 w-10 rounded-full object-cover"
-                    @error="handleImageError"
                   />
                 </div>
               </td>
@@ -431,7 +429,7 @@
     @close="closeForm"
   />
 
-    <AnggotaDetailModal
+    <DetailAnggota
       v-if="showDetailModal"
       :anggota="detailAnggota"
       :bidang="getBidang(detailAnggota?.bidang_id)"
@@ -469,7 +467,7 @@ import { ref, reactive, computed, onMounted } from "vue";
 import axios from "axios";
 
 import AnggotaModal from '@/Components/Modals/AnggotaModal.vue';
-import AnggotaDetailModal from '@/Components/Modals/AnggotaDetailModal.vue';
+import DetailAnggota from '@/Components/Modals/DetailAnggota.vue';
 import ConfirmationModal from '@/Components/Modals/ConfirmationModal.vue';
 
 // State

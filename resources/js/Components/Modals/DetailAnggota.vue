@@ -102,7 +102,7 @@
  
  <script>
  export default {
-   name: 'AnggotaDetailModal',
+   name: 'DetailAnggota',
    
    props: {
      anggota: {
@@ -142,7 +142,6 @@
  
      return {
        getImageUrl,
-       handleImageError,
        formatDate
      }
    }

@@ -32,7 +32,7 @@ Route::prefix('anggota')->group(function () {
    Route::post('/', [AnggotaController::class, 'store']);
    Route::get('/search', [AnggotaController::class, 'search']);
    Route::get('/{id}', [AnggotaController::class, 'show']);
-   Route::post('/{id}', [AnggotaController::class, 'update']);
+   Route::put('/{id}', [AnggotaController::class, 'update']);
    Route::delete('/{id}', [AnggotaController::class, 'destroy']);
 });
 
