@@ -197,7 +197,6 @@ class ArtikelController extends Controller
             ], 404);
         }
         
-        // Hapus gambar fisik jika ada
         if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
             Storage::disk('public')->delete($artikel->img);
         }
