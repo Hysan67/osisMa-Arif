@@ -1,13 +1,12 @@
-<!-- src/pages/EventDetail.vue -->
 <template>
-    <div class="min-h-screen bg-transparant py-16">
+    <div class="min-h-screen bg-transparent py-16">
         <div class="max-w-5xl mx-auto px-4 py-16">
             <router-link
-                to="/event"
+                to="/artikel"
                 class="text-blue-600 hover:underline mb-8 inline-block font-light"
                 data-aos="fade-left"
                 data-aos-delay="500"
-                >&larr; Kembali ke Daftar Event</router-link
+                >&larr; Kembali ke Daftar Artikel</router-link
             >
 
             <div v-if="!event" class="text-center py-20 text-gray-500">
@@ -15,28 +14,32 @@
             </div>
 
             <article v-else>
-                <!-- Gambar besar (editorial style) -->
+                <!-- Gambar Utama (Diperkecil) -->
                 <div
-                    class="rounded-2xl overflow-hidden mb-16 shadow-sm"
+                    class="flex justify-center mb-16"
                     data-aos="flip-left"
                     data-aos-delay="500"
                 >
                     <div
-                        class="aspect-video bg-gray-200 flex items-center justify-center"
+                        class="w-full max-w-lg rounded-2xl overflow-hidden shadow-sm"
                     >
-                        <img
-                            v-if="event.image"
-                            :src="event.image"
-                            :alt="event.title"
-                            class="w-full h-full object-cover transition-all duration-500 hover:scale-105 hover:brightness-90"
-                        />
-                        <span v-else class="text-black text-xl font-light"
-                            >Dokumentasi: {{ event.title }}</span
+                        <div
+                            class="aspect-video bg-gray-200 flex items-center justify-center"
                         >
+                            <img
+                                v-if="event.image"
+                                :src="event.image"
+                                :alt="event.title"
+                                class="w-full h-full object-cover transition-all duration-500 hover:scale-105 hover:brightness-90"
+                            />
+                            <span v-else class="text-black text-xl font-light">
+                                Dokumentasi: {{ event.title }}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Konten -->
+                <!-- Konten (TIDAK DIUBAH SAMA SEKALI) -->
                 <div class="prose prose-lg max-w-none">
                     <h1
                         class="text-5xl font-light text-blue-600 mb-4"
@@ -167,14 +170,14 @@ onMounted(async () => {
     }
 });
 
-// fungsi untuk salin link
+// Fungsi untuk salin link
 function copyLink() {
     const link = window.location.href;
     navigator.clipboard.writeText(link);
-    alert("Link event disalin ke clipboard!");
+    alert("Link artikel disalin ke clipboard!");
 }
 
-// fungsi untuk share (pakai Web Share API kalau tersedia)
+// Fungsi untuk share (Web Share API)
 function shareEvent() {
     const link = window.location.href;
     if (navigator.share) {

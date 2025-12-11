@@ -1,19 +1,28 @@
 <template>
-  <div class="bg-transparant py-20">
+  <div class="bg-blue-50 py-20">
     <div class="max-w-6xl mx-auto px-4" data-aos="fade-up" data-aos-delay="500">
       <h2 class="text-4xl font-light text-center text-blue-600 mb-16">Event Besar Kami</h2>
 
-      <div class="space-y-20">
+      <div v-if="!props.events?.length" class="text-center py-12 text-gray-500">
+        Tidak ada event besar saat ini.
+      </div>
+
+      <div v-else class="space-y-20">
         <div
-          v-for="(event, index) in events"
+          v-for="(event, index) in props.events"
           :key="event.id"
-          :class="['md:flex items-center gap-8', index % 2 !== 0 ? 'flex-row-reverse' : '']"
+          :class="['md:flex items-center gap-8', index % 2 !== 0 ? 'md:flex-row-reverse' : '']"
           :data-aos="index % 2 === 0 ? 'fade-right' : 'fade-left'"
           data-aos-delay="400"
         >
           <div class="md:w-1/2 mb-6 md:mb-0">
             <div class="aspect-video bg-gray-200 rounded-xl overflow-hidden">
-              <img :src="event.image" :alt="event.title" class="w-full h-full object-cover bg-gradient-to-t from-black/50 to-transparent"/>
+              <img
+                :src="event.image || '/images/placeholder-event.jpg'"
+                :alt="event.title"
+                class="w-full h-full object-cover"
+                @error="e => e.target.src = '/images/placeholder-event.jpg'"
+              />
             </div>
           </div>
           <div class="md:w-1/2 text-center md:text-left">
@@ -27,18 +36,10 @@
 </template>
 
 <script setup>
-const events = [
-  {
-    id: 1,
-    title: "MA’ARIF CUP",
-    desc: "Perlombaan antar sekolah tingkat Kabupaten Blitar yang mencakup cabang olahraga seperti futsal, voli, dan bulutangkis.",
-    image: "/images/event-1.jpg"
-  },
-  {
-    id: 2,
-    title: "MA’ARIF COMPETITION",
-    desc: "Kompetisi akademik tingkat MTs/SMP dan MA/SMA/SMK se-Jawa Timur, mencakup lomba MTQ, Pidato Bahasa Arab, dan Cerdas Cermat Keagamaan.",
-    image: "/images/event-2.jpg"
+const props = defineProps({
+  events: {
+    type: Array,
+    default: () => []
   }
-]
+})
 </script>
