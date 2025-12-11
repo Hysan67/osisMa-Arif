@@ -8,6 +8,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\AnggotaController;
 use App\Http\Controllers\Api\Admin\AspirasiController;
 use App\Http\Controllers\Api\PublicAspirasiController;
+use App\Http\Controllers\PendaftaranOSISController;
+
+Route::get('/pendaftaran-osis', [PendaftaranOSISController::class, 'index']);
+
+Route::prefix('api')->group(function () {
+   Route::post('/pendaftaran-osis', [PendaftaranOSISController::class, 'store']);
+   Route::get('/pendaftaran-osis', [PendaftaranOSISController::class, 'getAllPendaftaran']);
+   Route::get('/pendaftaran-osis/export', [PendaftaranOSISController::class, 'exportCSV']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
    Route::post('/artikels', [ArtikelController::class, 'store']);

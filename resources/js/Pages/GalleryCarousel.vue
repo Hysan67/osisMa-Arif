@@ -96,10 +96,6 @@ const props = defineProps({
 
 const currentIndex = ref(0);
 
-const onImageError = (e) => {
-    e.target.src = "/images/placeholder.jpg";
-};
-
 const prevImage = () => {
     if (props.images?.length > 0) {
         currentIndex.value =

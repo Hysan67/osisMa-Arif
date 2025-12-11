@@ -11,6 +11,7 @@ import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
 import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
 import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
 import StrukturMember from '@/Pages/StrukturMember.vue'
+import PendaftaranOSIS from '@/Pages/PendaftaranOSIS.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -20,6 +21,7 @@ const routes = [
   { path: '/generasi', name: 'Generasi', component: Generasi },
   { path: '/form-aspirasi-siswa', name: 'AspirasiSection', component: AspirasiSection },
   { path: '/login', name: 'Login', component: Login, meta: { requiresGuest: true } },
+  { path: '/pendaftaran-osis', name: 'PendaftaranOSIS', component: PendaftaranOSIS },
   {
     path: '/admin',
     name: 'Admin',

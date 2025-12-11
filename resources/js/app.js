@@ -68,4 +68,6 @@ app.use(router)
 const authStore = useAuthStore()
 authStore.checkAuth()
 
+document.title = 'OSIS MA Ma’arif Udanawu';
+
 app.mount('#app')

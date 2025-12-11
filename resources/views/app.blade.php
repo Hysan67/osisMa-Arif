@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" href="{{ asset('logo-osis.ico') }}"> 
     <!-- CSS & Scripts akan dihandle Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

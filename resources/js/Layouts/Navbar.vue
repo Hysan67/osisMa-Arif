@@ -80,6 +80,22 @@
                >
                   <li>
                      <router-link
+                        to="/form-aspirasi-siswa"
+                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
+                        @click="closeAllDropdowns"
+                        >Aspirasi Siswa</router-link
+                     >
+                  </li>
+                  <li>
+                     <router-link
+                        to="/pendaftaran-osis"
+                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
+                        @click="closeMenu"
+                        >Daftar Osis</router-link
+                     >
+                  </li>
+                  <li>
+                     <router-link
                         to="/event"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
@@ -92,14 +108,6 @@
                         class="block py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
                         target="_blank" rel="noopener noreferrer"
                         >Website Sekolah</a
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/form-aspirasi-siswa"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Aspirasi Siswa</router-link
                      >
                   </li>
                </ul>
@@ -234,6 +242,14 @@
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
                         >Aspirasi Siswa</router-link
+                     >
+                  </li>
+                  <li>
+                     <router-link
+                        to="/pendaftaran-osis"
+                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
+                        @click="closeMenu"
+                        >Daftar Osis</router-link
                      >
                   </li>
                </ul>
