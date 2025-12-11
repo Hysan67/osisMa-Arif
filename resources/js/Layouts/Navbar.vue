@@ -173,6 +173,25 @@
                         >Website Sekolah</a
                      >
                   </li>
+<<<<<<< Updated upstream
+=======
+                  <li>
+                     <router-link
+                        to="/form-aspirasi-siswa"
+                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
+                        @click="closeAllDropdowns"
+                        >Aspirasi Siswa</router-link
+                     >
+                  </li>
+                  <li>
+                     <router-link
+                        to="/form-pendaftaran-osis"
+                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
+                        @click="closeAllDropdowns"
+                        >Pendaftaran OSIS</router-link
+                     >
+                  </li>
+>>>>>>> Stashed changes
                </ul>
             </li>
          </ul>
