@@ -123,12 +123,6 @@
    return `/storage/${imgPath}`;
  }
  
- function handleImageError(event) {
-   console.error('Image failed to load:', event.target.src);
-   event.target.src = 'https://via.placeholder.com/48x48?text=No+Image';
-   event.target.onerror = null;
- }
- 
  function formatDate(dateString) {
    if (!dateString) return '-';
    const date = new Date(dateString);
