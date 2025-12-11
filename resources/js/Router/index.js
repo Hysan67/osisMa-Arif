@@ -11,15 +11,8 @@ import Login from '@/Pages/Login.vue'
 import EventForm from '@/Pages/Admin/EventForm.vue'
 import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
 import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
-<<<<<<< Updated upstream
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue' // ← Pastikan file ini ada
 import { useAuthStore } from '@/store/useAuthStore.js' // ← Path diperbaiki
-=======
-import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
-import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
-import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
-import PendaftaranOSIS from '@/Pages/PendaftaranOSIS.vue'
->>>>>>> Stashed changes
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -28,12 +21,7 @@ const routes = [
   { path: '/galeri', name: 'Galeri', component: Galeri },
   { path: '/kontak', name: 'Kontak', component: Kontak },
   { path: '/generasi', name: 'Generasi', component: Generasi },
-<<<<<<< Updated upstream
   { path: '/form-aspirasi-siswa', name: 'FormAspirasi', component: FormAspirasi },
-=======
-  { path: '/form-aspirasi-siswa', name: 'AspirasiSection', component: AspirasiSection },
-  { path: '/form-pendaftaran-OSIS', name: 'PendaftaranOSIS', component: PendaftaranOSIS },
->>>>>>> Stashed changes
   { 
     path: '/bidang/:id', 
     name: 'BidangDetail', 
