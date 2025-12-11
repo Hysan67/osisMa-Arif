@@ -27,6 +27,17 @@ Route::prefix('bidang')->group(function () {
    Route::delete('/{id}', [BidangController::class, 'destroy']);
 });
 
+Route::prefix('v1')->group(function () {
+   // API untuk bidang
+   Route::get('/bidang', [BidangController::class, 'index']);
+   Route::get('/bidang/{id}', [BidangController::class, 'show']);
+   Route::get('/bidang/{id}/anggota', [BidangController::class, 'anggota']);
+   
+   // API untuk anggota
+   Route::get('/anggota', [App\Http\Controllers\Api\AnggotaController::class, 'index']);
+   Route::get('/anggota/{id}', [App\Http\Controllers\Api\AnggotaController::class, 'show']);
+});
+
 Route::prefix('anggota')->group(function () {
    Route::get('/', [AnggotaController::class, 'index']);
    Route::post('/', [AnggotaController::class, 'store']);

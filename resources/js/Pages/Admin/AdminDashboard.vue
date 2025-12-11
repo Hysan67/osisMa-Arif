@@ -4,7 +4,7 @@
     <!-- Tombol Menu (Mobile) -->
     <button
       @click="sidebarOpen = !sidebarOpen"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-blue-700 text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-4 right-4 z-50 bg-blue-700 text-white p-2 rounded-md shadow-md"
     >
       ☰
     </button>
@@ -29,6 +29,7 @@
       
       <!-- Navigation Menu -->
       <nav class="px-4 py-6 space-y-1">
+        
 
         <!-- Member OSIS -->
         <router-link
@@ -141,11 +142,23 @@
 
     <!-- Main Content -->
     <main class="flex-1 lg:ml-64 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-x-auto">
+      <div v-if="$route.path !== '/admin'" class="p-4 bg-white shadow-sm border-b ">
+        <button
+          @click="goToHome"
+          class="flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-medium"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span>Kembali ke Beranda</span>
+        </button>
+      </div>
       <div class="p-8">
         <router-view />
       </div>
     </main>
-
+ 
   </div>
 </template>
 
@@ -167,6 +180,10 @@ onMounted(() => {
   const userData = localStorage.getItem('user')
   if (userData) user.value = JSON.parse(userData)
 })
+
+function goToHome() {
+  router.push('/')
+}
 
 async function handleLogout() {
   try {

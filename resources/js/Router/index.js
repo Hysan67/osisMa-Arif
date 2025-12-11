@@ -3,7 +3,6 @@ import Home from '@/Pages/Home.vue'
 import Event from '@/Pages/Event.vue'
 import EventDetail from '@/Pages/EventDetail.vue'
 import Generasi from '@/Pages/Generasi.vue'
-import BidangDetail from '@/Pages/BidangDetail.vue'
 import AspirasiSection from '@/Pages/AspirasiSection.vue'
 import Login from '@/Pages/Login.vue'
 import MemberOsis from '@/Pages/Admin/MemberOsis.vue'
@@ -11,19 +10,15 @@ import KelolaArtikel from '@/Pages/Admin/KelolaArtikel.vue'
 import AdminDashboard from '@/Pages/Admin/AdminDashboard.vue'
 import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
 import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
+import StrukturMember from '@/Pages/StrukturMember.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/event', name: 'Event', component: Event },
+  { path: '/struktur-osis', name: 'StrukturMember', component: StrukturMember },
   { path: '/event/:id', name: 'EventDetail', component: EventDetail },
   { path: '/generasi', name: 'Generasi', component: Generasi },
   { path: '/form-aspirasi-siswa', name: 'AspirasiSection', component: AspirasiSection },
-  { 
-    path: '/bidang/:id', 
-    name: 'BidangDetail', 
-    component: BidangDetail,
-    props: true
-  },
   { path: '/login', name: 'Login', component: Login, meta: { requiresGuest: true } },
   {
     path: '/admin',

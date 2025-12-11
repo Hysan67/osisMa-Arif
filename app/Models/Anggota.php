@@ -13,9 +13,8 @@ class Anggota extends Model
         'img',
         'nama',
         'posisi',
-        'quote',
+        'kelas',
         'pengalaman_prestasi',
-        'masa_bakti',
         'status',
         'bidang_id',
     ];

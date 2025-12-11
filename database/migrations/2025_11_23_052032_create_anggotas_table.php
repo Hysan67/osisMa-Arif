@@ -13,9 +13,8 @@ return new class extends Migration
             $table->string('img')->nullable();
             $table->string('nama');
             $table->string('posisi');
-            $table->text('quote');
-            $table->text('pengalaman_prestasi');
-            $table->string('masa_bakti');
+            $table->string('kelas');
+            $table->text('pengalaman_prestasi')->nullable();
             $table->string('status')->default('aktif');
             $table->foreignId('bidang_id')->nullable()->constrained('bidangs')->onDelete('set null');
             $table->timestamps();

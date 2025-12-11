@@ -1,6 +1,5 @@
 <template>
-  <div class="min-h-screen w-full bg-transparent overflow-x-hidden">
-
+  <div class="min-h-screen w-full bg-transparent overflow-x-hidden overflow-y-hidden"> <!-- Tambahkan overflow-y-hidden -->
     <!-- Hero Section -->
     <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center relative">
       <div class="absolute inset-0 -z-10 bg-[url('/background-header.JPG')] bg-cover bg-center"></div>

@@ -15,22 +15,39 @@
       </svg>
     </button>
     <div class="flex justify-center mt-4 space-x-2">
-      <button v-for="(img,index) in images" :key="index" @click="goToImage(index)" class="w-3 h-3 rounded-full" :class="index===currentIndex?'bg-blue-600':'bg-gray-400'"></button>
+      <button v-for="(img, index) in images" :key="index" @click="goToImage(index)" class="w-3 h-3 rounded-full" :class="index === currentIndex ? 'bg-blue-600' : 'bg-gray-400'"></button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-defineProps({ images: Array })
+
+const props = defineProps({ 
+  images: Array 
+})
 
 const currentIndex = ref(0)
-const prevImage = () => currentIndex.value = (currentIndex.value - 1 + images.length) % images.length
-const nextImage = () => currentIndex.value = (currentIndex.value + 1) % images.length
-const goToImage = (index) => currentIndex.value = index
+
+// Gunakan props.images
+const prevImage = () => {
+  currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
+};
+
+const nextImage = () => {
+  currentIndex.value = (currentIndex.value + 1) % props.images.length;
+};
+
+const goToImage = (index) => {
+  currentIndex.value = index;
+};
 
 // auto-slide
-let interval
-onMounted(() => interval = setInterval(nextImage, 6000))
-onUnmounted(() => clearInterval(interval))
+let interval;
+onMounted(() => {
+  interval = setInterval(nextImage, 6000);
+});
+onUnmounted(() => {
+  clearInterval(interval);
+});
 </script>

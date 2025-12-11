@@ -1,4 +1,4 @@
-<!-- src/components/layout/Navbar.vue -->
+<!-- resources/js/Layouts/Navbar.vue -->
 <template>
    <nav
    class="bg-gradient-to-r from-blue-600 to-blue-400 text-white fixed top-0 left-0 w-full z-50 shadow transition-shadow duration-300"
@@ -34,91 +34,16 @@
                </router-link>
             </li>
 
-            <!-- Dropdown: Bidang -->
-            <li class="relative" ref="bidangDropdown">
-               <button
-                  @click="toggleDesktopDropdown('bidang')"
-                  class="flex items-center hover:text-yellow-300 focus:outline-none transition-colors duration-200 py-2"
-                  :class="{ 'text-yellow-300': desktopDropdownOpen.bidang }"
+            <!-- Link: Struktur OSIS -->
+            <li>
+               <router-link
+                  to="/struktur-osis"
+                  class="hover:text-yellow-300 transition-colors duration-200 py-2 block"
+                  :class="{ 'text-yellow-300': isActive('/struktur-osis') }"
+                  @click="closeAllDropdowns"
                >
-                  Bidang
-                  <svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     class="ml-1 h-4 w-4 transition-transform duration-200"
-                     :class="{ 'rotate-180': desktopDropdownOpen.bidang }"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
-                  >
-                     <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
-                     />
-                  </svg>
-               </button>
-               <ul
-                  v-show="desktopDropdownOpen.bidang"
-                  class="absolute left-0 mt-2 w-56 bg-blue-600 rounded-md shadow-lg z-20 border border-blue-400"
-               >
-                  <li>
-                     <router-link
-                        to="/bidang/1"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang I – Badan Pengurus Harian</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/2"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang II – Keamanan & Ketertiban</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/3"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang III – Pramuka & Upacara</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/4"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang IV – Keagamaan</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/5"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang V – Kesehatan</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/6"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang VI – Seni & Hubungan Masyarakat</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/7"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Bidang VII – Olahraga</router-link
-                     >
-                  </li>
-               </ul>
+                  Struktur OSIS
+               </router-link>
             </li>
 
             <!-- Dropdown: Lainnya -->
@@ -151,14 +76,6 @@
                >
                   <li>
                      <router-link
-                        to="/generasi"
-                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
-                        @click="closeAllDropdowns"
-                        >Generasi Pengurus OSIS</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
                         to="/event"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
@@ -169,6 +86,7 @@
                      <a
                         href="https://www.ma-almablitar.sch.id/"
                         class="block py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
+                        target="_blank" rel="noopener noreferrer"
                         >Website Sekolah</a
                      >
                   </li>
@@ -251,90 +169,15 @@
                </router-link>
             </li>
 
-            <!-- Bidang (Mobile) -->
+            <!-- Link Struktur OSIS (Mobile) -->
             <li>
-               <button
-                  @click="toggleSubmenu('bidang')"
-                  class="flex justify-between items-center w-full text-left py-3 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
-               >
-                  Bidang
-                  <svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     class="h-4 w-4 transition-transform duration-200"
-                     :class="{ 'rotate-180': submenuOpen.bidang }"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor"
+               <router-link
+                  to="/struktur-osis"
+                  class="block py-3 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
+                  @click="closeMenu"
                   >
-                     <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
-                     />
-                  </svg>
-               </button>
-               <ul
-                  v-show="submenuOpen.bidang"
-                  class="mt-2 ml-4 space-y-2 bg-blue-700 rounded p-2"
-               >
-                  <li>
-                     <router-link
-                        to="/bidang/1"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang I – Badan Pengurus Harian</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/2"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang II – Keamanan & Ketertiban</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/3"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang III – Pramuka & Upacara</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/4"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang IV – Keagamaan</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/5"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang V – Kesehatan</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/6"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang VI – Seni & Hubungan Masyarakat</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
-                        to="/bidang/7"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Bidang VII – Olahraga</router-link
-                     >
-                  </li>
-               </ul>
+                  Struktur OSIS
+               </router-link>
             </li>
 
             <!-- Lainnya (Mobile) -->
@@ -366,14 +209,6 @@
                >
                   <li>
                      <router-link
-                        to="/generasi"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
-                        @click="closeMenu"
-                        >Generasi Pengurus OSIS</router-link
-                     >
-                  </li>
-                  <li>
-                     <router-link
                         to="/event"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
@@ -384,6 +219,8 @@
                      <a
                         href="https://www.ma-almablitar.sch.id/"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
+                        @click="closeMenu"
+                        target="_blank" rel="noopener noreferrer"
                         >Website Sekolah</a
                      >
                   </li>
@@ -408,64 +245,58 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 const isOpen = ref(false);
+// Hanya menyimpan state submenu untuk 'lainnya'
 const submenuOpen = reactive({
-   bidang: false,
    lainnya: false,
 });
 
+// Hanya menyimpan state dropdown untuk 'lainnya'
 const desktopDropdownOpen = reactive({
-   bidang: false,
    lainnya: false,
 });
 
-const bidangDropdown = ref(null);
-const lainnyaDropdown = ref(null);
+// Referensi untuk dropdown 'lainnya' saja
+const lainnyaDropdown = ref(null); // Ref 'strukurDropdown' dihapus
 
 const toggleMenu = () => (isOpen.value = !isOpen.value);
 const closeMenu = () => {
    isOpen.value = false;
-   // Tutup semua submenu mobile saat menu ditutup
-   submenuOpen.bidang = false;
-   submenuOpen.lainnya = false;
+   submenuOpen.lainnya = false; // Tutup submenu mobile 'lainnya'
 };
 
+// Toggle submenu mobile hanya untuk 'lainnya'
 const toggleSubmenu = (name) => {
-   submenuOpen[name] = !submenuOpen[name];
+   if (name === 'lainnya') {
+       submenuOpen[name] = !submenuOpen[name];
+   }
 };
 
+// Toggle dropdown desktop hanya untuk 'lainnya'
 const toggleDesktopDropdown = (name) => {
-   // Tutup dropdown lainnya sebelum membuka yang baru
-   Object.keys(desktopDropdownOpen).forEach((key) => {
-      if (key !== name) {
-         desktopDropdownOpen[key] = false;
-      }
-   });
-
-   desktopDropdownOpen[name] = !desktopDropdownOpen[name];
+   if (name === 'lainnya') {
+       desktopDropdownOpen[name] = !desktopDropdownOpen[name];
+   }
 };
 
+// Tutup semua dropdown desktop (hanya 'lainnya' yang ada sekarang)
 const closeAllDropdowns = () => {
-   Object.keys(desktopDropdownOpen).forEach((key) => {
-      desktopDropdownOpen[key] = false;
-   });
+   desktopDropdownOpen.lainnya = false;
 };
 
 const isActive = (path) => route.path === path;
 
-// Tutup dropdown desktop saat klik di luar
+// Fungsi untuk menangani klik di luar elemen dropdown
 const handleClickOutside = (event) => {
-   if (bidangDropdown.value && !bidangDropdown.value.contains(event.target)) {
-      desktopDropdownOpen.bidang = false;
-   }
-
+   // Cek apakah yang diklik bukan dropdown 'lainnya' atau turunannya
    if (lainnyaDropdown.value && !lainnyaDropdown.value.contains(event.target)) {
-      desktopDropdownOpen.lainnya = false;
+      desktopDropdownOpen.lainnya = false; // Tutup dropdown 'lainnya'
    }
 };
+
 const isScrolled = ref(false);
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 10; // muncul shadow saat scroll > 10px
+  isScrolled.value = window.scrollY > 10; // Tambahkan shadow saat scroll
 };
 
 onMounted(() => {
@@ -475,6 +306,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
+
+// Event listener untuk klik di luar dropdown
 onMounted(() => {
    document.addEventListener("click", handleClickOutside);
 });
