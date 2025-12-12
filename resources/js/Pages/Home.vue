@@ -182,7 +182,7 @@
           </div>
       </div>
 
-      <!-- Galeri Mini -->
+      <!-- Galeri Mini
       <section class="relative py-16 overflow-hidden">
           <div
               class="absolute inset-0 -z-10 bg-[url('/background-galeri.svg')] bg-cover bg-top bg-no-repeat"
@@ -205,9 +205,8 @@
               </p>
               <GalleryCarousel :images="galleryImages" />
           </div>
-      </section>
+      </section> -->
 
-      <!-- 🎉 EVENT BESAR (jenis_artikel = "event") -->
       <EventBesarSection :events="recentEvents" />
        <div class="text-center mt-12">
               <router-link
@@ -292,11 +291,11 @@ const programs = [
   },
 ];
 
-const galleryImages = [
-{ id:1,title:'Pengajian Rutin Jumat',image:'/images/gallery1' },
-{ id:2,title:'Rapat Koordinasi Bidang',image:'/images/gallery2' },
-{ id:3,title:'Persiapan Ma’arif Cup',image:'/images/gallery3.jpg' },
-{ id:4,title:'Bakti Sosial ke Panti Asuhan',image:'/images/gallery4.jpg' },
-{ id:5,title:'Pelatihan Jurnalistik OSIS',image:'/images/gallery5.jpg' }
-]
+//const galleryImages = [
+//{ id:1,title:'Pengajian Rutin Jumat',image:'/images/gallery1' },
+//{ id:2,title:'Rapat Koordinasi Bidang',image:'/images/gallery2' },
+//{ id:3,title:'Persiapan Ma’arif Cup',image:'/images/gallery3.jpg' },
+//{ id:4,title:'Bakti Sosial ke Panti Asuhan',image:'/images/gallery4.jpg' },
+//{ id:5,title:'Pelatihan Jurnalistik OSIS',image:'/images/gallery5.jpg' }
+//]
 </script>

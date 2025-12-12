@@ -55,7 +55,7 @@
                <button
                   @click="toggleDesktopDropdown('lainnya')"
                   class="flex items-center hover:text-yellow-300 focus:outline-none transition-colors duration-200 py-2"
-                  :class="{ 'text-yellow-300': desktopDropdownOpen.lainnya }"
+                  :class="{ 'text-yellow-300': desktopDropdownOpen.lainnya || isActive('/form-aspirasi-siswa') || isActive('/pendaftaran-osis') || isActive('/event') }"
                >
                   Lainnya
                   <svg
@@ -89,7 +89,7 @@
                   <li>
                      <router-link
                         to="/pendaftaran-osis"
-                        class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
+                        class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeMenu"
                         >Daftar Osis</router-link
                      >
@@ -99,7 +99,7 @@
                         to="/event"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
-                        >Event</router-link
+                        >Event & Artikel</router-link
                      >
                   </li>
                   <li>
@@ -112,6 +112,15 @@
                   </li>
                </ul>
             </li>
+            <ul>
+                 <router-link
+                     to="/Login"
+                     class="hover:text-yellow-300 transition-colors duration-200 py-2"
+                     :class="{ 'text-yellow-300': isActive('/login') }"
+                 >
+                     Login
+                 </router-link>
+             </ul>
          </ul>
 
             <!-- Hamburger (Mobile) -->
@@ -224,7 +233,7 @@
                         to="/event"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
-                        >Event</router-link
+                        >Event & Artikel</router-link
                      >
                   </li>
                   <li>

@@ -1,14 +1,17 @@
 // src/store/useEventStore.js
 import { defineStore } from "pinia";
+import axios from "axios";
 
 export const useEventStore = defineStore("event", {
     state: () => ({
         events: [],
         loading: false,
+        error: null,
     }),
     actions: {
         async fetchEvents() {
             this.loading = true;
+            this.error = null;
             try {
                 const response = await fetch("/api/artikels");
                 if (!response.ok) {
@@ -37,6 +40,10 @@ export const useEventStore = defineStore("event", {
             } finally {
                 this.loading = false;
             }
+        },
+
+        setLastSearchQuery(query) {
+            this.lastSearchQuery = query;
         },
 
         async fetchEventById(id) {

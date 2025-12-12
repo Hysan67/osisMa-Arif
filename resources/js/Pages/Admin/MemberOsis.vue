@@ -316,12 +316,13 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
               </button>
+              <!-- Ganti tombol hapus menjadi nonaktifkan -->
               <button
-                @click="confirmDelete(anggota)"
-                class="text-red-600 hover:text-red-800 p-1"
-                title="Hapus"
+                @click="confirmToggleStatus(anggota)"
+                class="text-yellow-600 hover:text-yellow-800 p-1"
+                title="Nonaktifkan"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
               </button>
@@ -401,14 +402,15 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
                   </button>
+                  <!-- Ganti tombol hapus menjadi nonaktifkan -->
                   <button
-                    @click="confirmDelete(anggota)"
-                    class="text-red-600 hover:text-red-900"
-                    title="Hapus"
+                    @click="confirmToggleStatus(anggota)"
+                    class="text-yellow-600 hover:text-yellow-900"
+                    title="Nonaktifkan"
                   >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
                   </button>
                 </div>
               </td>
@@ -438,18 +440,19 @@
       @edit="editAnggota(detailAnggota)"
     />
 
+    <!-- Ganti modal konfirmasi hapus menjadi konfirmasi ubah status -->
     <ConfirmationModal
-      v-if="showDeleteModal"
-      :show="showDeleteModal"
-      @close="showDeleteModal = false"
-      @confirmed="deleteAnggota"
+      v-if="showStatusModal"
+      :show="showStatusModal"
+      @close="showStatusModal = false"
+      @confirmed="toggleStatus"
     >
       <template #title>
-        Hapus Anggota
+        {{ statusToChange === 'aktif' ? 'Aktifkan' : 'Nonaktifkan' }} Anggota
       </template>
       <template #content>
-        <p class="text-gray-700">Apakah Anda yakin ingin menghapus anggota <strong>{{ anggotaToDelete?.nama }}</strong>?</p>
-        <p class="mt-2 text-sm text-gray-600">Tindakan ini tidak dapat dibatalkan.</p>
+        <p class="text-gray-700">Apakah Anda yakin ingin {{ statusToChange === 'aktif' ? 'mengaktifkan' : 'menonaktifkan' }} anggota <strong>{{ anggotaToToggle?.nama }}</strong>?</p>
+        <p class="mt-2 text-sm text-gray-600">Anggota akan tetap tersimpan dalam sistem.</p>
       </template>
     </ConfirmationModal>
 
@@ -477,15 +480,17 @@ const loading = ref(false);
 const error = ref("");
 const displayMode = ref("grid");
 
-// Modal states
+// Modal states - Ganti showDeleteModal menjadi showStatusModal
 const showForm = ref(false);
 const showDetailModal = ref(false);
-const showDeleteModal = ref(false);
+const showStatusModal = ref(false); // Ganti nama variabel
 const isEdit = ref(false);
 
 // Data for modals
 const detailAnggota = ref(null);
-const anggotaToDelete = ref(null);
+// Ganti anggotaToDelete menjadi anggotaToToggle dan tambahkan statusToChange
+const anggotaToToggle = ref(null);
+const statusToChange = ref('non aktif'); // 'aktif' atau 'non aktif'
 
 // Form data
 const form = ref({
@@ -554,7 +559,7 @@ function showAlert(msg, type = "success") {
 }
 
 function getImageUrl(imgPath) {
-  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image';
+  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image  ';
   if (imgPath.startsWith('http')) return imgPath;
   if (imgPath.startsWith('public/')) imgPath = imgPath.replace('public/', '');
   if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
@@ -680,10 +685,42 @@ function closeDetailModal() {
   detailAnggota.value = null;
 }
 
-function confirmDelete(anggota) {
-  anggotaToDelete.value = anggota;
-  showDeleteModal.value = true;
+// Ganti confirmDelete menjadi confirmToggleStatus
+function confirmToggleStatus(anggota) {
+  anggotaToToggle.value = anggota;
+  // Tentukan status tujuan: jika aktif -> non aktif, jika non aktif -> aktif
+  statusToChange.value = anggota.status === 'aktif' ? 'non aktif' : 'aktif';
+  showStatusModal.value = true; // Ganti ke showStatusModal
 }
+
+// Ganti deleteAnggota menjadi toggleStatus
+async function toggleStatus() {
+  if (!anggotaToToggle.value) return;
+  
+  try {
+    const token = localStorage.getItem('token');
+    await axios.put(`/anggota/${anggotaToToggle.value.id}/status`, {
+      status: statusToChange.value
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const action = statusToChange.value === 'aktif' ? 'diaktifkan' : 'dinonaktifkan';
+    showAlert(`Anggota berhasil ${action}`, "success");
+    showStatusModal.value = false; // Ganti ke showStatusModal
+    anggotaToToggle.value = null;
+    await fetchData(); // Refresh data
+  } catch (err) {
+    console.error(err);
+    const action = statusToChange.value === 'aktif' ? 'mengaktifkan' : 'menonaktifkan';
+    showAlert(`Gagal ${action} anggota: ` + (err.response?.data?.message || "Error"), "error");
+  }
+}
+
 
 // API Functions
 async function fetchData() {
@@ -756,25 +793,25 @@ async function saveAnggota(formData) {
   }
 }
 
-async function deleteAnggota() {
-  if (!anggotaToDelete.value) return;
-  
-  try {
-    await axios.delete(`/anggota/${anggotaToDelete.value.id}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Accept': 'application/json'
-      }
-    });
-    showAlert("Anggota berhasil dihapus", "success");
-    showDeleteModal.value = false;
-    anggotaToDelete.value = null;
-    await fetchData();
-  } catch (err) {
-    console.error(err);
-    showAlert("Gagal menghapus anggota: " + (err.response?.data?.message || "Error"), "error");
-  }
-}
+// Ganti komentar dan hapus fungsi deleteAnggota lama
+// async function deleteAnggota() {
+//   if (!anggotaToDelete.value) return;
+//   try {
+//     await axios.delete(`/anggota/${anggotaToDelete.value.id}`, {
+//       headers: {
+//         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+//         'Accept': 'application/json'
+//       }
+//     });
+//     showAlert("Anggota berhasil dihapus", "success");
+//     showDeleteModal.value = false;
+//     anggotaToDelete.value = null;
+//     await fetchData();
+//   } catch (err) {
+//     console.error(err);
+//     showAlert("Gagal menghapus anggota: " + (err.response?.data?.message || "Error"), "error");
+//   }
+// }
 
 // Lifecycle
 onMounted(() => {

@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-transparent py-16">
         <div class="max-w-5xl mx-auto px-4 py-16">
             <router-link
-                to="/artikel"
+                :to="{ path: '/event', query: { q: lastSearchQueryFromStore } }"
                 class="text-blue-600 hover:underline mb-8 inline-block font-light"
                 data-aos="fade-left"
                 data-aos-delay="500"
@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue"; // Import computed
 import { useRoute } from "vue-router";
 import { useEventStore } from "../store/useEventStore";
 import PhotoSlider from "@/Pages/PhotoSlider.vue";
@@ -157,6 +157,9 @@ import PhotoSlider from "@/Pages/PhotoSlider.vue";
 const route = useRoute();
 const store = useEventStore();
 const event = ref(null);
+
+// Ambil query dari store
+const lastSearchQueryFromStore = computed(() => store.lastSearchQuery);
 
 onMounted(async () => {
     const data = await store.fetchEventById(route.params.id);
@@ -170,14 +173,12 @@ onMounted(async () => {
     }
 });
 
-// Fungsi untuk salin link
 function copyLink() {
     const link = window.location.href;
     navigator.clipboard.writeText(link);
     alert("Link artikel disalin ke clipboard!");
 }
 
-// Fungsi untuk share (Web Share API)
 function shareEvent() {
     const link = window.location.href;
     if (navigator.share) {

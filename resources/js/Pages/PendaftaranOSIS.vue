@@ -293,7 +293,6 @@ function validateForm() {
     return false
   }
   
-  // Validasi tanggal persetujuan orang tua tidak lebih dari hari ini
   if (form.value.tanggal_ortu_wali > today) {
     errorMessage.value = 'Tanggal persetujuan orang tua tidak boleh lebih dari hari ini'
     return false
@@ -336,7 +335,7 @@ async function submitPendaftaran() {
     })
     
     if (response.data.success) {
-      successMessage.value = '✅ ' + response.data.message
+      successMessage.value =  response.data.message
       
       // Reset form setelah sukses
       resetForm()
@@ -344,7 +343,7 @@ async function submitPendaftaran() {
       // Scroll ke atas untuk melihat pesan sukses
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
-      errorMessage.value = '❌ ' + (response.data.message || 'Gagal mengirim pendaftaran')
+      errorMessage.value = (response.data.message || 'Gagal mengirim pendaftaran')
     }
   } catch (error) {
     console.error('Error:', error)
@@ -352,7 +351,7 @@ async function submitPendaftaran() {
     if (error.response) {
       // Server responded with error status
       const serverError = error.response.data
-      errorMessage.value = '❌ ' + (serverError.message || serverError.error || 'Terjadi kesalahan pada server')
+      errorMessage.value = (serverError.message || serverError.error || 'Terjadi kesalahan pada server')
       
       // Tampilkan error validasi dari Laravel jika ada
       if (serverError.errors) {
@@ -361,10 +360,10 @@ async function submitPendaftaran() {
       }
     } else if (error.request) {
       // No response received
-      errorMessage.value = '❌ Tidak ada respon dari server. Periksa koneksi internet Anda.'
+      errorMessage.value = 'Tidak ada respon dari server. Periksa koneksi internet Anda.'
     } else {
       // Other errors
-      errorMessage.value = '❌ ' + (error.message || 'Gagal mengirim pendaftaran')
+      errorMessage.value = (error.message || 'Gagal mengirim pendaftaran')
     }
   } finally {
     submitting.value = false

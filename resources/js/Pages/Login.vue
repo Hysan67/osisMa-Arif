@@ -5,7 +5,7 @@
 
       
       <h2 class="text-3xl font-bold text-center mb-6 text-gray-800 tracking-wide">
-        Login Admin
+        Login
       </h2>
 
       <form @submit.prevent="handleLogin" class="space-y-5">
@@ -57,8 +57,6 @@
           <!-- Extra Links -->
           <div class="flex justify-between text-sm mt-2">
             <button class="text-blue-600 hover:underline" type="button">Lupa sandi?</button>
-
-            <!-- WhatsApp Auto Message -->
             <a
               :href="whatsappUrl"
               target="_blank"

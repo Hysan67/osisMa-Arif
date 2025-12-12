@@ -1,5 +1,10 @@
 <template>
   <div class="container mx-auto px-4 py-8">
+    <!-- Status Message -->
+    <div v-if="statusMessage" class="mb-6 p-4 rounded-lg shadow-md" :class="statusType === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'">
+      {{ statusMessage }}
+    </div>
+
     <!-- Header -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-800 mb-2">Kelola Bidang OSIS</h1>
@@ -332,13 +337,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Alert -->
-    <transition name="fade-slide">
-      <div v-if="alert.show" class="fixed bottom-6 right-6 px-4 py-3 rounded-lg shadow-lg text-white z-50" :class="alert.color">
-        {{ alert.message }}
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -367,16 +365,27 @@ const form = ref({
 });
 
 const errors = ref({});
-const alert = ref({ show: false, message: "", color: "bg-green-500" });
+
+// Status Message State
+const statusMessage = ref("");
+const statusType = ref(""); // 'success' atau 'error'
 
 // Methods
-function showAlert(msg, type = "success") {
-  alert.value = { show: true, message: msg, color: type === "success" ? "bg-green-500" : "bg-red-500" };
-  setTimeout(() => (alert.value.show = false), 3000);
+function showStatus(msg, type = "success") {
+  statusMessage.value = msg;
+  statusType.value = type;
+
+  // Hapus pesan setelah 3 detik
+  setTimeout(() => {
+    if (statusMessage.value === msg) { // Pastikan hanya menghapus pesan ini jika belum diganti
+      statusMessage.value = "";
+      statusType.value = "";
+    }
+  }, 3000);
 }
 
 function getImageUrl(imgPath) {
-  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image';
+  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image  ';
   if (imgPath.startsWith('http')) return imgPath;
   if (imgPath.startsWith('public/')) imgPath = imgPath.replace('public/', '');
   if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
@@ -388,7 +397,7 @@ function handleFileUpload(e) {
   if (file) {
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
     if (!validTypes.includes(file.type)) {
-      showAlert('Format file harus JPG, PNG, GIF, atau SVG', 'error');
+      showStatus('Format file harus JPG, PNG, GIF, atau SVG', 'error');
       return;
     }
     
@@ -466,7 +475,7 @@ async function viewBidang(id) {
     showDetailModal.value = true;
   } catch (err) {
     console.error('Error viewing bidang:', err);
-    showAlert("Gagal memuat detail bidang: " + (err.response?.data?.message || "Error"), "error");
+    showStatus("Gagal memuat detail bidang: " + (err.response?.data?.message || "Error"), "error");
   }
 }
 
@@ -488,7 +497,7 @@ async function fetchBidangs() {
   } catch (err) {
     console.error('Error fetching bidangs:', err);
     error.value = 'Gagal memuat data bidang. Silakan coba lagi.';
-    showAlert("Gagal memuat bidang: " + (err.response?.data?.message || "Error"), "error");
+    showStatus("Gagal memuat bidang: " + (err.response?.data?.message || "Error"), "error");
   } finally {
     loading.value = false;
   }
@@ -520,7 +529,7 @@ async function saveBidang() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      showAlert("Bidang berhasil diperbarui");
+      showStatus("Bidang berhasil diperbarui");
     } else {
       await axios.post('/bidang', formData, {
         headers: {
@@ -529,7 +538,7 @@ async function saveBidang() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      showAlert("Bidang baru berhasil ditambahkan");
+      showStatus("Bidang baru berhasil ditambahkan");
     }
     
     closeModal();
@@ -544,7 +553,7 @@ async function saveBidang() {
       errorMessage = Object.values(err.response.data.errors).flat().join(', ');
     }
     submitError.value = errorMessage;
-    showAlert(errorMessage, "error");
+    showStatus(errorMessage, "error");
   } finally {
     submitting.value = false;
   }
@@ -565,11 +574,11 @@ async function deleteBidang(id) {
         'Accept': 'application/json'
       }
     });
-    showAlert("Bidang berhasil dihapus", "success");
+    showStatus("Bidang berhasil dihapus", "success");
     await fetchBidangs();
   } catch (err) {
     console.error(err);
-    showAlert("Gagal menghapus bidang: " + (err.response?.data?.message || "Error"), "error");
+    showStatus("Gagal menghapus bidang: " + (err.response?.data?.message || "Error"), "error");
   }
 }
 
@@ -607,7 +616,8 @@ onMounted(() => {
   }
 }
 
-.fade-slide-enter-active,
+/* Hilangkan style untuk alert */
+/* .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.4s ease;
 }
@@ -615,5 +625,5 @@ onMounted(() => {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(20px);
-}
+} */
 </style>
