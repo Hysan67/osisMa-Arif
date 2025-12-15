@@ -8,15 +8,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\AnggotaController;
 use App\Http\Controllers\Api\Admin\AspirasiController;
 use App\Http\Controllers\Api\PublicAspirasiController;
-use App\Http\Controllers\PendaftaranOSISController;
+// use App\Http\Controllers\PendaftaranOSISController;
 
-Route::get('/pendaftaran-osis', [PendaftaranOSISController::class, 'index']);
+// Route::get('/pendaftaran-osis', [PendaftaranOSISController::class, 'index']);
 
-Route::prefix('api')->group(function () {
-   Route::post('/pendaftaran-osis', [PendaftaranOSISController::class, 'store']);
-   Route::get('/pendaftaran-osis', [PendaftaranOSISController::class, 'getAllPendaftaran']);
-   Route::get('/pendaftaran-osis/export', [PendaftaranOSISController::class, 'exportCSV']);
-});
+// Route::prefix('api')->group(function () {
+//    Route::post('/pendaftaran-osis', [PendaftaranOSISController::class, 'store']);
+//    Route::get('/pendaftaran-osis', [PendaftaranOSISController::class, 'getAllPendaftaran']);
+//    Route::get('/pendaftaran-osis/export', [PendaftaranOSISController::class, 'exportCSV']);
+// });
 
 Route::middleware('auth:sanctum')->group(function () {
    Route::post('/artikels', [ArtikelController::class, 'store']);
@@ -27,22 +27,23 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('bidang')->group(function () {
-   Route::get('/', [BidangController::class, 'index']);
-   Route::post('/', [BidangController::class, 'store']);
-   Route::get('/search', [BidangController::class, 'search']);
-   Route::get('/with-count', [BidangController::class, 'withAnggotaCount']);
-   Route::get('/{id}', [BidangController::class, 'show']);
-   Route::put('/{id}', [BidangController::class, 'update']);
-   Route::delete('/{id}', [BidangController::class, 'destroy']);
+    Route::get('/', [BidangController::class, 'index']);
+    Route::get('/all', [BidangController::class, 'indexWithTrashed']); // Untuk admin
+    Route::get('/trashed', [BidangController::class, 'trashed']); // Hanya yang soft deleted
+    Route::post('/', [BidangController::class, 'store']);
+    Route::get('/{id}', [BidangController::class, 'show']);
+    Route::put('/{id}', [BidangController::class, 'update']);
+    Route::delete('/{id}', [BidangController::class, 'destroy']);
+    Route::delete('/force/{id}', [BidangController::class, 'forceDestroy']);
+    Route::post('/restore/{id}', [BidangController::class, 'restore']); // 
+    Route::get('/with-anggota-count', [BidangController::class, 'withAnggotaCount']);
 });
 
 Route::prefix('v1')->group(function () {
-   // API untuk bidang
    Route::get('/bidang', [BidangController::class, 'index']);
    Route::get('/bidang/{id}', [BidangController::class, 'show']);
    Route::get('/bidang/{id}/anggota', [BidangController::class, 'anggota']);
    
-   // API untuk anggota
    Route::get('/anggota', [App\Http\Controllers\Api\AnggotaController::class, 'index']);
    Route::get('/anggota/{id}', [App\Http\Controllers\Api\AnggotaController::class, 'show']);
 });

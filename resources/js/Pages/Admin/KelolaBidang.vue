@@ -8,22 +8,32 @@
     <!-- Header -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-800 mb-2">Kelola Bidang OSIS</h1>
-      <p class="text-gray-600">Kelola data bidang-bidang OSIS sekolah</p>
+      <p class="text-gray-600 mb-4">Kelola data bidang-bidang OSIS sekolah</p>
+      
+      <div class="flex space-x-3">
+        <!-- Tombol Lihat Bidang Dihapus -->
+        <router-link 
+          to="/admin/trashed-bidang"
+          class="flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+          Lihat Bidang Dihapus
+        </router-link>
+        
+        <!-- Tombol Tambah Bidang Baru -->
+        <button
+          @click="openForm()"
+          class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Tambah Bidang Baru
+        </button>
+      </div>
     </div>
-
-    <!-- Add Button -->
-    <div class="mb-6">
-      <button
-        @click="openForm()"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition"
-      >
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-        </svg>
-        Tambah Bidang Baru
-      </button>
-    </div>
-
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
       <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
@@ -385,11 +395,37 @@ function showStatus(msg, type = "success") {
 }
 
 function getImageUrl(imgPath) {
-  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image  ';
-  if (imgPath.startsWith('http')) return imgPath;
-  if (imgPath.startsWith('public/')) imgPath = imgPath.replace('public/', '');
-  if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
-  return `/storage/bidangs/${imgPath}`;
+  try {
+    if (!imgPath || imgPath.trim() === '') {
+      return 'https://via.placeholder.com/400x300?text=No+Image';
+    }
+    
+    if (imgPath.startsWith('http://') || imgPath.startsWith('https://')) {
+      return imgPath;
+    }
+    
+    let normalizedPath = imgPath;
+    
+    if (normalizedPath.startsWith('public/')) {
+      normalizedPath = normalizedPath.substring(7);
+    }
+    
+    if (normalizedPath.startsWith('/')) {
+      normalizedPath = normalizedPath.substring(1);
+    }
+    
+    if (normalizedPath.includes('bidangs/')) {
+      if (!normalizedPath.startsWith('storage/')) {
+        return `/storage/${normalizedPath}`;
+      }
+      return `/${normalizedPath}`;
+    }
+    
+    return `/storage/bidangs/${normalizedPath}`;
+  } catch (error) {
+    console.error('Error generating image URL:', error);
+    return 'https://via.placeholder.com/400x300?text=Error+Loading';
+  }
 }
 
 function handleFileUpload(e) {
@@ -409,9 +445,46 @@ function handleFileUpload(e) {
   }
 }
 
-function removeImage() {
-  form.value.img = null;
-  form.value.imgPreview = null;
+async function removeImage() {
+  try {
+    if (isEdit.value && form.value.id) {
+      const confirmDelete = confirm('Apakah Anda yakin ingin menghapus gambar ini?');
+      if (!confirmDelete) return;
+
+      const token = localStorage.getItem('token');
+      
+      // Kirim request untuk hapus gambar saja
+      const response = await axios.put(`/bidang/${form.value.id}`, {
+        nama: form.value.nama,
+        deskripsi: form.value.deskripsi,
+        tugas_umum: form.value.tugas_umum,
+        remove_img: true // Flag untuk hapus gambar
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      // Reset gambar di form
+      form.value.img = null;
+      form.value.imgPreview = null;
+      
+      showStatus("Gambar berhasil dihapus", "success");
+      
+      // Update data di list jika perlu
+      await fetchBidangs();
+    } else {
+      // Jika bukan edit mode (tambah baru atau edit tanpa ID)
+      form.value.img = null;
+      form.value.imgPreview = null;
+    }
+  } catch (err) {
+    console.error('Error deleting image:', err);
+    const errorMessage = err.response?.data?.message || 'Gagal menghapus gambar';
+    showStatus(errorMessage, "error");
+  }
 }
 
 function formatDate(dateString) {
@@ -479,7 +552,6 @@ async function viewBidang(id) {
   }
 }
 
-// API Functions
 async function fetchBidangs() {
   loading.value = true;
   error.value = "";

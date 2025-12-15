@@ -401,14 +401,14 @@
       if (bulkAction.value === 'delete') {
         // Delete multiple
         for (const id of selectedAspirasi.value) {
-          await axios.delete(`/api/admin/aspirasi/${id}`, {
+          await axios.delete(`/admin/aspirasi/${id}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         }
         showAlert(`${selectedAspirasi.value.length} aspirasi berhasil dihapus`)
       } else {
         // Update status
-        await axios.post('/api/admin/aspirasi/bulk-update', {
+        await axios.post('/admin/aspirasi/bulk-update', {
           aspirasi_ids: selectedAspirasi.value,
           status: bulkAction.value
         }, {
@@ -434,7 +434,7 @@
     
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.post(`/api/admin/aspirasi/${aspirasi.id}/update-status`, {
+      const response = await axios.post(`/admin/aspirasi/${aspirasi.id}/update-status`, {
         status: newStatus
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -454,7 +454,7 @@
     
     try {
       const token = localStorage.getItem('token')
-      await axios.delete(`/api/admin/aspirasi/${aspirasi.id}`, {
+      await axios.delete(`/admin/aspirasi/${aspirasi.id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       

@@ -12,6 +12,7 @@ import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
 import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
 import StrukturMember from '@/Pages/StrukturMember.vue'
 import PendaftaranOSIS from '@/Pages/PendaftaranOSIS.vue'
+import TrashedBidang from '@/Pages/Admin/TrashedBidang.vue' // Import komponen baru
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -42,6 +43,12 @@ const routes = [
         path: 'kelola-bidang',
         name: 'KelolaBidang',
         component: KelolaBidang,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'trashed-bidang', // Tambah route untuk halaman trash
+        name: 'TrashedBidang',
+        component: TrashedBidang,
         meta: { requiresAuth: true }
       },
       {
