@@ -519,11 +519,13 @@ const alert = ref({ show: false, message: "", color: "bg-green-500" });
 
 // Constants
 const posisiOptions = [
-  'Ketua OSIS',
-  'Wakil Ketua OSIS',
+  'Ketua Umum',
+  'Ketua',
+  'Sekretaris Umum',
   'Sekretaris',
+  'Bendahara Umum',
   'Bendahara',
-  'Ketua Bidang',
+  'Ketua Departemen',
   'Anggota'
 ];
 

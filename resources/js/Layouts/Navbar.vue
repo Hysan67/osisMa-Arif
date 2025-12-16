@@ -55,7 +55,7 @@
                <button
                   @click="toggleDesktopDropdown('lainnya')"
                   class="flex items-center hover:text-yellow-300 focus:outline-none transition-colors duration-200 py-2"
-                  :class="{ 'text-yellow-300': desktopDropdownOpen.lainnya || isActive('/form-aspirasi-siswa') || isActive('/pendaftaran-osis') || isActive('/event') }"
+                  :class="{ 'text-yellow-300': desktopDropdownOpen.lainnya || isActive('/form-aspirasi-siswa') || isActive('/pendaftaran-osis') || isActive('/event-artikel') }"
                >
                   Lainnya
                   <svg
@@ -96,7 +96,7 @@
                   </li>
                   <li>
                      <router-link
-                        to="/event"
+                        to="/event-artikel"
                         class="block px-4 py-2 hover:bg-blue-700 transition-colors duration-200"
                         @click="closeAllDropdowns"
                         >Event & Artikel</router-link
@@ -230,7 +230,7 @@
                >
                   <li>
                      <router-link
-                        to="/event"
+                        to="/event-artikel"
                         class="block py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200"
                         @click="closeMenu"
                         >Event & Artikel</router-link

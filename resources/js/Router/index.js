@@ -12,17 +12,22 @@ import KelolaBidang from '@/Pages/Admin/KelolaBidang.vue'
 import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
 import StrukturMember from '@/Pages/StrukturMember.vue'
 import PendaftaranOSIS from '@/Pages/PendaftaranOSIS.vue'
-import TrashedBidang from '@/Pages/Admin/TrashedBidang.vue' // Import komponen baru
+import TrashedBidang from '@/Pages/Admin/TrashedBidang.vue' 
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
-  { path: '/event', name: 'Event', component: Event },
+  { path: '/event-artikel', name: 'Event', component: Event },
   { path: '/struktur-osis', name: 'StrukturMember', component: StrukturMember },
   { path: '/event/:id', name: 'EventDetail', component: EventDetail },
   { path: '/generasi', name: 'Generasi', component: Generasi },
   { path: '/form-aspirasi-siswa', name: 'AspirasiSection', component: AspirasiSection },
   { path: '/login', name: 'Login', component: Login, meta: { requiresGuest: true } },
   { path: '/pendaftaran-osis', name: 'PendaftaranOSIS', component: PendaftaranOSIS },
+  {
+    path: '/bidang/:id',
+    name: 'BidangDetail',
+    component: () => import('@/Pages/BidangDetail.vue')
+  },
   {
     path: '/admin',
     name: 'Admin',

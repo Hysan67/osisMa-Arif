@@ -121,7 +121,7 @@
 
           <div class="text-center mt-12">
               <router-link
-                  to="/artikel"
+                  to="/event-artikel"
                   class="inline-block px-6 py-3 text-blue-600 font-medium border border-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors"
                   data-aos="fade-right"
               >
@@ -210,7 +210,7 @@
       <EventBesarSection :events="recentEvents" />
        <div class="text-center mt-12">
               <router-link
-                  to="/artikel"
+                  to="/event-artikel"
                   class="inline-block px-6 py-3 text-blue-600 font-medium border border-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors"
                   data-aos="fade-right"
               >

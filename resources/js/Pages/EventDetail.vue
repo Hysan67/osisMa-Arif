@@ -2,8 +2,8 @@
     <div class="min-h-screen bg-transparent py-16">
         <div class="max-w-5xl mx-auto px-4 py-16">
             <router-link
-                :to="{ path: '/event', query: { q: lastSearchQueryFromStore } }"
-                class="text-blue-600 hover:underline mb-8 inline-block font-light"
+                :to="{ path: '/event-artikel', query: { q: lastSearchQueryFromStore } }"
+                class="flex items-center w-40 text-blue-600 hover:text-blue-800 mb-4 px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50 transition"
                 data-aos="fade-left"
                 data-aos-delay="500"
                 >&larr; Kembali ke Daftar Artikel</router-link

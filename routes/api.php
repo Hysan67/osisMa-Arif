@@ -42,10 +42,8 @@ Route::prefix('bidang')->group(function () {
 Route::prefix('v1')->group(function () {
    Route::get('/bidang', [BidangController::class, 'index']);
    Route::get('/bidang/{id}', [BidangController::class, 'show']);
-   Route::get('/bidang/{id}/anggota', [BidangController::class, 'anggota']);
-   
-   Route::get('/anggota', [App\Http\Controllers\Api\AnggotaController::class, 'index']);
-   Route::get('/anggota/{id}', [App\Http\Controllers\Api\AnggotaController::class, 'show']);
+   Route::get('/anggota', [AnggotaController::class, 'index']);
+   Route::get('/anggota/{id}', [AnggotaController::class, 'show']);
 });
 
 Route::prefix('anggota')->group(function () {
