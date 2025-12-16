@@ -21,13 +21,12 @@
                 :src="event.image || '/images/placeholder-event.jpg'"
                 :alt="event.title"
                 class="w-full h-full object-cover"
-                @error="e => e.target.src = '/images/placeholder-event.jpg'"
               />
             </div>
           </div>
           <div class="md:w-1/2 text-center md:text-left">
             <h3 class="text-2xl font-light text-blue-600 mb-4">{{ event.title }}</h3>
-            <p class="text-gray-700">{{ event.desc }}</p>
+            <p class="text-gray-700 line-clamp-3">{{ event.desc }}</p>
           </div>
         </div>
       </div>

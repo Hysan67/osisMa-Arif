@@ -49,9 +49,10 @@
 
       <div class="bg-white rounded-lg shadow p-4">
         <div class="flex items-center">
+          <!-- PERBAIKAN: Ganti ikon nonaktif menjadi lebih tepat -->
           <div class="p-2 rounded-full bg-gray-100 text-gray-600 mr-3">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
             </svg>
           </div>
           <div>
@@ -287,15 +288,8 @@
           <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ anggota.nama }}</h3>
           <p class="text-blue-600 font-medium text-sm mb-2">{{ anggota.posisi }}</p>
           
-          <!-- Quote -->
           <div class="mb-3">
-            <p class="text-gray-600 text-sm italic">"{{ truncateText(anggota.quote, 80) }}"</p>
-          </div>
-          
-          <!-- Masa Bakti -->
-          <div class="mb-4">
-            <p class="text-xs text-gray-500">Masa Bakti:</p>
-            <p class="text-sm font-medium text-gray-800">{{ anggota.masa_bakti }}</p>
+            <p class="text-gray-600 text-sm">"{{ anggota.kelas }}"</p>
           </div>
           
           <!-- Actions -->
@@ -316,14 +310,19 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
               </button>
-              <!-- Ganti tombol hapus menjadi nonaktifkan -->
+              <!-- PERBAIKAN: Ganti ikon untuk tombol toggle status -->
               <button
                 @click="confirmToggleStatus(anggota)"
-                class="text-yellow-600 hover:text-yellow-800 p-1"
-                title="Nonaktifkan"
+                :class="anggota.status === 'aktif' ? 'text-yellow-600 hover:text-yellow-800' : 'text-green-600 hover:text-green-800'"
+                class="p-1"
+                :title="anggota.status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan'"
               >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                <svg v-if="anggota.status === 'aktif'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                </svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                 </svg>
               </button>
             </div>
@@ -402,15 +401,19 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
                   </button>
-                  <!-- Ganti tombol hapus menjadi nonaktifkan -->
+                  <!-- PERBAIKAN: Ganti ikon untuk tombol toggle status di table view -->
                   <button
                     @click="confirmToggleStatus(anggota)"
-                    class="text-yellow-600 hover:text-yellow-900"
-                    title="Nonaktifkan"
+                    :class="anggota.status === 'aktif' ? 'text-yellow-600 hover:text-yellow-900' : 'text-green-600 hover:text-green-900'"
+                    :title="anggota.status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan'"
                   >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
+                    <svg v-if="anggota.status === 'aktif'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                    </svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
                   </button>
                 </div>
               </td>
@@ -422,14 +425,14 @@
 
     <!-- Modals -->
     <AnggotaModal 
-    v-if="showForm"
-    :show="showForm"
-    :is-edit="isEdit"
-    :form-data="form"
-    :bidangs="bidangs"
-    @save="saveAnggota"
-    @close="closeForm"
-  />
+      v-if="showForm"
+      :show="showForm"
+      :is-edit="isEdit"
+      :form-data="form"
+      :bidangs="bidangs"
+      @save="saveAnggota"
+      @close="closeForm"
+    />
 
     <DetailAnggota
       v-if="showDetailModal"
@@ -440,7 +443,7 @@
       @edit="editAnggota(detailAnggota)"
     />
 
-    <!-- Ganti modal konfirmasi hapus menjadi konfirmasi ubah status -->
+    <!-- Modal konfirmasi ubah status -->
     <ConfirmationModal
       v-if="showStatusModal"
       :show="showStatusModal"
@@ -480,27 +483,25 @@ const loading = ref(false);
 const error = ref("");
 const displayMode = ref("grid");
 
-// Modal states - Ganti showDeleteModal menjadi showStatusModal
+// Modal states
 const showForm = ref(false);
 const showDetailModal = ref(false);
-const showStatusModal = ref(false); // Ganti nama variabel
+const showStatusModal = ref(false);
 const isEdit = ref(false);
 
 // Data for modals
 const detailAnggota = ref(null);
-// Ganti anggotaToDelete menjadi anggotaToToggle dan tambahkan statusToChange
 const anggotaToToggle = ref(null);
-const statusToChange = ref('non aktif'); // 'aktif' atau 'non aktif'
+const statusToChange = ref('non aktif');
 
 // Form data
 const form = ref({
   id: null,
   nama: "",
   posisi: "",
+  kelas: "", // FIELD BARU
   bidang_id: "",
   status: "aktif",
-  masa_bakti: "",
-  quote: "",
   pengalaman_prestasi: "",
   img: null,
   imgPreview: null,
@@ -561,27 +562,11 @@ function showAlert(msg, type = "success") {
 }
 
 function getImageUrl(imgPath) {
-  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image  ';
+  if (!imgPath) return 'https://via.placeholder.com/400x300?text=No+Image';
   if (imgPath.startsWith('http')) return imgPath;
   if (imgPath.startsWith('public/')) imgPath = imgPath.replace('public/', '');
   if (imgPath.startsWith('/')) imgPath = imgPath.substring(1);
   return `/storage/${imgPath}`;
-}
-
-function handleFileUpload(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (!validTypes.includes(file.type)) {
-      showAlert('Format file harus JPG, PNG, atau GIF', 'error');
-      return;
-    }
-    
-    form.value.img = file;
-    const reader = new FileReader();
-    reader.onload = (e) => form.value.imgPreview = e.target.result;
-    reader.readAsDataURL(file);
-  }
 }
 
 function getCountByStatus(status) {
@@ -613,31 +598,29 @@ function truncateText(text, length) {
 function openForm(data = null) {
   isEdit.value = !!data;
   if (data) {
-    form.value = {
-      id: data.id,
-      nama: data.nama,
-      posisi: data.posisi,
-      bidang_id: data.bidang_id || "",
-      status: data.status || "aktif",
-      masa_bakti: data.masa_bakti,
-      quote: data.quote || "",
-      pengalaman_prestasi: data.pengalaman_prestasi || "",
-      img: null,
-      imgPreview: data.img ? getImageUrl(data.img) : null,
-    };
-  } else {
-    form.value = {
-      id: null,
-      nama: "",
-      posisi: "",
-      bidang_id: "",
-      status: "aktif",
-      masa_bakti: "",
-      quote: "",
-      pengalaman_prestasi: "",
-      img: null,
-      imgPreview: null,
-    };
+  form.value = {
+    id: data.id,
+    nama: data.nama,
+    posisi: data.posisi,
+    kelas: data.kelas || "", // FIELD BARU
+    bidang_id: data.bidang_id || "",
+    status: data.status || "aktif",
+    pengalaman_prestasi: data.pengalaman_prestasi || "",
+    img: null,
+    imgPreview: data.img ? getImageUrl(data.img) : null,
+  };
+} else {
+  form.value = {
+    id: null,
+    nama: "",
+    posisi: "",
+    kelas: "", // FIELD BARU
+    bidang_id: "",
+    status: "aktif",
+    pengalaman_prestasi: "",
+    img: null,
+    imgPreview: null,
+  };
   }
   showForm.value = true;
 }
@@ -653,10 +636,9 @@ function editAnggota(anggota) {
     id: anggota.id,
     nama: anggota.nama || "",
     posisi: anggota.posisi || "",
+    kelas: anggota.kelas || "", 
     bidang_id: anggota.bidang_id || "",
     status: anggota.status || "aktif",
-    masa_bakti: anggota.masa_bakti || "",
-    quote: anggota.quote || "",
     pengalaman_prestasi: anggota.pengalaman_prestasi || "",
     img: null,
     imgPreview: anggota.img ? getImageUrl(anggota.img) : null,
@@ -687,35 +669,37 @@ function closeDetailModal() {
   detailAnggota.value = null;
 }
 
-// Ganti confirmDelete menjadi confirmToggleStatus
 function confirmToggleStatus(anggota) {
   anggotaToToggle.value = anggota;
-  // Tentukan status tujuan: jika aktif -> non aktif, jika non aktif -> aktif
+  // PERBAIKAN: Logika toggle yang benar
   statusToChange.value = anggota.status === 'aktif' ? 'non aktif' : 'aktif';
-  showStatusModal.value = true; // Ganti ke showStatusModal
+  showStatusModal.value = true;
 }
 
-// Ganti deleteAnggota menjadi toggleStatus
 async function toggleStatus() {
   if (!anggotaToToggle.value) return;
   
   try {
     const token = localStorage.getItem('token');
-    await axios.put(`/anggota/${anggotaToToggle.value.id}/status`, {
-      status: statusToChange.value
-    }, {
+    
+    // PERBAIKAN: Gunakan endpoint update biasa untuk mengubah status
+    const formData = new FormData();
+    formData.append('_method', 'PUT');
+    formData.append('status', statusToChange.value);
+    
+    await axios.post(`/anggota/${anggotaToToggle.value.id}`, formData, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       }
     });
 
     const action = statusToChange.value === 'aktif' ? 'diaktifkan' : 'dinonaktifkan';
     showAlert(`Anggota berhasil ${action}`, "success");
-    showStatusModal.value = false; // Ganti ke showStatusModal
+    showStatusModal.value = false;
     anggotaToToggle.value = null;
-    await fetchData(); // Refresh data
+    await fetchData();
   } catch (err) {
     console.error(err);
     const action = statusToChange.value === 'aktif' ? 'mengaktifkan' : 'menonaktifkan';
@@ -723,17 +707,18 @@ async function toggleStatus() {
   }
 }
 
-
 // API Functions
 async function fetchData() {
   loading.value = true;
   error.value = "";
   
   try {
+    const token = localStorage.getItem('token');
+    
     // Fetch anggotas
     const anggotaResponse = await axios.get('/anggota', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
       }
     });
@@ -742,7 +727,7 @@ async function fetchData() {
     // Fetch bidangs
     const bidangResponse = await axios.get('/bidang', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
       }
     });
@@ -794,26 +779,6 @@ async function saveAnggota(formData) {
     showAlert(errorMessage, "error");
   }
 }
-
-// Ganti komentar dan hapus fungsi deleteAnggota lama
-// async function deleteAnggota() {
-//   if (!anggotaToDelete.value) return;
-//   try {
-//     await axios.delete(`/anggota/${anggotaToDelete.value.id}`, {
-//       headers: {
-//         'Authorization': `Bearer ${localStorage.getItem('token')}`,
-//         'Accept': 'application/json'
-//       }
-//     });
-//     showAlert("Anggota berhasil dihapus", "success");
-//     showDeleteModal.value = false;
-//     anggotaToDelete.value = null;
-//     await fetchData();
-//   } catch (err) {
-//     console.error(err);
-//     showAlert("Gagal menghapus anggota: " + (err.response?.data?.message || "Error"), "error");
-//   }
-// }
 
 // Lifecycle
 onMounted(() => {

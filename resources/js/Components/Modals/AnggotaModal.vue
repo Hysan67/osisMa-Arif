@@ -91,58 +91,62 @@
 
             <!-- Right Column -->
             <div class="space-y-4">
-              <!-- Masa Bakti -->
+              <!-- Kelas -->
               <div>
-                <label class="block text-gray-700 text-sm font-medium mb-2">Masa Bakti *</label>
+                <label class="block text-gray-700 text-sm font-medium mb-2">Kelas</label>
                 <input
-                  v-model="localForm.masa_bakti"
+                  v-model="localForm.kelas"
                   type="text"
-                  required
                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Contoh: 2023-2024"
+                  placeholder="Contoh: XII IPA 1"
                 />
-              </div>
-
-              <!-- Quote -->
-              <div>
-                <label class="block text-gray-700 text-sm font-medium mb-2">Quote/Motto</label>
-                <textarea
-                  v-model="localForm.quote"
-                  rows="3"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Motto hidup anggota"
-                ></textarea>
               </div>
 
               <!-- Gambar -->
               <div>
                 <label class="block text-gray-700 text-sm font-medium mb-2">Foto Anggota</label>
-                <div class="mt-1 flex items-center">
-                  <div v-if="localForm.imgPreview" class="mr-4">
-                    <img :src="localForm.imgPreview" class="h-24 w-24 object-cover rounded-lg" />
+                <div class="mt-1">
+                  <!-- Image Preview -->
+                  <div v-if="localForm.imgPreview" class="mb-3">
+                    <img :src="localForm.imgPreview" class="h-40 w-full object-cover rounded-lg border border-gray-300" />
                   </div>
-                  <label class="cursor-pointer">
-                    <input
-                      type="file"
-                      ref="fileInput"
-                      @change="handleFileChange"
-                      accept="image/*"
-                      class="hidden"
-                    />
-                    <div class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                      {{ localForm.imgPreview ? 'Ganti Foto' : 'Unggah Foto' }}
-                    </div>
-                  </label>
-                  <button
-                    v-if="localForm.imgPreview"
-                    @click="removeImage"
-                    type="button"
-                    class="ml-2 text-sm text-red-600 hover:text-red-800"
-                  >
-                    Hapus
-                  </button>
+                  
+                  <!-- Upload Button -->
+                  <div class="flex items-center space-x-3">
+                    <label class="cursor-pointer flex-1">
+                      <input
+                        type="file"
+                        ref="fileInput"
+                        @change="handleFileChange"
+                        accept="image/*"
+                        class="hidden"
+                      />
+                      <div class="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-center hover:bg-gray-50 transition">
+                        <svg class="w-6 h-6 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                        <p class="text-sm font-medium text-gray-700">
+                          {{ localForm.imgPreview ? 'Ganti Foto' : 'Unggah Foto' }}
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">Klik untuk memilih file</p>
+                      </div>
+                    </label>
+                    
+                    <!-- Remove Button -->
+                    <button
+                      v-if="localForm.imgPreview"
+                      @click="removeImage"
+                      type="button"
+                      class="px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                      title="Hapus Foto"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-                <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG. Maksimal 2MB</p>
+                <p class="mt-2 text-xs text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB</p>
               </div>
             </div>
           </div>
@@ -209,11 +213,13 @@ const props = defineProps({
 const emit = defineEmits(['save', 'close']);
 
 const posisiOptions = [
-  'Ketua OSIS',
-  'Wakil Ketua OSIS',
+  'Ketua Umum',
+  'Ketua',
+  'Sekretaris Umum',
   'Sekretaris',
+  'Bendahara Umum',
   'Bendahara',
-  'Ketua Bidang',
+  'Ketua Departemen',
   'Anggota'
 ];
 
@@ -222,10 +228,9 @@ const localForm = reactive({
   id: null,
   nama: "",
   posisi: "",
+  kelas: "",
   bidang_id: "",
   status: "aktif",
-  masa_bakti: "",
-  quote: "",
   pengalaman_prestasi: "",
   img: null,
   imgPreview: null,
@@ -238,19 +243,28 @@ const fileInput = ref(null);
 
 // Watch for formData changes
 watch(() => props.formData, (newData) => {
-  if (newData) {
+  if (newData && Object.keys(newData).length > 0) {
+    // Reset form dulu
+    resetForm();
+    
+    // Isi form dengan data baru
     Object.keys(localForm).forEach(key => {
-      if (key in newData) {
+      if (key in newData && newData[key] !== undefined) {
         localForm[key] = newData[key];
       }
     });
     
-    // Handle image preview
+    // Handle image preview khusus
     if (newData.imgPreview) {
       localForm.imgPreview = newData.imgPreview;
+    } else if (newData.img) {
+      // Jika ada img tapi tidak ada imgPreview, buat preview dari URL yang ada
+      if (typeof newData.img === 'string' && (newData.img.startsWith('http') || newData.img.startsWith('/'))) {
+        localForm.imgPreview = newData.img;
+      }
     }
   }
-}, { deep: true, immediate: true });
+}, { immediate: true });
 
 // Reset form when modal closes
 watch(() => props.show, (newVal) => {
@@ -265,10 +279,9 @@ function resetForm() {
     id: null,
     nama: "",
     posisi: "",
+    kelas: "",
     bidang_id: "",
     status: "aktif",
-    masa_bakti: "",
-    quote: "",
     pengalaman_prestasi: "",
     img: null,
     imgPreview: null,
@@ -286,7 +299,8 @@ function handleFileChange(event) {
       return;
     }
     
-    if (file.size > 2 * 1024 * 1024) { // 2MB
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
       submitError.value = 'Ukuran file maksimal 2MB';
       return;
     }
@@ -327,19 +341,17 @@ async function handleSubmit() {
       throw new Error("Posisi wajib dipilih");
     }
     
-    if (!localForm.masa_bakti.trim()) {
-      throw new Error("Masa bakti wajib diisi");
-    }
-    
     // Prepare form data
     const formData = new FormData();
     
     // Append all form data except imgPreview
     Object.keys(localForm).forEach(key => {
-      if (key !== 'imgPreview' && localForm[key] !== null) {
+      if (key !== 'imgPreview' && localForm[key] !== null && localForm[key] !== undefined) {
         if (key === 'bidang_id' && !localForm[key]) {
           formData.append(key, '');
         } else if (key === 'pengalaman_prestasi' && !localForm[key]) {
+          formData.append(key, '-');
+        } else if (key === 'kelas' && !localForm[key]) {
           formData.append(key, '-');
         } else {
           formData.append(key, localForm[key]);

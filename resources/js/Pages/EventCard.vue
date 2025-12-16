@@ -14,7 +14,7 @@
       <div class="md:w-1/2 text-center md:text-left">
         <h3 class="text-2xl font-light text-blue-600 mb-2" data-aos="fade-left" data-aos-delay="500">{{ event.title }}</h3>
         <p class="text-sm text-gray-500 mb-4" data-aos="zoom-in" data-aos-delay="500">{{ event.date }}</p>
-        <p class="text-gray-700 max-w-2xl mx-auto md:mx-0" data-aos="zoom-in" data-aos-delay="500">{{ event.desc }}</p>
+        <p class="text-gray-700 max-w-2xl line-clamp-3 mx-auto md:mx-0" data-aos="zoom-in" data-aos-delay="500">{{ event.desc }}</p>
       </div>
     </div>
   </router-link>

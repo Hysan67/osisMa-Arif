@@ -112,15 +112,6 @@
                   </li>
                </ul>
             </li>
-            <ul>
-                 <router-link
-                     to="/Login"
-                     class="hover:text-yellow-300 transition-colors duration-200 py-2"
-                     :class="{ 'text-yellow-300': isActive('/login') }"
-                 >
-                     Login
-                 </router-link>
-             </ul>
          </ul>
 
             <!-- Hamburger (Mobile) -->

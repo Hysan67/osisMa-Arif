@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <!-- Konten (TIDAK DIUBAH SAMA SEKALI) -->
+                <!-- Konten -->
                 <div class="prose prose-lg max-w-none">
                     <h1
                         class="text-5xl font-light text-blue-600 mb-4"
@@ -69,15 +69,19 @@
                         </div>
                     </div>
 
-                    <!-- Cerita -->
+                    <!-- Cerita - FIX: Menangani spasi dan baris baru -->
                     <div
                         class="space-y-6 text-gray-800 leading-relaxed"
                         data-aos="fade-up"
                         data-aos-delay="500"
                     >
-                        <p v-for="(paragraph, i) in event.story" :key="i">
-                            {{ paragraph }}
-                        </p>
+                        <!-- Gunakan v-html jika ingin mempertahankan format -->
+                        <div v-html="formattedStory"></div>
+                        
+                        <!-- ATAU gunakan p dengan white-space: pre-wrap -->
+                        <!--
+                        <div class="whitespace-pre-wrap">{{ event.story }}</div>
+                        -->
                     </div>
 
                     <!-- Penutup -->
@@ -90,7 +94,7 @@
                             Untuk teman-teman santri yang turut serta, kami
                             segenap panitia
                             <span class="font-medium text-blue-600"
-                                >OSIS MA Ma’arif Udanawu</span
+                                >OSIS MA Ma'arif Udanawu</span
                             >
                             mengucapkan:
                         </p>
@@ -149,7 +153,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue"; // Import computed
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useEventStore } from "../store/useEventStore";
 import PhotoSlider from "@/Pages/PhotoSlider.vue";
@@ -157,38 +161,108 @@ import PhotoSlider from "@/Pages/PhotoSlider.vue";
 const route = useRoute();
 const store = useEventStore();
 const event = ref(null);
+const loading = ref(false);
+const error = ref(null);
 
 // Ambil query dari store
 const lastSearchQueryFromStore = computed(() => store.lastSearchQuery);
 
+// Format story untuk menangani spasi dan baris baru
+const formattedStory = computed(() => {
+    if (!event.value || !event.value.story) return '';
+    
+    // Jika story adalah array (sudah diproses)
+    if (Array.isArray(event.value.story)) {
+        return event.value.story
+            .map(paragraph => {
+                // Hapus spasi berlebih di awal dan akhir, pertahankan baris baru
+                return `<p>${paragraph.trim().replace(/\n/g, '<br>')}</p>`;
+            })
+            .join('');
+    }
+    
+    // Jika story adalah string
+    let story = event.value.story;
+    
+    // Hapus spasi berlebih di awal dan akhir
+    story = story.trim();
+    
+    // Ganti baris ganda menjadi paragraf
+    const paragraphs = story.split(/\n\s*\n/);
+    
+    return paragraphs
+        .map(paragraph => {
+            // Hapus spasi berlebih di setiap paragraf
+            const cleanParagraph = paragraph.trim();
+            // Ganti baris tunggal dengan <br> di dalam paragraf
+            return `<p>${cleanParagraph.replace(/\n/g, '<br>')}</p>`;
+        })
+        .join('');
+});
+
 onMounted(async () => {
-    const data = await store.fetchEventById(route.params.id);
-    if (data) {
-        event.value = {
-            ...data,
-            theme: data.theme || "",
-            story: data.story ? data.story.split("\n") : [data.desc],
-            closingGreeting: data.closingGreeting || "Barakallahu fiikum!",
-        };
+    loading.value = true;
+    error.value = null;
+    
+    try {
+        const data = await store.fetchEventById(route.params.id);
+        if (data) {
+            event.value = {
+                ...data,
+                theme: data.theme || "",
+                // Simpan story asli untuk diproses di computed property
+                story: data.story || data.desc || "",
+                closingGreeting: data.closingGreeting || "Barakallahu fiikum!",
+            };
+        } else {
+            error.value = "Kegiatan tidak ditemukan";
+        }
+    } catch (err) {
+        error.value = "Gagal memuat data kegiatan";
+        console.error("Error loading event:", err);
+    } finally {
+        loading.value = false;
     }
 });
 
 function copyLink() {
     const link = window.location.href;
-    navigator.clipboard.writeText(link);
-    alert("Link artikel disalin ke clipboard!");
+    navigator.clipboard.writeText(link)
+        .then(() => {
+            // Bisa tambahkan notifikasi yang lebih baik
+            alert("Link artikel disalin ke clipboard!");
+        })
+        .catch(() => {
+            alert("Gagal menyalin link");
+        });
 }
 
 function shareEvent() {
     const link = window.location.href;
     if (navigator.share) {
         navigator.share({
-            title: event.value.title,
+            title: event.value?.title || "Kegiatan OSIS",
             text: "Yuk baca kisah kegiatan OSIS!",
             url: link,
+        }).catch(() => {
+            copyLink();
         });
     } else {
         copyLink();
     }
 }
 </script>
+
+<style scoped>
+/* Optional: Tambahkan style untuk formatting teks */
+.prose :deep(p) {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.prose :deep(br) {
+    content: "";
+    display: block;
+    margin-bottom: 0.5em;
+}
+</style>

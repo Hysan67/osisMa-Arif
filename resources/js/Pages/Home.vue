@@ -107,7 +107,7 @@
                   v-for="artikel in recentArtikels"
                   :key="artikel.id"
                   :event="artikel"
-                  :delay="artikel.id * 400"
+                  :delay="artikel.id"
               />
           </div>
           <div

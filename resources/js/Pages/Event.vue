@@ -5,7 +5,6 @@
                 to="/"
                 class="flex items-center w-40 text-blue-600 hover:text-blue-800 mb-4 px-4 py-2 rounded-lg border border-blue-600 hover:bg-blue-50 transition"
                 data-aos="fade-left"
-                data-aos-delay="500"
                 >&larr; Kembali ke Beranda</router-link
             >
 
@@ -13,19 +12,16 @@
                 <h1
                     class="text-5xl font-light text-blue-600"
                     data-aos="fade-up"
-                    data-aos-delay="500"
                 >
                     Artikel & Event
                 </h1>
                 <div
                     class="w-16 h-px bg-yellow-300 mx-auto mt-6"
                     data-aos="fade-right"
-                    data-aos-delay="500"
                 ></div>
                 <p
                     class="text-gray-600 mt-8 max-w-2xl mx-auto"
                     data-aos="fade-left"
-                    data-aos-delay="500"
                 >
                     Simak artikel-artikel terbaru dari OSIS MA Ma'arif Udanawu.
                 </p>

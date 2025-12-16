@@ -34,10 +34,9 @@ class AnggotaController extends Controller
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'posisi' => 'required|string|max:100',
+            'kelas' => 'nullable|string|max:50',
             'bidang_id' => 'nullable|exists:bidangs,id',
             'status' => 'required|in:aktif,non aktif',
-            'masa_bakti' => 'required|string|max:50',
-            'quote' => 'nullable|string',
             'pengalaman_prestasi' => 'nullable|string',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -45,7 +44,6 @@ class AnggotaController extends Controller
             'nama.required' => 'Nama wajib diisi',
             'posisi.required' => 'Posisi wajib diisi',
             'status.required' => 'Status wajib dipilih',
-            'masa_bakti.required' => 'Masa bakti wajib diisi',
         ]);
 
         if ($validator->fails()) {
@@ -57,14 +55,22 @@ class AnggotaController extends Controller
         }
 
         try {
-            $data = $request->except('img');
+            $data = $request->only([
+                'nama', 
+                'posisi', 
+                'kelas', 
+                'bidang_id', 
+                'status', 
+                'pengalaman_prestasi'
+            ]);
             
-            if (empty($data['quote'])) {
-                $data['quote'] = '-';
-            }
-
+            // Set default untuk field yang kosong
             if (empty($data['pengalaman_prestasi'])) {
                 $data['pengalaman_prestasi'] = '-';
+            }
+            
+            if (empty($data['kelas'])) {
+                $data['kelas'] = '-';
             }
             
             if ($request->hasFile('img')) {
@@ -120,10 +126,9 @@ class AnggotaController extends Controller
         $validator = Validator::make($request->all(), [
             'nama' => 'sometimes|required|string|max:255',
             'posisi' => 'sometimes|required|string|max:100',
+            'kelas' => 'nullable|string|max:50',
             'bidang_id' => 'nullable|exists:bidangs,id',
             'status' => 'sometimes|required|in:aktif,non aktif',
-            'masa_bakti' => 'sometimes|required|string|max:50',
-            'quote' => 'nullable|string',
             'pengalaman_prestasi' => 'nullable|string',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -146,7 +151,14 @@ class AnggotaController extends Controller
                 ], 404);
             }
 
-            $data = $request->except('img');
+            $data = $request->only([
+                'nama', 
+                'posisi', 
+                'kelas', 
+                'bidang_id', 
+                'status', 
+                'pengalaman_prestasi'
+            ]);
 
             if ($request->hasFile('img')) {
                 // Hapus gambar lama jika ada
@@ -213,6 +225,7 @@ class AnggotaController extends Controller
             $search = $request->query('search', '');
             $bidangId = $request->query('bidang_id');
             $status = $request->query('status');
+            $kelas = $request->query('kelas');
 
             $query = Anggota::with('bidang:id,nama');
 
@@ -220,7 +233,8 @@ class AnggotaController extends Controller
                 $query->where(function($q) use ($search) {
                     $q->where('nama', 'like', '%' . $search . '%')
                       ->orWhere('posisi', 'like', '%' . $search . '%')
-                      ->orWhere('quote', 'like', '%' . $search . '%');
+                      ->orWhere('kelas', 'like', '%' . $search . '%')
+                      ->orWhere('pengalaman_prestasi', 'like', '%' . $search . '%');
                 });
             }
 
@@ -230,6 +244,10 @@ class AnggotaController extends Controller
 
             if ($status) {
                 $query->where('status', $status);
+            }
+
+            if ($kelas) {
+                $query->where('kelas', 'like', '%' . $kelas . '%');
             }
 
             $anggotas = $query->latest()->get();
@@ -243,6 +261,35 @@ class AnggotaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal melakukan pencarian: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Opsional: method untuk toggle status
+    public function toggleStatus(Request $request, $id)
+    {
+        try {
+            $anggota = Anggota::find($id);
+
+            if (!$anggota) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anggota tidak ditemukan'
+                ], 404);
+            }
+
+            $newStatus = $anggota->status === 'aktif' ? 'non aktif' : 'aktif';
+            $anggota->update(['status' => $newStatus]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $anggota,
+                'message' => 'Status berhasil diubah'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengubah status: ' . $e->getMessage()
             ], 500);
         }
     }
