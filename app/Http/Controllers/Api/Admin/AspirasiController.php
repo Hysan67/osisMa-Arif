@@ -9,19 +9,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class AspirasiController extends Controller
 {
+    private $csvFile = 'aspirasi.csv';
+
     public function index(Request $request)
     {
         $query = Aspirasi::query();
         
-        // Filter berdasarkan status
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
         
-        // Filter berdasarkan tanggal
         if ($request->has('start_date')) {
             $query->whereDate('created_at', '>=', $request->start_date);
         }
@@ -30,7 +32,6 @@ class AspirasiController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
         
-        // Search
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -41,7 +42,6 @@ class AspirasiController extends Controller
             });
         }
         
-        // Sort
         $sortField = $request->get('sort_by', 'created_at');
         $sortDirection = $request->get('sort_dir', 'desc');
         $query->orderBy($sortField, $sortDirection);
@@ -67,9 +67,6 @@ class AspirasiController extends Controller
         ]);
     }
     
-    /**
-     * Update status aspirasi (tanpa balasan)
-     */
     public function updateStatus(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -93,7 +90,11 @@ class AspirasiController extends Controller
         }
         
         $aspirasi->status = $request->status;
+        $aspirasi->admin_id = Auth::id();
         $aspirasi->save();
+
+        // ✅ Simpan ke CSV
+        $this->saveAspirasiToCsv();
         
         return response()->json([
             'success' => true,
@@ -102,9 +103,6 @@ class AspirasiController extends Controller
         ]);
     }
     
-    /**
-     * Delete aspirasi.
-     */
     public function destroy($id)
     {
         try {
@@ -120,6 +118,8 @@ class AspirasiController extends Controller
             $deleted = $aspirasi->delete();
             
             if ($deleted) {
+                // ✅ Simpan ke CSV setelah hapus
+                $this->saveAspirasiToCsv();
                 return response()->json([
                     'success' => true,
                     'message' => 'Aspirasi berhasil dihapus'
@@ -139,9 +139,6 @@ class AspirasiController extends Controller
         }
     }
     
-    /**
-     * Bulk update status.
-     */
     public function bulkUpdate(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -163,11 +160,116 @@ class AspirasiController extends Controller
                 'admin_id' => Auth::id(),
                 'updated_at' => now(),
             ]);
+
+        // ✅ Simpan ke CSV
+        $this->saveAspirasiToCsv();
             
         return response()->json([
             'success' => true,
             'message' => "{$updated} aspirasi berhasil diperbarui",
             'updated_count' => $updated
         ]);
+    }
+
+    /**
+     * Ekspor semua aspirasi ke CSV (manual download)
+     */
+    public function exportCsv()
+    {
+        try {
+            $aspirasis = Aspirasi::all();
+            if ($aspirasis->isEmpty()) {
+                return response()->json(['success' => false, 'message' => 'Tidak ada data untuk diekspor'], 404);
+            }
+
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="aspirasi_' . now()->format('Y-m-d_H-i-s') . '.csv"',
+            ];
+
+            $callback = function () use ($aspirasis) {
+                $file = fopen('php://output', 'w');
+
+                fputcsv($file, [
+                    'ID',
+                    'Nama',
+                    'Email',
+                    'Kelas',
+                    'Judul',
+                    'Pesan',
+                    'Status',
+                    'Admin ID',
+                    'Dibuat',
+                    'Diperbarui'
+                ]);
+
+                foreach ($aspirasis as $aspirasi) {
+                    fputcsv($file, [
+                        $aspirasi->id,
+                        $aspirasi->nama,
+                        $aspirasi->email,
+                        $aspirasi->kelas ?? '-',
+                        $aspirasi->judul,
+                        substr(strip_tags($aspirasi->pesan), 0, 200) . '...',
+                        $aspirasi->status,
+                        $aspirasi->admin_id ?? '-',
+                        $aspirasi->created_at->format('Y-m-d H:i:s'),
+                        $aspirasi->updated_at->format('Y-m-d H:i:s'),
+                    ]);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengekspor CSV: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Simpan semua data aspirasi ke file CSV (full replace)
+     */
+    private function saveAspirasiToCsv()
+    {
+        try {
+            $csvPath = storage_path('app/' . $this->csvFile);
+            
+            // Pastikan folder ada
+            if (!is_dir(dirname($csvPath))) {
+                mkdir(dirname($csvPath), 0755, true);
+            }
+
+            $allAspirasi = Aspirasi::all();
+            $file = fopen($csvPath, 'w');
+
+          
+            // Header
+            fputcsv($file, [
+                'id', 'nama', 'email', 'kelas', 'judul', 'pesan', 'status', 'admin_id', 'created_at', 'updated_at'
+            ]);
+
+            // Data
+            foreach ($allAspirasi as $aspirasi) {
+                fputcsv($file, [
+                    $aspirasi->id,
+                    $aspirasi->nama,
+                    $aspirasi->email,
+                    $aspirasi->kelas ?? '',
+                    $aspirasi->judul,
+                    $aspirasi->pesan,
+                    $aspirasi->status,
+                    $aspirasi->admin_id ?? '',
+                    $aspirasi->created_at->toDateTimeString(),
+                    $aspirasi->updated_at->toDateTimeString(),
+                ]);
+            }
+
+            fclose($file);
+        } catch (\Exception $e) {
+        }
     }
 }
