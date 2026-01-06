@@ -13,6 +13,7 @@ import Aspirasi from '@/Pages/Admin/KelolaAspirasi.vue'
 import StrukturMember from '@/Pages/StrukturMember.vue'
 import PendaftaranOSIS from '@/Pages/PendaftaranOSIS.vue'
 import TrashedBidang from '@/Pages/Admin/TrashedBidang.vue' 
+import KelolaDaftarOsis from '@/Pages/Admin/KelolaDaftarOsis.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -48,6 +49,13 @@ const routes = [
         path: 'kelola-bidang',
         name: 'KelolaBidang',
         component: KelolaBidang,
+        meta: { requiresAuth: true }
+      },
+      // Di dalam children array di path '/admin'
+      {
+        path: 'kelola-pendaftaran',
+        name: 'KelolaPendaftaran',
+        component: KelolaDaftarOsis,
         meta: { requiresAuth: true }
       },
       {

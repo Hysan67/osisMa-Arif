@@ -64,3 +64,12 @@ Route::get('/artikels-trash', [ArtikelController::class, 'trash']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::prefix('pendaftaran-osis')->group(function () {
+   Route::post('/', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'store']); // Public
+   Route::get('/', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'index'])->middleware('auth:sanctum');
+   Route::get('/stats', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'getStats'])->middleware('auth:sanctum');
+   Route::put('/{id}/status', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'updateStatus'])->middleware('auth:sanctum');
+   Route::delete('/{id}', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'destroy'])->middleware('auth:sanctum');
+   Route::get('/export', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'exportCsv'])->middleware('auth:sanctum');
+});
