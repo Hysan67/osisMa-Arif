@@ -191,10 +191,6 @@
                         >Pendaftaran OSIS</router-link
                      >
                   </li>
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
                </ul>
             </li>
          </ul>
