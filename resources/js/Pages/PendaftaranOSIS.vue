@@ -1,4 +1,31 @@
 <template>
+
+  <!-- POPUP PENUTUPAN PENDAFTARAN -->
+ <div
+  v-if="showPopup"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999999] backdrop-blur-0"
+>
+
+   <div class="bg-white p-6 rounded-lg max-w-md w-full text-center shadow-lg">
+     <h2 class="text-xl font-bold text-red-600 mb-4">
+      Pendaftaran OSIS Ditutup
+     </h2>
+    <p class="text-gray-700 mb-6">
+      Mohon maaf, pendaftaran OSIS saat ini <b>kami tutup</b>.<br>
+      Pendaftaran akan dibuka kembali pada:
+      <br><b>9 Agustus 2026</b>
+    </p>
+    
+    <router-link
+                :to="{ path: '/', query: { q: lastSearchQueryFromStore } }"
+                class="mt-3 w-full py-2 rounded-lg transition font-medium text-gray-700"
+                data-aos="fade-left"
+                data-aos-delay="500"
+                >&larr; Kembali ke Beranda</router-link
+    >
+   </div>
+ </div>
+
   <div class="max-w-2xl mx-auto p-6 py-24">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <div class="text-center mb-6">
@@ -142,7 +169,7 @@
 
         <!-- SUBMIT -->
         <div class="flex justify-end pt-4">
-          <button type="submit" :disabled="submitting || !isFormValid"
+          <button type="submit" :disabled="submitting || !isFormValid || !isOpen"
             class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
             
             <svg v-if="submitting" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
@@ -158,7 +185,7 @@
             {{ submitting ? 'Mengirim...' : 'Kirim Pendaftaran' }}
           </button>
         </div>
-        
+
         <!-- Info Box -->
         <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div class="flex items-start">
@@ -184,8 +211,33 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
+
+// === TAMBAHAN LOGIC PENDAFTARAN ===
+const showPopup = ref(false)
+const isOpen = ref(false)
+
+// Tanggal buka pendaftaran
+const openDate = new Date('2026-08-09')
+
+onMounted(() => {
+  const today = new Date()
+
+  if (today >= openDate) {
+    isOpen.value = true
+    showPopup.value = false
+    document.body.style.overflow = ''
+  } else {
+    isOpen.value = false
+    showPopup.value = true
+    document.body.style.overflow = 'hidden'
+  }
+})
+
+watch(showPopup, (val) => {
+  document.body.style.overflow = val ? 'hidden' : ''
+})
 
 // CSRF Token untuk Laravel
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
