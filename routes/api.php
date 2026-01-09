@@ -54,8 +54,14 @@ Route::prefix('admin')->group(function () {
    Route::post('/aspirasi/bulk-update', [AspirasiController::class, 'bulkUpdate']);
    Route::post('/aspirasi/{id}/update-status', [AspirasiController::class, 'updateStatus']);
    Route::delete('/aspirasi/{id}', [AspirasiController::class, 'destroy']);
+<<<<<<< Updated upstream
    Route::get('/aspirasi/export-csv', [AspirasiController::class, 'exportCsv']);
    Route::apiResource('/aspirasi', AspirasiController::class);
+=======
+   Route::get('/aspirasi/export', [AspirasiController::class, 'exportCsv'])->middleware('auth:sanctum');
+   Route::post('/aspirasi/import', [AspirasiController::class, 'importCsv'])->middleware('auth:sanctum');
+   Route::post('/aspirasi/sync-csv', [AspirasiController::class, 'syncDatabaseToCsv'])->middleware('auth:sanctum'); // Tambahkan ini
+>>>>>>> Stashed changes
 });
 
 Route::post('/aspirasi', [PublicAspirasiController::class, 'store']);
