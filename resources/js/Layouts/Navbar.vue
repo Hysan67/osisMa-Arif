@@ -1,5 +1,6 @@
 <!-- src/components/layout/Navbar.vue -->
 <template>
+<<<<<<< Updated upstream
    <nav
       class="bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg sticky top-0 z-50"
    >
@@ -22,6 +23,33 @@
             />
             <span class="font-semibold text-lg">OSIS MA Ma'arif Udanawu</span>
          </div>
+=======
+    <nav
+        class="bg-gradient-to-r from-blue-600 to-blue-400 text-white fixed top-0 left-0 w-full z-50 shadow transition-shadow duration-300"
+        :class="{ 'shadow-lg': isScrolled }"
+    >
+        <div
+            class="max-w-6xl mx-auto px-2 py-1 flex justify-between items-center overflow-visible"
+        >
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-2">
+                <!-- Logo Sekolah -->
+                <img
+                    src="/logo-sekolah-maArif udanawu.png"
+                    alt="Logo OSIS"
+                    class="w-16 h-16 rounded-full"
+                />
+                <!-- Logo OSIS -->
+                <img
+                    src="/logo-osis-maArif udanawu.png"
+                    alt="Logo MA Ma'arif Udanawu"
+                    class="w-16 h-16 rounded-full"
+                />
+                <span class="font-semibold text-lg"
+                    >OSIS MA Ma'arif Udanawu</span
+                >
+            </div>
+>>>>>>> Stashed changes
 
          <!-- Menu Desktop -->
          <ul class="hidden md:flex space-x-6 items-center">
