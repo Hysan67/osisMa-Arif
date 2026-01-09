@@ -54,6 +54,7 @@ Route::prefix('admin')->group(function () {
    Route::post('/aspirasi/bulk-update', [AspirasiController::class, 'bulkUpdate']);
    Route::post('/aspirasi/{id}/update-status', [AspirasiController::class, 'updateStatus']);
    Route::delete('/aspirasi/{id}', [AspirasiController::class, 'destroy']);
+   Route::get('/aspirasi/export', [AspirasiController::class, 'exportCsv'])->middleware('auth:sanctum'); // Tambahkan ini
 });
 
 Route::post('/aspirasi', [PublicAspirasiController::class, 'store']);
