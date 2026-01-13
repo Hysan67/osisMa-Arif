@@ -3,10 +3,10 @@
 <<<<<<< Updated upstream
    <nav
       class="bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg sticky top-0 z-50"
-   >
+   />
       <div
          class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center"
-      >
+      />
          <!-- Logo & Title -->
          <div class="flex items-center space-x-2">
             <!-- Logo Sekolah -->
