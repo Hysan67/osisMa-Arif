@@ -1,9 +1,82 @@
+[file name]: KelolaDaftarOsis.vue
 <template>
   <div class="container mx-auto px-4 py-8">
-    <!-- Header -->
+    <!-- Header dengan Status Pendaftaran -->
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">Pendaftaran OSIS</h1>
-      <p class="text-gray-600">Kelola pendaftaran calon anggota OSIS</p>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Pendaftaran OSIS</h1>
+          <p class="text-gray-600">Kelola pendaftaran calon anggota OSIS</p>
+        </div>
+        
+        <!-- Status Pendaftaran dan Tombol Aksi -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <!-- Status Indicator -->
+          <div :class="[
+            'px-4 py-2 rounded-lg border flex items-center gap-2',
+            registrationSettings.is_open 
+              ? 'bg-green-50 border-green-200 text-green-800' 
+              : 'bg-red-50 border-red-200 text-red-800'
+          ]">
+            <div :class="[
+              'w-3 h-3 rounded-full',
+              registrationSettings.is_open ? 'bg-green-500' : 'bg-red-500'
+            ]"></div>
+            <span class="font-medium">
+              {{ registrationSettings.is_open ? 'Pendaftaran Dibuka' : 'Pendaftaran Ditutup' }}
+            </span>
+            <button @click="openSettingsModal" title="Edit pengaturan" class="ml-2 text-gray-500 hover:text-gray-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Toggle Button -->
+          <div class="flex gap-2">
+            <button @click="toggleRegistration" :disabled="togglingRegistration"
+                    :class="[
+                      'px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors',
+                      registrationSettings.is_open
+                        ? 'bg-red-600 hover:bg-red-700 text-white'
+                        : 'bg-green-600 hover:bg-green-700 text-white'
+                    ]">
+              <svg v-if="togglingRegistration" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path v-if="registrationSettings.is_open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {{ togglingRegistration 
+                ? 'Memproses...' 
+                : (registrationSettings.is_open ? 'Tutup Pendaftaran' : 'Buka Pendaftaran') 
+              }}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pesan Status Pendaftaran -->
+      <div v-if="!registrationSettings.is_open" class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div class="flex items-start">
+          <svg class="w-5 h-5 text-yellow-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.698-.833-2.464 0L4.072 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+          </svg>
+          <div class="flex-1">
+            <h3 class="font-medium text-yellow-900">Pendaftaran Ditutup</h3>
+            <p class="text-sm text-yellow-800 mt-1">{{ registrationSettings.closed_message }}</p>
+            <div v-if="registrationSettings.last_updated" class="text-xs text-yellow-700 mt-2 flex items-center gap-2">
+              <span>Terakhir diperbarui: {{ formatDateTime(registrationSettings.last_updated) }}</span>
+              <span v-if="registrationSettings.updated_by_name" class="bg-yellow-100 px-2 py-0.5 rounded">
+                oleh {{ registrationSettings.updated_by_name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Stats Cards -->
@@ -67,6 +140,16 @@
 
     <!-- Filters and Actions -->
     <div class="bg-white rounded-lg shadow p-4 mb-6">
+      <!-- Pesan Info Status Pendaftaran -->
+      <div v-if="!registrationSettings.is_open" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+        <p class="text-sm text-red-800 flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.698-.833-2.464 0L4.072 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+          </svg>
+          <strong>Perhatian:</strong> Pendaftaran saat ini ditutup. Pengguna tidak dapat mengirim formulir pendaftaran baru.
+        </p>
+      </div>
+
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex flex-col md:flex-row gap-4">
           <!-- Search -->
@@ -538,6 +621,77 @@
         </div>
       </div>
     </div>
+
+    <!-- Settings Modal -->
+    <div v-if="showSettingsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-medium text-gray-900">Pengaturan Pendaftaran</h3>
+          <button @click="showSettingsModal = false" class="text-gray-400 hover:text-gray-500 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form @submit.prevent="saveSettings" class="space-y-4">
+          <!-- Status -->
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="flex items-center">
+              <input v-model="settingsForm.is_open" type="checkbox" 
+                     class="h-5 w-5 rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors">
+              <span class="ml-3 text-sm font-medium text-gray-700">Buka Pendaftaran untuk Umum</span>
+            </label>
+            <p class="text-xs text-gray-500 mt-2 ml-8">
+              Jika tidak dicentang, formulir pendaftaran akan ditutup dan tidak dapat diakses oleh siswa
+            </p>
+          </div>
+
+          <!-- Pesan Penutupan -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Pesan Penutupan
+              <span class="text-xs text-gray-500 font-normal">(akan ditampilkan saat pendaftaran ditutup)</span>
+            </label>
+            <textarea v-model="settingsForm.closed_message" rows="4"
+                      placeholder="Contoh: Pendaftaran OSIS tahun ajaran 2024/2025 sudah ditutup. Terima kasih atas minat Anda untuk bergabung dengan OSIS."
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+            <p class="text-xs text-gray-500 mt-1">
+              Pesan ini akan muncul di halaman pendaftaran saat status ditutup
+            </p>
+          </div>
+
+          <!-- Info Terakhir Diperbarui -->
+          <div v-if="registrationSettings.last_updated" class="bg-blue-50 p-3 rounded-lg">
+            <p class="text-xs text-blue-800">
+              <span class="font-medium">Terakhir diperbarui:</span> {{ formatDateTime(registrationSettings.last_updated) }}
+              <span v-if="registrationSettings.updated_by_name" class="block mt-1">
+                oleh <span class="font-medium">{{ registrationSettings.updated_by_name }}</span>
+              </span>
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
+            <button type="button" @click="showSettingsModal = false"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+              Batal
+            </button>
+            <button type="submit" :disabled="savingSettings"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              <svg v-if="savingSettings" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {{ savingSettings ? 'Menyimpan...' : 'Simpan Pengaturan' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -545,6 +699,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
+// Data states
 const data = ref([])
 const stats = ref({})
 const loading = ref(false)
@@ -553,14 +708,26 @@ const search = ref('')
 const statusFilter = ref('all')
 const sortBy = ref('created_at')
 const total = ref(0)
+
+// Modal states
 const showModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
+const showSettingsModal = ref(false)
 const selectedItem = ref(null)
 const itemToDelete = ref(null)
 const activeActions = ref(null)
 
-// Edit form
+// Registration settings
+const registrationSettings = ref({
+  is_open: true,
+  closed_message: 'Pendaftaran OSIS sedang ditutup.',
+  last_updated: null,
+  updated_by: null,
+  updated_by_name: null
+})
+
+// Forms
 const editForm = ref({
   id: '',
   nama: '',
@@ -569,6 +736,15 @@ const editForm = ref({
   status: 'pending',
   notes: ''
 })
+
+const settingsForm = ref({
+  is_open: true,
+  closed_message: ''
+})
+
+// Loading states
+const togglingRegistration = ref(false)
+const savingSettings = ref(false)
 
 // Get user from localStorage for admin_id
 const user = JSON.parse(localStorage.getItem('user') || '{}')
@@ -592,6 +768,14 @@ const fetchData = async () => {
     if (resData.data.success) {
       data.value = resData.data.data
       total.value = resData.data.total
+      
+      // Update settings from response
+      if (resData.data.registration_open !== undefined) {
+        registrationSettings.value.is_open = resData.data.registration_open
+      }
+      if (resData.data.registration_message) {
+        registrationSettings.value.closed_message = resData.data.registration_message
+      }
     }
 
     if (resStats.data.success) {
@@ -602,6 +786,85 @@ const fetchData = async () => {
     alert('Gagal memuat data pendaftaran')
   } finally {
     loading.value = false
+  }
+}
+
+// Fetch registration settings
+const fetchSettings = async () => {
+  try {
+    const response = await axios.get('/pendaftaran-osis/settings')
+    if (response.data.success) {
+      registrationSettings.value = response.data.data
+      settingsForm.value = {
+        is_open: response.data.data.is_open,
+        closed_message: response.data.data.closed_message
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching settings:', error)
+  }
+}
+
+const toggleRegistration = async () => {
+  if (togglingRegistration.value) return
+  
+  const newStatus = !registrationSettings.value.is_open
+  const confirmMessage = newStatus 
+    ? 'Apakah Anda yakin ingin membuka pendaftaran OSIS?\n\nSiswa akan dapat mengirim formulir pendaftaran baru.' 
+    : 'Apakah Anda yakin ingin menutup pendaftaran OSIS?\n\nPesan yang akan ditampilkan: "' + registrationSettings.value.closed_message + '"'
+  
+  if (!confirm(confirmMessage)) {
+    return
+  }
+  
+  togglingRegistration.value = true
+  
+  try {
+    const response = await axios.post('/pendaftaran-osis/settings/toggle', {
+      is_open: newStatus,
+      closed_message: registrationSettings.value.closed_message
+    })
+    
+    if (response.data.success) {
+      registrationSettings.value = response.data.data
+      alert(`Pendaftaran OSIS berhasil ${newStatus ? 'dibuka' : 'ditutup'}`)
+      fetchData() // Refresh data untuk update status di header
+    }
+  } catch (error) {
+    console.error('Error toggling registration:', error)
+    alert('Gagal mengubah status pendaftaran')
+  } finally {
+    togglingRegistration.value = false
+  }
+}
+
+// Open settings modal
+const openSettingsModal = () => {
+  settingsForm.value = {
+    is_open: registrationSettings.value.is_open,
+    closed_message: registrationSettings.value.closed_message
+  }
+  showSettingsModal.value = true
+}
+
+// Save settings
+const saveSettings = async () => {
+  savingSettings.value = true
+  
+  try {
+    const response = await axios.post('/pendaftaran-osis/settings/toggle', settingsForm.value)
+    
+    if (response.data.success) {
+      registrationSettings.value = response.data.data
+      alert('Pengaturan pendaftaran berhasil disimpan')
+      showSettingsModal.value = false
+      fetchData() // Refresh data untuk update status di header
+    }
+  } catch (error) {
+    console.error('Error saving settings:', error)
+    alert('Gagal menyimpan pengaturan')
+  } finally {
+    savingSettings.value = false
   }
 }
 
@@ -780,6 +1043,7 @@ const handleClickOutside = (event) => {
 // Mount
 onMounted(() => {
   fetchData()
+  fetchSettings()
   document.addEventListener('click', handleClickOutside)
 })
 </script>

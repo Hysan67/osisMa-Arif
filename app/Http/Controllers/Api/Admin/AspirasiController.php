@@ -244,7 +244,6 @@ class AspirasiController extends Controller
             $file = fopen($csvPath, 'r');
 
             if (!$file) {
-                \Log::warning('Tidak bisa membuka file CSV untuk update: ' . $csvPath);
                 return;
             }
 
@@ -281,7 +280,6 @@ class AspirasiController extends Controller
             fclose($file);
 
         } catch (\Exception $e) {
-            \Log::warning('Gagal memperbarui CSV entry: ' . $e->getMessage());
         }
     }
 
@@ -301,7 +299,6 @@ class AspirasiController extends Controller
             $file = fopen($csvPath, 'r');
 
             if (!$file) {
-                \Log::warning('Tidak bisa membuka file CSV untuk hapus: ' . $csvPath);
                 return;
             }
 
@@ -325,7 +322,6 @@ class AspirasiController extends Controller
             fclose($file);
 
         } catch (\Exception $e) {
-            \Log::warning('Gagal menghapus dari CSV entry: ' . $e->getMessage());
         }
     }
 
@@ -339,7 +335,6 @@ class AspirasiController extends Controller
             $file = fopen($csvPath, 'w');
 
             if (!$file) {
-                \Log::warning('Tidak bisa membuat file CSV baru: ' . $csvPath);
                 return;
             }
 
@@ -365,7 +360,6 @@ class AspirasiController extends Controller
             fclose($file);
 
         } catch (\Exception $e) {
-            \Log::warning('Gagal membuat CSV baru: ' . $e->getMessage());
         }
     }
 }

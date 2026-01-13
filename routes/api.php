@@ -73,4 +73,6 @@ Route::prefix('pendaftaran-osis')->group(function () {
    Route::put('/{id}/status', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'updateStatus'])->middleware('auth:sanctum');
    Route::delete('/{id}', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'destroy'])->middleware('auth:sanctum');
    Route::get('/export', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'exportCsv'])->middleware('auth:sanctum');
+   Route::get('/settings', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'getSettings'])->middleware('auth:sanctum');
+   Route::post('/settings/toggle', [\App\Http\Controllers\Api\PendaftaranOsisController::class, 'toggleRegistration'])->middleware('auth:sanctum');
 });

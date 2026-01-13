@@ -11,6 +11,7 @@ class PendaftaranOsisController extends Controller
 {
     private $csvFile = 'pendaftaran_osis.csv';
     private $jsonBackupFile = 'backup_pendaftaran_osis.json';
+    private $settingsFile = 'pendaftaran_settings.json';
     
     /**
      * Get all registrations
@@ -18,6 +19,8 @@ class PendaftaranOsisController extends Controller
     public function index(Request $request)
     {
         try {
+            $settings = $this->getSettings();
+
             $registrations = $this->getAllRegistrations();
             
             // Filter by status
@@ -74,6 +77,13 @@ class PendaftaranOsisController extends Controller
     public function store(Request $request)
     {
         try {
+            $settings = $this->getSettings();
+            if (!$settings['is_open']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $settings['closed_message'] ?? 'Pendaftaran OSIS sedang ditutup.'
+                ], 403);
+            }
             $validated = $request->validate([
                 'nama' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
@@ -157,6 +167,63 @@ class PendaftaranOsisController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan pendaftaran: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    public function getSettings()
+    {
+        $settingsPath = storage_path('app/' . $this->settingsFile);
+        
+        if (file_exists($settingsPath)) {
+            $settings = json_decode(file_get_contents($settingsPath), true);
+            if ($settings) {
+                return $settings;
+            }
+        }
+        
+        // Default settings
+        return [
+            'is_open' => true,
+            'closed_message' => 'Pendaftaran OSIS sedang ditutup.',
+            'last_updated' => Carbon::now()->toDateTimeString(),
+            'updated_by' => null
+        ];
+    }
+
+    public function toggleRegistration(Request $request)
+    {
+        try {
+            $request->validate([
+                'is_open' => 'boolean',
+                'closed_message' => 'nullable|string|max:500'
+            ]);
+            
+            $settings = $this->getSettings();
+            $user = $request->user();
+            
+            $settings['is_open'] = $request->has('is_open') ? $request->is_open : !$settings['is_open'];
+            $settings['closed_message'] = $request->closed_message ?? $settings['closed_message'];
+            $settings['last_updated'] = Carbon::now()->toDateTimeString();
+            $settings['updated_by'] = $user ? $user->id : null;
+            $settings['updated_by_name'] = $user ? $user->name : 'System';
+            
+            // Save settings
+            $settingsPath = storage_path('app/' . $this->settingsFile);
+            file_put_contents($settingsPath, json_encode($settings, JSON_PRETTY_PRINT));
+            
+            $statusText = $settings['is_open'] ? 'dibuka' : 'ditutup';
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Pendaftaran OSIS berhasil ' . $statusText,
+                'data' => $settings
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengubah status pendaftaran: ' . $e->getMessage()
             ], 500);
         }
     }
