@@ -327,7 +327,7 @@ async function submitPendaftaran() {
 
   try {
     // Kirim ke endpoint
-    const response = await axios.post('/api/pendaftaran-osis', fd, {
+    const response = await axios.post('/pendaftaran-osis', fd, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'X-CSRF-TOKEN': csrfToken

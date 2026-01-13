@@ -213,7 +213,7 @@ watch(route, () => {
 // Fetch pending registration count
 async function fetchPendingCount() {
   try {
-    const response = await axios.get('/api/pendaftaran-osis/stats')
+    const response = await axios.get('/pendaftaran-osis/stats')
     if (response.data.success) {
       pendingCount.value = response.data.data.pending || 0
     }
