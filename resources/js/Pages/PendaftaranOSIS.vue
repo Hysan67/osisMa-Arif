@@ -1,190 +1,218 @@
 <template>
   <div class="max-w-2xl mx-auto p-6 py-24">
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Form Pendaftaran OSIS</h2>
-        <p class="text-gray-600 mt-2">Silakan lengkapi formulir berikut untuk proses pendaftaran OSIS.</p>
-      </div>
+    <!-- Loading state -->
+    <div v-if="registrationOpen === null" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <p class="mt-4 text-gray-600">Memeriksa status pendaftaran...</p>
+    </div>
 
-      <!-- Pesan Sukses/Error -->
-      <div v-if="successMessage" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-        {{ successMessage }}
-      </div>
-      <div v-if="errorMessage" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-        {{ errorMessage }}
-      </div>
-
-      <form @submit.prevent="submitPendaftaran" class="space-y-4">
-
-        <!-- NAMA -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
-          <input v-model="form.nama" required type="text"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- EMAIL -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-          <input v-model="form.email" required type="email" placeholder="contoh@email.com"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- FOTO -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Foto 3x4 *</label>
-          <input type="file" accept="image/*" @change="handleFoto" class="w-full text-sm border border-gray-300 rounded-lg p-2">
-          <p v-if="form.foto" class="text-xs text-green-600 mt-1">✓ Foto terpilih: {{ form.foto.name }}</p>
-          <p class="text-xs text-gray-500 mt-1">Maksimal ukuran file: 2MB (JPG, JPEG, PNG)</p>
-        </div>
-
-        <!-- KELAS -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Kelas *</label>
-          <input v-model="form.kelas" required type="text" placeholder="Contoh: X-A"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- TEMPAT LAHIR -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir *</label>
-          <input v-model="form.tempat_lahir" required type="text"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- TANGGAL LAHIR -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir *</label>
-          <input v-model="form.tanggal_lahir" required type="date"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- JENIS KELAMIN -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin *</label>
-          <select v-model="form.jenis_kelamin" required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-            <option value="">Pilih...</option>
-            <option value="Laki-laki">Laki-laki</option>
-            <option value="Perempuan">Perempuan</option>
-          </select>
-        </div>
-
-        <!-- ALAMAT -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Alamat *</label>
-          <textarea v-model="form.alamat" required rows="2"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
-        </div>
-
-        <!-- HP -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP *</label>
-          <input v-model="form.no_hp" required type="tel" placeholder="Contoh: 081122334455"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- ASAL SEKOLAH -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Asal Sekolah *</label>
-          <input v-model="form.asal_sekolah" required type="text"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- ORTU -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Orang Tua/Wali *</label>
-          <input v-model="form.nama_ortu_wali" required type="text"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- PENGALAMAN -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Pengalaman / Prestasi</label>
-          <textarea v-model="form.pengalaman_prestasi" rows="3" placeholder="Opsional: sertakan pengalaman organisasi atau prestasi yang pernah dicapai"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
-        </div>
-
-        <!-- PENYAKIT -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Penyakit yang Diderita</label>
-          <textarea v-model="form.penyakit_diderita" rows="2" placeholder="Opsional: jika ada, sebutkan penyakit yang sedang diderita"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
-        </div>
-
-        <!-- RUTINITAS -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Rutinitas yang Menghambat</label>
-          <textarea v-model="form.rutinitas_menghambat" rows="2" placeholder="Opsional: rutinitas yang mungkin menghambat kegiatan OSIS"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
-        </div>
-
-        <!-- TUJUAN -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tujuan Masuk OSIS *</label>
-          <textarea v-model="form.tujuan" required rows="2" placeholder="Jelaskan tujuan Anda ingin bergabung dengan OSIS"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
-        </div>
-
-        <!-- HARAPAN -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Harapan Setelah Bergabung *</label>
-          <textarea v-model="form.harapan" required rows="2" placeholder="Apa harapan Anda setelah menjadi anggota OSIS?"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
-        </div>
-
-        <!-- TANGGAL ORTU -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Persetujuan Orang Tua *</label>
-          <input v-model="form.tanggal_ortu_wali" required type="date"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-        </div>
-
-        <!-- SUBMIT -->
-        <div class="flex justify-end pt-4">
-          <button type="submit" :disabled="submitting || !isFormValid"
-            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-            
-            <svg v-if="submitting" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            
-            <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-
-            {{ submitting ? 'Mengirim...' : 'Kirim Pendaftaran' }}
-          </button>
-        </div>
-        
-        <!-- Info Box -->
-        <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div class="flex items-start">
-            <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <div>
-              <h3 class="font-medium text-blue-900">📋 Informasi Pengiriman Pendaftaran OSIS</h3>
-              <ul class="text-sm text-blue-800 mt-2 space-y-1">
-                <li>✓ Pengiriman pendaftaran OSIS akan dibalas via email dalam 1-3 hari kerja</li>
-                <li>✓ Pastikan email yang Anda masukkan aktif dan benar</li>
-                <li>✓ Gunakan bahasa yang sopan dan konstruktif</li>
-                <li>✓ Data pribadi Anda akan dijaga kerahasiaannya</li>
-                <li>✓ Periksa folder spam jika belum menerima balasan</li>
-              </ul>
-            </div>
+    <!-- Konten utama setelah status loaded -->
+    <div v-else>
+      <!-- Jika pendaftaran ditutup -->
+      <div v-if="!registrationOpen" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-6">
+        <div class="flex items-center mb-3">
+          <svg class="w-8 h-8 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.698-.833-2.464 0L4.072 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+          </svg>
+          <div>
+            <h3 class="text-lg font-bold text-red-900">Pendaftaran Ditutup</h3>
+            <p class="text-red-800 mt-1">{{ closedMessage }}</p>
           </div>
         </div>
+        <div class="mt-4 pt-4 border-t border-red-200">
+          <p class="text-sm text-red-700">
+            Untuk informasi lebih lanjut, silakan hubungi pengurus OSIS atau beralih ke halaman lain.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Jika pendaftaran dibuka -->
+      <div v-else class="bg-white rounded-lg shadow-lg p-6">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Form Pendaftaran OSIS</h2>
+          <p class="text-gray-600 mt-2">Silakan lengkapi formulir berikut untuk proses pendaftaran OSIS.</p>
+        </div>
 
-      </form>
+        <!-- Pesan Sukses/Error -->
+        <div v-if="successMessage" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+          {{ successMessage }}
+        </div>
+        <div v-if="errorMessage" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+          {{ errorMessage }}
+        </div>
+
+        <form @submit.prevent="submitPendaftaran" class="space-y-4">
+
+          <!-- NAMA -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
+            <input v-model="form.nama" required type="text"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- EMAIL -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+            <input v-model="form.email" required type="email" placeholder="contoh@email.com"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- FOTO -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Foto 3x4 *</label>
+            <input type="file" accept="image/*" @change="handleFoto" class="w-full text-sm border border-gray-300 rounded-lg p-2">
+            <p v-if="form.foto" class="text-xs text-green-600 mt-1">✓ Foto terpilih: {{ form.foto.name }}</p>
+            <p class="text-xs text-gray-500 mt-1">Maksimal ukuran file: 2MB (JPG, JPEG, PNG)</p>
+          </div>
+
+          <!-- KELAS -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kelas *</label>
+            <input v-model="form.kelas" required type="text" placeholder="Contoh: X-A"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- TEMPAT LAHIR -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir *</label>
+            <input v-model="form.tempat_lahir" required type="text"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- TANGGAL LAHIR -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir *</label>
+            <input v-model="form.tanggal_lahir" required type="date"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- JENIS KELAMIN -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin *</label>
+            <select v-model="form.jenis_kelamin" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+              <option value="">Pilih...</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+
+          <!-- ALAMAT -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Alamat *</label>
+            <textarea v-model="form.alamat" required rows="2"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+          </div>
+
+          <!-- HP -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor HP *</label>
+            <input v-model="form.no_hp" required type="tel" placeholder="Contoh: 081122334455"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- ASAL SEKOLAH -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Asal Sekolah *</label>
+            <input v-model="form.asal_sekolah" required type="text"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- ORTU -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Orang Tua/Wali *</label>
+            <input v-model="form.nama_ortu_wali" required type="text"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- PENGALAMAN -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Pengalaman / Prestasi</label>
+            <textarea v-model="form.pengalaman_prestasi" rows="3" placeholder="Opsional: sertakan pengalaman organisasi atau prestasi yang pernah dicapai"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+          </div>
+
+          <!-- PENYAKIT -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Penyakit yang Diderita</label>
+            <textarea v-model="form.penyakit_diderita" rows="2" placeholder="Opsional: jika ada, sebutkan penyakit yang sedang diderita"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+          </div>
+
+          <!-- RUTINITAS -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Rutinitas yang Menghambat</label>
+            <textarea v-model="form.rutinitas_menghambat" rows="2" placeholder="Opsional: rutinitas yang mungkin menghambat kegiatan OSIS"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+          </div>
+
+          <!-- TUJUAN -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tujuan Masuk OSIS *</label>
+            <textarea v-model="form.tujuan" required rows="2" placeholder="Jelaskan tujuan Anda ingin bergabung dengan OSIS"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+          </div>
+
+          <!-- HARAPAN -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Harapan Setelah Bergabung *</label>
+            <textarea v-model="form.harapan" required rows="2" placeholder="Apa harapan Anda setelah menjadi anggota OSIS?"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+          </div>
+
+          <!-- TANGGAL ORTU -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Persetujuan Orang Tua *</label>
+            <input v-model="form.tanggal_ortu_wali" required type="date"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+          </div>
+
+          <!-- SUBMIT -->
+          <div class="flex justify-end pt-4">
+            <button type="submit" :disabled="submitting || !isFormValid"
+              class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              
+              <svg v-if="submitting" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              
+              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+
+              {{ submitting ? 'Mengirim...' : 'Kirim Pendaftaran' }}
+            </button>
+          </div>
+          
+          <!-- Info Box -->
+          <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <div>
+                <h3 class="font-medium text-blue-900">📋 Informasi Pengiriman Pendaftaran OSIS</h3>
+                <ul class="text-sm text-blue-800 mt-2 space-y-1">
+                  <li>✓ Pengiriman pendaftaran OSIS akan dibalas via email dalam 1-3 hari kerja</li>
+                  <li>✓ Pastikan email yang Anda masukkan aktif dan benar</li>
+                  <li>✓ Gunakan bahasa yang sopan dan konstruktif</li>
+                  <li>✓ Data pribadi Anda akan dijaga kerahasiaannya</li>
+                  <li>✓ Periksa folder spam jika belum menerima balasan</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 
 // CSRF Token untuk Laravel
@@ -215,6 +243,51 @@ const form = ref({
 const submitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
+
+const registrationOpen = ref(null) // Null untuk loading state
+const closedMessage = ref('')
+
+let refreshInterval = null
+
+const checkRegistrationStatus = async () => {
+  try {
+    console.log('🔍 Checking registration status...')
+    const response = await axios.get('/pendaftaran-osis/settings')
+    console.log('📊 Registration status response:', response.data)
+    
+    if (response.data.success) {
+      registrationOpen.value = Boolean(response.data.data.is_open)
+      closedMessage.value = response.data.data.closed_message || 'Pendaftaran OSIS sedang ditutup.'
+      
+      console.log(`✅ Status updated: open=${registrationOpen.value}, message="${closedMessage.value}"`)
+    } else {
+      console.error('❌ Failed to get settings:', response.data.message)
+      // Default ke buka jika error
+      registrationOpen.value = true
+      closedMessage.value = 'Pendaftaran OSIS sedang ditutup.'
+    }
+  } catch (error) {
+    console.error('❌ Error fetching registration status:', error)
+    // Default ke buka jika error
+    registrationOpen.value = true
+    closedMessage.value = 'Pendaftaran OSIS sedang ditutup.'
+  }
+}
+
+// Panggil saat komponen dimuat
+onMounted(() => {
+  console.log('🚀 PendaftaranOSIS component mounted')
+  checkRegistrationStatus()
+  
+  // Auto-refresh setiap 10 detik
+  refreshInterval = setInterval(checkRegistrationStatus, 10000)
+})
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval)
+  }
+})
 
 // Computed property untuk cek apakah form valid
 const isFormValid = computed(() => {
@@ -302,6 +375,12 @@ function validateForm() {
 }
 
 async function submitPendaftaran() {
+  // Cek status pendaftaran dulu
+  if (!registrationOpen.value) {
+    errorMessage.value = 'Pendaftaran sedang ditutup.'
+    return
+  }
+  
   // Reset pesan
   successMessage.value = ''
   errorMessage.value = ''
