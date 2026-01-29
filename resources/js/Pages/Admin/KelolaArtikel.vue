@@ -38,6 +38,7 @@
         @delete-artikel="deleteArtikel"
         @preview-image="previewImage"
         @page-change="goToPage"
+        @clear-search="clearSearch"
       />
 
       <!-- Modals -->
@@ -103,6 +104,7 @@ const form = ref({
   jenis_artikel: "artikel",
   img: null,
   imgPreview: null,
+  expires_at: null,
 });
 
 const alert = ref({ show: false, message: "", color: "bg-green-500" });
@@ -173,6 +175,7 @@ function openForm(data = null) {
       jenis_artikel: data.jenis_artikel || "artikel",
       img: null,
       imgPreview: data.img ? getImageUrl(data.img) : null,
+      expires_at: data.expires_at ? formatDateTimeForInput(data.expires_at) : null,
     };
   } else {
     form.value = {
@@ -182,14 +185,36 @@ function openForm(data = null) {
       jenis_artikel: "artikel",
       img: null,
       imgPreview: null,
+      expires_at: null,
     };
   }
   showForm.value = true;
 }
 
+function formatDateTimeForInput(dateString) {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  // Format: YYYY-MM-DDTHH:mm
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 function closeForm() {
   showForm.value = false;
-  form.value.imgPreview = null;
+  form.value = {
+    id: null,
+    judul: "",
+    deskripsi: "",
+    jenis_artikel: "artikel",
+    img: null,
+    imgPreview: null,
+    expires_at: null,
+  };
 }
 
 function openHistoryModal() {
@@ -201,23 +226,7 @@ function closeHistoryModal() {
   showHistoryModal.value = false;
 }
 
-function formatDate(dateString) {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-}
-
 // Search & Pagination
-function onSearch() {
-  currentPage.value = 1;
-}
-
 function clearSearch() {
   searchQuery.value = "";
   currentPage.value = 1;
@@ -257,6 +266,8 @@ async function saveArtikel() {
     formData.append('judul', form.value.judul);
     formData.append('deskripsi', form.value.deskripsi);
     formData.append('jenis_artikel', form.value.jenis_artikel);
+
+    formData.append('expires_at', form.value.expires_at || '');
 
     if (form.value.img) formData.append('img', form.value.img);
 
@@ -330,6 +341,10 @@ async function permanentDeleteArtikel(id) {
 // Lifecycle
 onMounted(() => {
   fetchArtikels();
+});
+
+watch(searchQuery, () => {
+  currentPage.value = 1;
 });
 
 watch(filteredArtikels, () => {

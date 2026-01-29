@@ -12,13 +12,16 @@ class ArtikelController extends Controller
 {
     public function index()
     {
-        $artikels = Artikel::select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'admin_id', 'created_at', 'updated_at'])
+        $artikels = Artikel::select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'admin_id', 'expires_at', 'created_at', 'updated_at'])
                           ->whereNull('deleted_at')
                           ->latest()
                           ->get()
                           ->toArray();
 
-        return response()->json($artikels);
+        return response()->json([
+        'success' => true,
+        'data' => $artikels
+    ]);
     }
 
     public function indexAlternative()
@@ -33,11 +36,12 @@ class ArtikelController extends Controller
                 'jenis_artikel' => $artikel->jenis_artikel,
                 'img' => $artikel->img,
                 'admin_id' => $artikel->admin_id,
+                'expires_at' => $artikel->expires_at, // Tambahkan ini
                 'created_at' => $artikel->created_at,
                 'updated_at' => $artikel->updated_at,
             ];
         }
-
+    
         return response()->json($data);
     }
 
@@ -46,14 +50,14 @@ class ArtikelController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required',
-            'jenis_artikel' => 'required|in:artikel,event',
+            'jenis_artikel' => 'required|in:artikel,event,pengumuman',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'expires_at' => 'nullable|date|after:now',
         ]);
 
-        $data = $request->only(['judul', 'deskripsi', 'jenis_artikel']);
+        $data = $request->only(['judul', 'deskripsi', 'jenis_artikel', 'expires_at']);
         
         $data['admin_id'] = auth()->id();
-
         
         if ($request->hasFile('img')) {
             $data['img'] = $request->file('img')->store('artikels', 'public');
@@ -74,6 +78,7 @@ class ArtikelController extends Controller
             'jenis_artikel' => $artikel->jenis_artikel,
             'img' => $artikel->img,
             'admin_id' => $artikel->admin_id,
+            'expires_at' => $artikel->expires_at, // Tambahkan ini
             'created_at' => $artikel->created_at,
             'updated_at' => $artikel->updated_at,
         ]);
@@ -92,7 +97,11 @@ class ArtikelController extends Controller
         }
         
         if ($request->has('jenis_artikel')) {
-            $rules['jenis_artikel'] = 'required|in:artikel,event';
+            $rules['jenis_artikel'] = 'required|in:artikel,event,pengumuman';
+        }
+
+        if ($request->has('expires_at')) {
+            $rules['expires_at'] = 'nullable|date|after:now';
         }
         
         if ($request->hasFile('img')) {
@@ -112,11 +121,14 @@ class ArtikelController extends Controller
         }
         
         if ($request->hasFile('img')) {
-            // Hapus gambar lama jika ada
             if ($artikel->img && Storage::disk('public')->exists($artikel->img)) {
                 Storage::disk('public')->delete($artikel->img);
             }
             $artikel->img = $request->file('img')->store('artikels', 'public');
+        }
+
+        if ($request->has('expires_at')) {
+            $artikel->expires_at = $request->expires_at;
         }
 
         $artikel->save();
@@ -144,14 +156,12 @@ class ArtikelController extends Controller
 
     public function trash()
     {
-        
         try {
             $deletedArtikels = Artikel::onlyTrashed()
-                ->select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img','admin_id', 'created_at', 'deleted_at'])
+                ->select(['id', 'judul', 'deskripsi', 'jenis_artikel', 'img', 'admin_id', 'expires_at', 'created_at', 'deleted_at']) // Tambahkan expires_at
                 ->latest('deleted_at')
                 ->get();
                 
-            
             return response()->json([
                 'success' => true,
                 'data' => $deletedArtikels
@@ -206,6 +216,58 @@ class ArtikelController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Artikel berhasil dihapus permanen'
+        ]);
+    }
+
+    public function activeAnnouncements()
+    {
+        try {
+            $pengumuman = Artikel::where('jenis_artikel', 'pengumuman')
+                ->where(function ($query) {
+                    $query->whereNull('expires_at')
+                        ->orWhere('expires_at', '>', now());
+                })
+                ->whereNull('deleted_at')
+                ->latest()
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'judul' => $item->judul,
+                        'deskripsi' => $item->deskripsi,
+                        'img' => $item->img,
+                        'expires_at' => $item->expires_at,
+                        'created_at' => $item->created_at,
+                    ];
+                });
+                
+            return response()->json([
+                'success' => true,
+                'data' => $pengumuman
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function cleanupExpiredAnnouncements()
+    {
+        $expired = Artikel::where('jenis_artikel', 'pengumuman')
+            ->where('expires_at', '<=', now())
+            ->whereNull('deleted_at')
+            ->get();
+
+        foreach ($expired as $announcement) {
+            $announcement->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil menghapus ' . count($expired) . ' pengumuman yang telah kedaluwarsa',
+            'deleted_count' => count($expired)
         ]);
     }
 }

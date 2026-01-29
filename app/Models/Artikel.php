@@ -15,6 +15,11 @@ class Artikel extends Model
         'deskripsi',
         'jenis_artikel',
         'admin_id',
+        'expires_at',
+    ];
+
+    protected $casts = [
+        'expires_at' => 'datetime',
     ];
 
     public function admin()

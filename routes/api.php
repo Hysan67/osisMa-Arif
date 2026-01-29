@@ -9,18 +9,21 @@ use App\Http\Controllers\Api\AnggotaController;
 use App\Http\Controllers\Api\Admin\AspirasiController;
 use App\Http\Controllers\Api\PublicAspirasiController;
 
+Route::get('/announcements/active', [ArtikelController::class, 'activeAnnouncements']);
+
 Route::middleware('auth:sanctum')->group(function () {
    Route::post('/artikels', [ArtikelController::class, 'store']);
    Route::put('/artikels/{artikel}', [ArtikelController::class, 'update']);
    Route::delete('/artikels/{artikel}', [ArtikelController::class, 'destroy']);
    Route::put('/artikels-restore/{id}', [ArtikelController::class, 'restore']);
+   Route::post('/announcements/cleanup', [ArtikelController::class, 'cleanupExpiredAnnouncements']);
    Route::delete('/artikels-force/{id}', [ArtikelController::class, 'forceDelete']);
 });
 
 Route::prefix('bidang')->group(function () {
     Route::get('/', [BidangController::class, 'index']);
-    Route::get('/all', [BidangController::class, 'indexWithTrashed']); // Untuk admin
-    Route::get('/trashed', [BidangController::class, 'trashed']); // Hanya yang soft deleted
+    Route::get('/all', [BidangController::class, 'indexWithTrashed']); 
+    Route::get('/trashed', [BidangController::class, 'trashed']); 
     Route::post('/', [BidangController::class, 'store']);
     Route::get('/{id}', [BidangController::class, 'show']);
     Route::put('/{id}', [BidangController::class, 'update']);
